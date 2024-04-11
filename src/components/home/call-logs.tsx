@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "../Button";
+import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 
 const CallLogs = () => {
   const [current, setCurrent] = useState(0);
-
+  const [open, setOpen] = useState<boolean>(false); 
   return (
     <div className="w-full flex flex-col mt-6">
       {/* tabs session */}
@@ -46,31 +47,27 @@ const CallLogs = () => {
           <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
             You do not have any classes at the moment, Create a new group class
             or private class to get started
-                  </p>
-                  <Button name="Connect new live class" className="mt-5 mx-auto" />
-                  
+          </p>
+          <Button name="Connect new live class" className="mt-5 mx-auto" onClick={() => setOpen(true)} />
         </div>
       )}
       {current === 1 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
           <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any Upcoming at the moment, Create a new group class
-            or private class to get started
-                  </p>
-                  <Button name="Connect new live class" className="mt-5 mx-auto" />
-                  
+            You do not have any upcoming calls.
+          </p>
+          <Button name="Connect new live class" className="mt-5 mx-auto" />
         </div>
       )}
       {current === 2 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
           <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any past calls at the moment, Create a new group class
-            or private class to get started
-                  </p>
-                  <Button name="Connect new live class" className="mt-5 mx-auto" />
-                  
+            You do not have any past calls.
+          </p>
+          <Button name="Connect new live class" className="mt-5 mx-auto" />
         </div>
       )}
+      <CreateNewServiceModal open={open} setOpen={setOpen} />
     </div>
   );
 };

@@ -30,7 +30,7 @@ export default function PrimarySelect({
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <div className="flex flex-col w-full">
-          <Listbox.Label className="text-xs text-[#707070] font-medium dm-sans mb-1">
+          <Listbox.Label className="text-xs text-foreground font-medium dm-sans mb-1">
             {label && label}
           </Listbox.Label>
           <div className="mt-1 relative w-full">

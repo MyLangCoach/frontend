@@ -29,7 +29,7 @@ const Sidebar = ({ current }: { current: number }) => {
           </div>
           <div
             className={current === 2 ? styles.active : styles.inActive}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/live-classes")}
           >
             <MicIcon />
             <p className="text-black text-sm font-medium inter">My Classes</p>

@@ -10,8 +10,8 @@ import Transactions from "./pages/Transactions";
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "./pages/Error/NotFound";
 import Users from "./pages/users";
-
-
+import LiveClasses from "./pages/live-classes";
+import CreateClass from "./pages/live-classes/create-new-class";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -22,6 +22,8 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/live-classes" element={<LiveClasses />} />
+        <Route path="/create-new-class" element={<CreateClass />} />
      
 
         {/* Protected Routes */}

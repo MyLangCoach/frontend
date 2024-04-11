@@ -96,7 +96,7 @@ const UserProfile = () => {
         {/* end */}
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
-          <label className="text-xs text-[#707070] font-medium dm-sans mb-2">
+          <label className="text-xs text-foreground font-medium dm-sans mb-2">
             Short bio
           </label>
           <textarea

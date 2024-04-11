@@ -1,5 +1,11 @@
-import { useState } from "react";
-import { EyeSlash } from "../../assets";
+import { useRef, useState } from "react";
+import { CalenderIcon, EyeSlash } from "../../assets";
+interface dateProps {
+  date: string;
+  setDate: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
+  height?: string;
+}
 export const Input = ({
   className,
   label,
@@ -21,7 +27,7 @@ export const Input = ({
 }) => {
   return (
     <div className={`w-full flex flex-col  ${className}`}>
-      <label className="text-xs text-[#707070] font-medium dm-sans mb-2">
+      <label className="text-xs text-foreground font-medium dm-sans mb-2">
         {label}
       </label>
       <input
@@ -98,10 +104,10 @@ export default function UrlInput({
   preUrl?:string
 }) {
   return (
-    <div>
+    <div className="w-full">
       <label
         htmlFor="company-website"
-        className="block text-xs text-[#707070] font-medium dm-sans"
+        className="block text-xs text-foreground font-medium dm-sans"
       >
         {label && label}
       </label>
@@ -124,4 +130,48 @@ export default function UrlInput({
     </div>
   );
 }
+
+
+export const DateInput = ({
+  date,
+  setDate,
+  className,
+  height,
+}: dateProps) => {
+  const inputRef = useRef<any>(null);
+  const onCalenderIconClick = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+      inputRef?.current?.showPicker();
+    }
+  };
+  return (
+    <div
+      className={`relative outline-none rounded-[5px] border border-border flex  items-center px-4  w-full      ${className} ${
+        height ? height : "h-[36px]"
+      }`}
+    >
+      <input
+        type="date"
+        name="date"
+        className=" opacity-0  "
+        value={date}
+        onChange={(e: any) => setDate(e.target?.value)}
+        ref={inputRef}
+      />
+      <div className="flex items-center  justify-between w-full px-3 absolute inset-0">
+        <p
+          className={` text-sm  ${
+            date ? "text-foreground" : "text-[#71717A]"
+          }`}
+        >
+          {date ? date : "Select Date"}
+        </p>
+        <span className="cursor-pointer" onClick={onCalenderIconClick}>
+          <CalenderIcon />
+        </span>
+      </div>
+    </div>
+  );
+};
 
