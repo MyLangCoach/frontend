@@ -22,7 +22,7 @@ const LiveClassInformation = ({ setCurrent }: any) => {
       </h1>
       <div className="w-full flex flex-col mt-4">
         <div className="w-full">
-          <Input label={"Live class name"} value={name} setValue={setName} />
+          <Input label={"Live class name"} height='h-9' value={name} setValue={setName} />
         </div>
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
