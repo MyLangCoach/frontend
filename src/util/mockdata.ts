@@ -28,3 +28,34 @@ export const OfferingsDummy = [
         subType:"One off"
     },
 ]
+
+export const transactionDummy = [
+    {
+        date: "12/03/2022",
+        status: "pending",
+        fees: "$2.00",
+        charges: "$1.00",
+        total:"$20.00"
+    },
+    {
+        date: "12/03/2022",
+        status: "pending",
+        fees: "$2.00",
+        charges: "$1.00",
+        total:"$20.00"
+    },
+    {
+        date: "12/03/2022",
+        status: "paid",
+        fees: "$2.00",
+        charges: "$1.00",
+        total:"$20.00"
+    },
+    {
+        date: "12/03/2022",
+        status: "paid",
+        fees: "$2.00",
+        charges: "$1.00",
+        total:"$20.00"
+    },
+]

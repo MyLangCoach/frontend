@@ -12,6 +12,8 @@ import NotFound from "./pages/Error/NotFound";
 import Users from "./pages/users";
 import LiveClasses from "./pages/live-classes";
 import CreateClass from "./pages/live-classes/create-new-class";
+import Payouts from "./pages/payouts";
+import SettingsPage from "./pages/settings";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -24,6 +26,8 @@ const AppRoutes = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/live-classes" element={<LiveClasses />} />
         <Route path="/create-new-class" element={<CreateClass />} />
+        <Route path="/payouts" element={<Payouts />} />
+        <Route path="/settings" element={<SettingsPage />} />
      
 
         {/* Protected Routes */}

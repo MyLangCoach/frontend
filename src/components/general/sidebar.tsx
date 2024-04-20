@@ -76,14 +76,14 @@ const Sidebar = ({ current }: { current: number }) => {
           </div>
           <div
             className={current === 7 ? styles.active : styles.inActive}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/payouts")}
           >
             <RecieptIcon />
             <p className="text-black text-sm font-medium inter">Earnings</p>
           </div>
           <div
             className={current === 8 ? styles.active : styles.inActive}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/settings")}
           >
             <SettingsIcon />
             <p className="text-black text-sm font-medium inter">Settings</p>
