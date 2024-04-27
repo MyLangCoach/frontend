@@ -29,6 +29,39 @@ export const OfferingsDummy = [
     },
 ]
 
+
+export const studentDummy = [
+    {
+        name: "Ayeni Daniel",
+        email: "danie@email.com",
+        ref: "12-3456789",
+        date:"12/03/2024"
+    },
+    {
+        name: "Ayeni Daniel",
+        email: "danie@email.com",
+        ref: "12-3456789",
+        date:"12/03/2024"
+    },
+    {
+        name: "Ayeni Daniel",
+        email: "danie@email.com",
+        ref: "12-3456789",
+        date:"12/03/2024"
+    },
+    {
+        name: "Ayeni Daniel",
+        email: "danie@email.com",
+        ref: "12-3456789",
+        date:"12/03/2024"
+    },
+    {
+        name: "Ayeni Daniel",
+        email: "danie@email.com",
+        ref: "12-3456789",
+        date:"12/03/2024"
+    },
+]
 export const transactionDummy = [
     {
         date: "12/03/2022",

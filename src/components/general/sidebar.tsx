@@ -58,7 +58,7 @@ const Sidebar = ({ current }: { current: number }) => {
           </div>
           <div
             className={current === 5 ? styles.active : styles.inActive}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/students")}
           >
             <StudentIcon />
             <p className="text-black text-sm font-medium inter">Students</p>
@@ -79,7 +79,7 @@ const Sidebar = ({ current }: { current: number }) => {
             onClick={() => navigate("/payouts")}
           >
             <RecieptIcon />
-            <p className="text-black text-sm font-medium inter">Earnings</p>
+            <p className="text-black text-sm font-medium inter">Payouts</p>
           </div>
           <div
             className={current === 8 ? styles.active : styles.inActive}

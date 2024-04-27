@@ -67,7 +67,7 @@ const CallLogs = () => {
           <Button name="Connect new live class" className="mt-5 mx-auto" />
         </div>
       )}
-      <CreateNewServiceModal open={open} setOpen={setOpen} />
+      <CreateNewServiceModal open={open} setOpen={setOpen}  />
     </div>
   );
 };
