@@ -29,10 +29,10 @@ const Login = () => {
 
 
   useEffect(() => {
-  //   if (auth?.token ) {
+    if (auth?.token ) {
 
-  //   navigate("/")
-  // }
+    navigate("/")
+  }
 }, [auth?.userData])
   
   

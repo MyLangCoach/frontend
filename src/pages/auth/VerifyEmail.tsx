@@ -1,70 +1,83 @@
+import { useEffect,useState } from "react";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import AuthLayout from "../../layouts/AuthLayout";
+import signPic from "../../assets/png/sign-pic.png";
 import { verifyUserEmail } from "../../features/auth/authSlice";
-import { useEffect } from "react";
-import { toast } from "react-hot-toast";
-
+import AuthLayout from "../../layouts/AuthLayout";
+import logo from "../../assets/png/lang-logo.png";
+import { ErrorMail, SuccessMail } from "../../assets";
 const VerifyEmail = () => {
   const authUser = useAppSelector((state) => state.auth);
-  const dispatch = useDispatch<AppDispatch>();
-  const loading = authUser.loading;
+
   const navigate = useNavigate();
+  const [success, setSuccess] = useState(true);
 
-  useEffect(() => {
-    if (authUser.verifiedStatus) {
-      toast.success("Account Verified!");
-      navigate("/login", { replace: true });
-    }
-  }, [authUser.verifiedStatus]);
+  // useEffect(() => {
+  //   if (authUser.verifiedStatus) {
+  //     toast.success("Account Verified!");
+  //     navigate("/login", { replace: true });
+  //   }
+  // }, [authUser.verifiedStatus]);
 
-  const [searchParams] = useSearchParams();
-  const verifyToken = searchParams.get("token");
+  // const [searchParams] = useSearchParams();
+  // const verifyToken = searchParams.get("token");
 
-  const handleVerifyBTN = () => {
-    dispatch(verifyUserEmail(`token=${verifyToken}`));
-  };
+  // const handleVerifyBTN = () => {
+  //   dispatch(verifyUserEmail(`token=${verifyToken}`));
+  // };
 
   return (
-    <AuthLayout>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Verify your account
-          </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <div className="space-y-6">
-            <button
-              type="button"
-              disabled={loading}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={handleVerifyBTN}
-            >
-              Verify
-            </button>
+    <div className="w-full bg-white flex h-screen items-center justify-center">
+      {success ? (
+        <div className="verify-shadow flex flex-col md:max-w-[441px] w-full py-12">
+          <div className="w-10/12 flex flex-col mx-auto">
+            <div>
+              <img src={logo} alt="logo" className="w-[109px] h-auto" />
+            </div>
+            <div className="mt-8  flex justify-center">
+              <SuccessMail />
+            </div>
+            <h1 className="mt-6 red-hat font-bold text-black mx-auto max-w-[345px] text-[32px] text-center">
+              Your email has been verified!
+            </h1>
+            <p className="text-muted text-base md:text-lg mx-auto max-w-[317px] mt-3 text-center dm-sans ">
+              Your email has been successfully verified! Click on login to
+              continue.
+            </p>
+            <div className="mt-8">
+              <button className="bg-black text-[#faf8f0] font-medium h-[55px] max-w-[345px] w-full rounded-[4px] cursor-pointer red-hat " onClick={() => navigate("/login")}>
+                Go back to login
+              </button>
+            </div>
           </div>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Already verified?{" "}
-            <a
-              href="/login"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Login Here
-            </a>
-          </p>
         </div>
-      </div>
-    </AuthLayout>
+      ) : (
+        <div className="verify-shadow flex flex-col md:max-w-[441px] w-full py-12">
+          <div className="w-10/12 flex flex-col mx-auto">
+            <div>
+              <img src={logo} alt="logo" className="w-[109px] h-auto" />
+            </div>
+            <div className="mt-8  flex justify-center">
+              <ErrorMail />
+            </div>
+            <h1 className="mt-6 red-hat font-bold text-black mx-auto max-w-[345px] text-[32px] text-center">
+              Verification Link expired
+            </h1>
+            <p className="text-muted text-base md:text-lg mx-auto max-w-[317px] mt-3 text-center dm-sans ">
+              Sorry your verification link has expired, try again.
+            </p>
+            <div className="mt-8">
+              <button className="bg-black text-[#faf8f0] font-medium h-[55px] max-w-[345px] w-full rounded-[4px] cursor-pointer red-hat  ">
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

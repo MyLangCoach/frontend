@@ -20,6 +20,14 @@ export const getSimplifiedError = (error: object | any) => {
       toast.error("Oops something went wrong!");
     }
   }
+  if (error.response?.status === 403) {
+    if (errorObject?.message === "Email already taken") {
+      toast.error("Phone or Email already taken");
+    } else {
+      toast.error(error?.response?.data?.message);
+     
+    }
+  }
   if (error.response.status === 404) {
     toast.error(errorObject?.message ?? "Resource Not Found!");
     // console.error(error?.response?.error);

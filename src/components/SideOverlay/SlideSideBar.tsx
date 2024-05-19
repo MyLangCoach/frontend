@@ -1,12 +1,14 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import  {FaTimes} from "react-icons/fa"
+import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { HomeIcon, MicIcon, CatIcon, MessageIcon, StudentIcon, ProfileIcon, RecieptIcon, SettingsIcon } from "../../assets"
+import { HomeIcon, MicIcon, CatIcon, MessageIcon, StudentIcon, ProfileIcon, RecieptIcon, SettingsIcon } from "../../assets";
 
-import sampPic from "../../assets/png/samp-pic.png"
-import mobLogo from "../../assets/png/mob-logo.png"
+import sampPic from "../../assets/png/samp-pic.png";
+import mobLogo from "../../assets/png/mob-logo.png";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { clearState } from "../../features/offeringslice";
 const styles = {
   active: "flex h-[36px] items-center gap-2 px-4 py-2 bg-[#f4f4f5] rounded-[4px] mb-2  ",
   inActive: "flex h-[36px] items-center gap-2 px-4 py-2 mb-2 cursor-pointer",
@@ -14,7 +16,13 @@ const styles = {
 
 export default function SlideSidebar({current,open,setOpen} : any) {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.auth);
+    const handleLogout = () => {
+      dispatch(clearState());
+      navigate("/login");
+    };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -46,8 +54,11 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           alt="logo"
                           className="w-auto h-auto"
                         />
-                        <span className="cursor-pointer" onClick={() => setOpen(false)}>
-                <FaTimes />
+                        <span
+                          className="cursor-pointer"
+                          onClick={() => setOpen(false)}
+                        >
+                          <FaTimes />
                         </span>
                       </div>
                     </div>
@@ -151,6 +162,17 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           Settings
                         </p>
                       </div>
+                      <div
+                        className={
+                          current === 9 ? styles.active : styles.inActive
+                        }
+                        onClick={handleLogout}
+                      >
+                        <SettingsIcon />
+                        <p className="text-black text-sm font-medium inter">
+                          Logout
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div className="px-4 mt-4 xl:px-8 border-t-[#e4e4e7] h-[90px] flex items-center border-t border-b border-b-[#e4e4e7] ">
@@ -163,10 +185,15 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         />
                       </span>
                       <div className="flex flex-col">
-                        <h1 className="inter font-medium text-[#17191C] text-sm ">
-                          Ibrahim.M
+                        <h1 className="inter font-medium text-[#17191C] text-sm capitalize ">
+                          {user?.userData?.firstName +
+                            " " +
+                            user?.userData?.lastName}
                         </h1>
-                        <p className="text-xs font-normal text-[#707070] underline cursor-pointer">
+                        <p
+                          className="text-xs font-normal text-[#707070] underline cursor-pointer"
+                          onClick={() => navigate("/profile")}
+                        >
                           View profile
                         </p>
                       </div>

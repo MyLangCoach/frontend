@@ -1,21 +1,20 @@
-import React from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import { NotificationIcon } from "../../assets";
-import classIcon from "../../assets/icons/class.svg";
-import expenseIcon from "../../assets/icons/expense.svg";
-import tutorIcon from "../../assets/icons/tutors.svg";
 import Overview from "../../components/home/overview";
 import CallLogs from "../../components/home/call-logs";
 import GuideTour from "../../components/home/guide-tour";
 import UpcomingEvents from "../../components/home/upcoming-event";
 import TopCoaches from "../../components/home/top-coaches";
-const index = () => {
+import { useAppSelector } from "../../app/hooks";
+const Home = () => {
+    const user = useAppSelector((state) => state.auth);
   return (
     <DashboardLayout current={1}>
       <div className="w-full flex flex-col">
         <div className="w-full flex items-center justify-between lg:mt-6">
           <p className="text-lg font-bold lg:text-2xl ">
-            Daniella, welcome back
+            {user?.userData?.firstName + " " + user?.userData?.lastName} ,
+            welcome back
           </p>
           <span className="">
             <NotificationIcon />
@@ -40,4 +39,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Home;

@@ -5,7 +5,7 @@ import { url } from "../../util/endpoints";
 export interface AuthState {
   loading: boolean;
   userData: any;
-  token: any;
+  token: string;
   verifiedStatus: boolean;
   registerSuccess: boolean;
 }
@@ -13,7 +13,7 @@ export interface AuthState {
 const initialState: AuthState = {
   loading: false,
   userData: {},
-  token: {},
+  token: "",
   verifiedStatus: false,
   registerSuccess : false
 };

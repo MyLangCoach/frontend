@@ -72,9 +72,17 @@ const Register = () => {
             <h1 className="text-2xl font-extrabold text-black red-hat">
               Account Created Successfully
             </h1>
-            <p className="text-muted">
-              Kindly check your email box and click on the link there to get verified 
+            <p className="text-muted mt-3">
+              Kindly check your email box and click on the link there to get
+              verified
             </p>
+            <button
+              className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] mt-6  "
+              onClick={() => navigate("/login")}
+            
+            >
+             Proceed to Login
+            </button>
           </div>
         ) : (
           <div className="w-full px-4 md:max-w-[345px] flex flex-col flow-hide h-screen ">
@@ -152,13 +160,10 @@ const Register = () => {
                 <div className="w-full  flex items-center justify-end mt-4">
                   <button
                     className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  "
-                      onClick={handleRegister}
-                      disabled={auth?.loading}
-                    >
-                      {
-                        auth?.loading ? "Loading..." : "Sign up"
-                      }
-                  
+                    onClick={handleRegister}
+                    disabled={auth?.loading}
+                  >
+                    {auth?.loading ? "Loading..." : "Sign up"}
                   </button>
                 </div>
                 <div className="w-full flex items-center justify-center mb-20">
