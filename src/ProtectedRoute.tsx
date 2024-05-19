@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { store } from "./app/store";
 
 const ProtectedRoute = ({ children }: { children: any }) => {
-  const authenticated = store.getState().auth?.token.access;
+  const authenticated = store.getState().auth?.token;
 
   if (!authenticated) {
     return <Navigate to="/login" />;
