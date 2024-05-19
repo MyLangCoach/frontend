@@ -6,8 +6,17 @@ import GuideTour from "../../components/home/guide-tour";
 import UpcomingEvents from "../../components/home/upcoming-event";
 import TopCoaches from "../../components/home/top-coaches";
 import { useAppSelector } from "../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 const Home = () => {
-    const user = useAppSelector((state) => state.auth);
+  const user = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user?.token?.length === 0) {
+      navigate("/login")
+    }
+  }, [])
+  
   return (
     <DashboardLayout current={1}>
       <div className="w-full flex flex-col">
