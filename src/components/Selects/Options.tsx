@@ -3,7 +3,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
-import { MoreIcon } from "../../assets/svgs/Icons";
+
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -16,7 +16,8 @@ export default function Options({ children }: any) {
         <div>
           <Menu.Button className=" rounded-full flex items-center text-gray-400 hover:text-gray-600 ">
             <span className="sr-only">Open options</span>
-            <MoreIcon />
+        
+            {/* MORE ICONS HERE  */}
           </Menu.Button>
         </div>
 

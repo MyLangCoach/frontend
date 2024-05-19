@@ -1,6 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/solid";
+
 import { Fragment } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 interface selectProps {
@@ -93,7 +93,7 @@ export default function UserSelect({
                               "absolute inset-y-0 left-0 flex items-center pl-1.5"
                             )}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                       
                           </span>
                         ) : null}
                       </>

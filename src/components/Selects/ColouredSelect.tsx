@@ -1,6 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/solid";
+
 import { Fragment } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 interface selectProps {

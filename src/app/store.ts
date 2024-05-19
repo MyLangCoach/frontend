@@ -14,19 +14,22 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+// import storage from "redux-persist/lib/storage";
+import session from "redux-persist/lib/storage/session";
 import counterReducer from "../features/counter/counterSlice";
 import authReducer from "../features/auth/authSlice";
+import offeringsSlice from "../features/offeringslice";
 
 const rootReducer = combineReducers({
   counter: counterReducer, //to be removed once we have more than one reducer
   auth: authReducer,
+  offerings:offeringsSlice
 });
 
 const persistConfig = {
   key: "root",
-  storage: storage,
-  whitelist: ["auth"], //add any reducer you want to be persisted here
+  storage: session,
+  whitelist: ["auth",], //add any reducer you want to be persisted here
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

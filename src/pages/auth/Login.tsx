@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../assets/png/lang-logo.png";
 import signPic from "../../assets/png/sign-pic.png";
 import { GoogleLogo } from "../../assets";
@@ -6,13 +6,38 @@ import { Input, Password } from "../../components/Input";
 import Status from "../../components/dropdown/status-drop";
 import PrimarySelect from "../../components/Selects/PrimarySelect";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { loginUser } from "../../features/auth/authSlice";
+import toast from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const auth = useAppSelector((state) => state.auth);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [selected, setSelected] = useState<any>(null);
+
+  const handleLogin = () => {
+    if (email && password) {
+    dispatch(loginUser({email,password}))
+    }
+    else {
+      toast.error("All fields must be filled")
+    }
+}
+
+
+
+  useEffect(() => {
+  //   if (auth?.token ) {
+
+  //   navigate("/")
+  // }
+}, [auth?.userData])
+  
+  
+  
+
 
   return (
     <div className="w-full flex flex-col xl:flex-row ">
@@ -49,8 +74,8 @@ const Login = () => {
             </div>
             <div className="flex flex-col mt-4 gap-y-4">
               <Input
-                value={name}
-                setValue={setName}
+                value={email}
+                setValue={setEmail}
                 label="Your email"
                 placeholder="your@email.com"
               />
@@ -59,22 +84,13 @@ const Login = () => {
                 setValue={setPassword}
                 label="Password"
               />
-              <div className="w-full flex items-center gap-4">
-                <input
-                  type="checkbox"
-                  className="accent-black w-[18px] h-[18px]"
-                  id=""
-                />
-                <p className="dm-sans font-medium text-xs text-[#707070]  ">
-                  I agree to{" "}
-                  <span className="font-bold text-black mx-1">Terms</span>
-                  and{" "}
-                  <span className="font-bold mx-1 text-black">conditions</span>
-                </p>
-              </div>
+        
               <div className="w-full  flex items-center justify-end mt-4">
-                <button className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  ">
-                  Sign In
+                <button className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] " onClick={handleLogin}>
+                  {
+                    auth?.loading ? "Loading..." : "Sign In"
+                  }
+            
                 </button>
               </div>
               <div className="w-full flex items-center justify-center mb-20">

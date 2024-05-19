@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+
 import { Combobox } from "@headlessui/react";
 
 interface SelectedProps {
@@ -37,7 +37,7 @@ export default function Example({
           }
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        {/* icon here */}
         </Combobox.Button>
 
         {filteredPeople.length > 0 && (
@@ -84,7 +84,7 @@ export default function Example({
                           active ? "text-white" : "text-indigo-600"
                         )}
                       >
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                     
                       </span>
                     )}
                   </>

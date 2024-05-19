@@ -7,6 +7,7 @@ export interface AuthState {
   userData: any;
   token: any;
   verifiedStatus: boolean;
+  registerSuccess: boolean;
 }
 
 const initialState: AuthState = {
@@ -14,6 +15,7 @@ const initialState: AuthState = {
   userData: {},
   token: {},
   verifiedStatus: false,
+  registerSuccess : false
 };
 
 export const authSlice = createSlice({
@@ -23,6 +25,10 @@ export const authSlice = createSlice({
     clearState: () => {
       return initialState;
     },
+    restoreDefault: (state) => {
+      state.registerSuccess = false;
+  
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -31,8 +37,8 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.userData = payload;
-        state.token = payload.tokens;
+     
+        state.registerSuccess = true;
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.loading = false;
@@ -53,34 +59,13 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.userData = payload.user;
-        state.token = payload.tokens;
+        state.userData = payload.data?.user;
+        state.token = payload.data?.token;
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.loading = false;
       })
-      .addCase(socialLogin.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(socialLogin.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.userData = payload.user;
-        state.token = payload.tokens;
-      })
-      .addCase(socialLogin.rejected, (state, { payload }) => {
-        state.loading = false;
-      })
-      .addCase(logoutUser.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(logoutUser.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.token = {};
-        state.userData = {};
-      })
-      .addCase(logoutUser.rejected, (state, { payload }) => {
-        state.loading = false;
-      })
+
       .addCase(verifyUserEmail.pending, (state) => {
         state.loading = true;
       })
@@ -136,33 +121,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const socialLogin = createAsyncThunk(
-  "socialLogin",
-  async (payload: any, { rejectWithValue }) => {
-    try {
-      const { data } = await APIService.post(`${url.socialLogin}`, payload);
-      return data;
-    } catch (error: any) {
-      return rejectWithValue(
-        getSimplifiedError(error.response ? error : error)
-      );
-    }
-  }
-);
-
-export const logoutUser = createAsyncThunk(
-  "logoutUser",
-  async (payload: any, { rejectWithValue }) => {
-    try {
-      const { data } = await APIService.post(`${url.logout}`, payload);
-      return data;
-    } catch (error: any) {
-      return rejectWithValue(
-        getSimplifiedError(error.response ? error : error)
-      );
-    }
-  }
-);
 
 export const verifyUserEmail = createAsyncThunk(
   "verifyUserEmail",
@@ -180,7 +138,54 @@ export const verifyUserEmail = createAsyncThunk(
   }
 );
 
+export const getUserProfile = createAsyncThunk(
+  "getUserProfile",
+  async (_, { rejectWithValue }) => {
+      const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.userProfile}`,
+        {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "updateUserProfile",
+  async (payload: any, { rejectWithValue }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.patch(
+        `${url.userProfile}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
 export const authSelector = (state: any) => state.auth;
 
-export const { clearState } = authSlice.actions;
+export const { clearState,restoreDefault } = authSlice.actions;
 export default authSlice.reducer;
+function getState(): any {
+  throw new Error("Function not implemented.");
+}
+
