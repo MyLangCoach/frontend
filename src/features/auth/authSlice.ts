@@ -187,7 +187,7 @@ export const updateUserProfile = createAsyncThunk(
   async (payload: any, { rejectWithValue,getState }) => {
           const { auth }: any = getState();
     try {
-      const { data } = await APIService.patch(
+      const { data } = await APIService.put(
         `${url.userProfile}`,
         payload,
         {

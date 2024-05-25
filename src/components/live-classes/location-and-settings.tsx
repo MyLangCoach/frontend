@@ -3,7 +3,7 @@ import UrlInput from '../Input';
 import { useNavigate } from 'react-router-dom';
 import { OutlineBtn, BigButton } from '../Button';
 
-const LocationSettings = ({ setCurrent }: any) => {
+const LocationSettings = ({ setCurrent, handleCreate,loading }: any) => {
     const [url, setUrl] = useState('');
     const navigate = useNavigate();
 
@@ -85,7 +85,9 @@ const LocationSettings = ({ setCurrent }: any) => {
         <span>
           <BigButton
             name="Continue"
-            onClick={() => navigate("/live-classes")}
+            loading={loading}
+
+            onClick={handleCreate}
           />
         </span>
       </div>

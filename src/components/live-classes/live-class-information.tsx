@@ -1,18 +1,21 @@
-import {useState} from 'react'
-import { DateInput, Input } from '../Input'
+import {useEffect, useState} from 'react'
+import { DateInput, DateTimeInput, Input } from '../Input'
 
 import PrimarySelect from '../Selects/PrimarySelect';
 import { OutlineBtn, BigButton } from '../Button';
 import { useNavigate } from 'react-router-dom';
-const LiveClassInformation = ({ setCurrent }: any) => {
+const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration }: any) => {
     const navigate = useNavigate();
-    const [name, setName] = useState<string>("");
+    // const [name, setName] = useState<string>("");
     const [desc, setDesc] = useState<string>("");
-    const [date, setDate] = useState<string>("");
+    // const [date, setDate] = useState<string>("");
     const [image, setImage] = useState<any>("");
     const [classType, setClassType] = useState(0);
-      const [time, setTime] = useState({ name: "" });
-      const [duration, setDuration] = useState({ name: "" });
+      const [time, setTime] = useState({ name: "30mins", value:30 });
+    useEffect(() => {
+      setDuration(time.value)
+    }, [time])
+    
 
 
   return (
@@ -22,7 +25,12 @@ const LiveClassInformation = ({ setCurrent }: any) => {
       </h1>
       <div className="w-full flex flex-col mt-4">
         <div className="w-full">
-          <Input label={"Live class name"} height='h-9' value={name} setValue={setName} />
+          <Input
+            label={"Live class name"}
+            height="h-9"
+            value={title}
+            setValue={setTitle}
+          />
         </div>
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
@@ -33,6 +41,8 @@ const LiveClassInformation = ({ setCurrent }: any) => {
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
           ></textarea>
         </div>
         {/* end */}
@@ -45,6 +55,8 @@ const LiveClassInformation = ({ setCurrent }: any) => {
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
+            onChange={(e) => setCoverImageUrl(e.target.value)}
+            value={coverImageUrl}
           ></textarea>
         </div>
         {/* end */}
@@ -72,21 +84,24 @@ const LiveClassInformation = ({ setCurrent }: any) => {
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 mt-4 gap-4 ">
           <div className="w-full flex flex-col">
             <label className="text-xs text-foreground font-medium dm-sans mb-2">
-              Cover Image
+              Class Date & Time
             </label>
-            <DateInput date={date} setDate={setDate} />
+            <DateTimeInput dateTime={dateTime} setDateTime={setDatetime} />
           </div>
           <div>
             <PrimarySelect
               selected={time}
               setSelected={setTime}
               label="Class time"
-              data={[{ name: "30 mins" }, { name: "1 hour" }]}
+              data={[
+                { name: "30 mins", value: 30 },
+                { name: "1 hour", value: 60 },
+              ]}
               name="Select"
             />
           </div>
         </div>
-        <div className="w-full mt-4">
+        {/* <div className="w-full mt-4">
           <PrimarySelect
             selected={duration}
             setSelected={setDuration}
@@ -94,7 +109,7 @@ const LiveClassInformation = ({ setCurrent }: any) => {
             data={[{ name: "30 mins" }, { name: "1 hour" }]}
             name="Select"
           />
-        </div>
+        </div> */}
         <div className="flex gap-3 items-center mt-8 justify-end">
           <span>
             <OutlineBtn name="Discard changes" onClick={() => navigate(-1)} />

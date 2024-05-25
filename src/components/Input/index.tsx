@@ -6,6 +6,12 @@ interface dateProps {
   className?: string;
   height?: string;
 }
+interface dateTimeProps {
+  dateTime: string;
+  setDateTime: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
+  height?: string;
+}
 export const Input = ({
   className,
   label,
@@ -166,6 +172,48 @@ export const DateInput = ({
           }`}
         >
           {date ? date : "Select Date"}
+        </p>
+        <span className="cursor-pointer" onClick={onCalenderIconClick}>
+          <CalenderIcon />
+        </span>
+      </div>
+    </div>
+  );
+};
+export const DateTimeInput = ({
+  dateTime,
+  setDateTime,
+  className,
+  height,
+}: dateTimeProps) => {
+  const inputRef = useRef<any>(null);
+  const onCalenderIconClick = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+      inputRef?.current?.showPicker();
+    }
+  };
+  return (
+    <div
+      className={`relative outline-none rounded-[5px] border border-border flex  items-center px-4  w-full      ${className} ${
+        height ? height : "h-[36px]"
+      }`}
+    >
+      <input
+        type="datetime-local"
+        name="date"
+        className=" opacity-0  "
+        value={dateTime}
+        onChange={(e: any) => setDateTime(e.target?.value)}
+        ref={inputRef}
+      />
+      <div className="flex items-center  justify-between w-full px-3 absolute inset-0">
+        <p
+          className={` text-sm  ${
+            dateTime ? "text-foreground" : "text-[#71717A]"
+          }`}
+        >
+          {dateTime ? dateTime : "Select Date & Time"}
         </p>
         <span className="cursor-pointer" onClick={onCalenderIconClick}>
           <CalenderIcon />

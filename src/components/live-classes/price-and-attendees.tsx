@@ -1,13 +1,44 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Radio from '../Radio';
 import { Input } from '../Input';
 import { BigButton, CapsuleBtn, OutlineBtn } from '../Button';
+import PrimarySelect from '../Selects/PrimarySelect';
 
-const PriceAttendees = ({ setCurrent }: any) => {
-    const [free, setFree] = useState(true);
-    const [limited, setLimited] = useState(true);
-    const [price, setPrice] = useState("");
-    const [population, setPopulation] = useState("");
+const PriceAttendees = ({
+  setCurrent,
+  cost,
+  setCost,
+  attendantType,
+  setAttendantType,
+  numOfAttendees,
+  setNumOfAttendees,
+  setCostType,setType
+}: any) => {
+  const [free, setFree] = useState(true);
+  const [limited, setLimited] = useState(true);
+  const [price, setPrice] = useState<number>(0);
+  const [population, setPopulation] = useState("");
+  const [classType,setClassType] = useState({name:"ONE TIME",value:"ONE_TIME"})
+  useEffect(() => {
+    if (free) {
+      setCostType("FREE")
+    }
+    else setCostType("PAID")
+    if (limited) {
+      setAttendantType("LIMITED")
+    }
+    else {
+       setAttendantType("UNLIMITED");
+    }
+  }, [free,attendantType])
+  useEffect(() => {
+  setCost({currency:"NGN", amount:price})
+  }, [price])
+
+  useEffect(() => {
+    setType(classType?.value)
+  }, [classType])
+  
 
   return (
     <div className="w-full flex flex-col">
@@ -29,10 +60,13 @@ const PriceAttendees = ({ setCurrent }: any) => {
           </span>
         </div>
         <div className="w-full mt-4">
-          <Input label={"Class price"} value={price} setValue={setPrice} height='h-9' />
-        </div>
-        <div className="w-full mt-4">
-          <CapsuleBtn name="Currency" />
+          <Input
+            label={"Class price (NGN)"}
+            value={price}
+            setValue={setPrice}
+            height="h-9"
+            type="number"
+          />
         </div>
 
         <div className="w-full mt-4 flex flex-col">
@@ -56,12 +90,23 @@ const PriceAttendees = ({ setCurrent }: any) => {
             </span>
           </div>
         </div>
-        <div className="w-full mt-4">
+        <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-8">
           <Input
             label={"Attendees"}
-            value={population}
-                      setValue={setPopulation}
-                      height='h-9'
+            value={numOfAttendees}
+            setValue={setNumOfAttendees}
+            height="h-9"
+            type="number"
+          />
+          <PrimarySelect
+            selected={classType}
+            setSelected={setClassType}
+            label="Class time"
+            data={[
+              { name: "ONE TIME", value: "ONE_TIME" },
+              { name: "RECURRING", value: "RECURRING" },
+            ]}
+            name="Select"
           />
         </div>
         <div className="flex gap-3 items-center mt-8 justify-end">
@@ -75,6 +120,6 @@ const PriceAttendees = ({ setCurrent }: any) => {
       </div>
     </div>
   );
-}
+};
 
 export default PriceAttendees

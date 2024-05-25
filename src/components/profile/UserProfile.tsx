@@ -21,7 +21,7 @@ const UserProfile = () => {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
+  const [country, setCountry] = useState<any>("");
   const [desc, setDesc] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   const [socialMedia, setSocialMedia] = useState<string[]>([""]);
@@ -111,11 +111,11 @@ const UserProfile = () => {
    const updatedProfile: UserProfileData = {
      firstName: firstname,
      lastName: lastname,
-     profileImage: prof.name,
-     role: "MALE", // Assuming role is always "MALE". Adjust if dynamic
+     profileImage: "daniekeys.com",
+      // username:username,
      description: desc,
      bio: bio,
-     country: country,
+     country: country?.name,
      socials: socialMedia,
      languages: languages,
      qualifications: qualifications,
@@ -201,7 +201,7 @@ const UserProfile = () => {
         </div>
         {/* end of an input */}
         {/* start */}
-        <div className="w-full mt-4">
+        {/* <div className="w-full mt-4">
           <UrlInput
             preUrl="https://www.mylangcoach/"
             placeholder="geo"
@@ -212,7 +212,7 @@ const UserProfile = () => {
             setValue={setUsername}
             label="Username"
           />
-        </div>
+        </div> */}
         {/* end */}
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
@@ -223,6 +223,22 @@ const UserProfile = () => {
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+          ></textarea>
+        </div>
+        {/* end */}
+        {/* start */}
+        <div className="w-full mt-4 flex flex-col">
+          <label className="text-xs text-foreground font-medium dm-sans mb-2">
+            Short Description
+          </label>
+          <textarea
+            id=""
+            className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
+            placeholder="type message here"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
           ></textarea>
         </div>
         {/* end */}
@@ -233,7 +249,7 @@ const UserProfile = () => {
             setSelected={setCountry}
             label="Choose Country"
             data={Location}
-            name="Select Country"
+            name={country}
           />
         </span>
         {/* end */}
