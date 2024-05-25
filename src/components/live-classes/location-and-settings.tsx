@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {SetStateAction, useState} from 'react'
 import UrlInput from '../Input';
 import { useNavigate } from 'react-router-dom';
 import { OutlineBtn, BigButton } from '../Button';
@@ -17,8 +17,9 @@ const LocationSettings = ({ setCurrent }: any) => {
           label={"Location (Add meeting link here)"}
           placeholder="www.meet.google.com"
           value={url}
-          setValue={setUrl}
+        
           className="w-full"
+          onChange={(e: any) => setUrl(e.target?.value)}
         />
       </div>
       <div className="w-full flex flex-col mt-10">
@@ -71,8 +72,9 @@ const LocationSettings = ({ setCurrent }: any) => {
             label={"Redirect Url"}
             placeholder="www.meet.google.com"
             value={url}
-            setValue={setUrl}
+          
             className="w-full"
+            onChange={(e: any) => setUrl(e.target?.value)}
           />
         </div>
       </div>
@@ -81,7 +83,10 @@ const LocationSettings = ({ setCurrent }: any) => {
           <OutlineBtn name="Discard changes" onClick={() => setCurrent(2)} />
         </span>
         <span>
-          <BigButton name="Continue" onClick={() => navigate("/live-classes")} />
+          <BigButton
+            name="Continue"
+            onClick={() => navigate("/live-classes")}
+          />
         </span>
       </div>
     </div>
