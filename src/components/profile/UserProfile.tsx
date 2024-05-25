@@ -1,26 +1,143 @@
-import React, { useState } from "react";
+import  { useEffect, useState } from "react";
 import camera from "../../assets/icons/camera-icon.png";
 import dp from "../../assets/png/dp.jpg";
 import UrlInput, { Input } from "../Input";
 import { BigButton, Button, CapsuleBtn, OutlineBtn } from "../Button";
 import PrimarySelect from "../Selects/PrimarySelect";
 import { Location } from "../../util/location";
-
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getUserProfile,updateUserProfile } from "../../features/auth/authSlice";
+import LoadingComponent from "../Loaders/skeleton-loading";
+import { Language,Qualification,UserProfileData } from "../../util/types";
 const UserProfile = () => {
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [username, setUsername] = useState("");
-  const [country, setCountry] = useState("");
-  const [desc, setDesc] = useState("");
-  const [bio, setBio] = useState("");
-  const [socialMedia, setSocialMedia] = useState("");
-  const [qualification, setQualification] = useState("");
-  const [isOgr, setIsOrg] = useState("");
-  const [year, setYear] = useState({ name: "", value: "" });
-  const [lang, setLang] = useState("");
-  const [cost, setCost] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [prof, setProf] = useState({ name: ""})
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.auth);
+  useEffect(() => {
+    dispatch(getUserProfile());
+  }, []);
+  
+  const userData: UserProfileData | undefined = user?.userData;
+
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+  const [socialMedia, setSocialMedia] = useState<string[]>([""]);
+  const [qualification, setQualification] = useState<string>("");
+  const [isOrg, setIsOrg] = useState<string>("");
+  const [year, setYear] = useState<{ name: string; value: number }>({
+    name: "",
+    value: 0,
+  });
+  const [languages, setLanguages] = useState<Language[]>([
+    { language: "", proficiency: "" },
+  ]);
+  const [cost, setCost] = useState<string>("");
+  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [prof, setProf] = useState<{ name: string }>({ name: "" });
+    const [qualifications, setQualifications] = useState<Qualification[]>([
+      { name: "", issuing_org: "", year: 0 },
+    ]);
+  
+  useEffect(() => {
+    if (userData) {
+      setFirstname(userData.firstName || "");
+      setLastname(userData.lastName || "");
+      setUsername(userData.username || ""); // assuming username exists in userData
+      setCountry(userData.country || "");
+      setDesc(userData.description || "");
+      setBio(userData.bio || "");
+      setSocialMedia(userData.socials || [""]);
+         setQualifications(
+           userData.qualifications || [{ name: "", issuing_org: "", year: 0 }]
+         );// assuming single qualification
+      setIsOrg(userData.qualifications?.[0]?.issuing_org || "");
+      setYear({
+        name: userData.qualifications?.[0]?.name || "",
+        value: userData.qualifications?.[0]?.year || 0,
+      });
+      setLanguages(userData.languages || [{ language: "", proficiency: "" }]);
+      setVideoUrl(userData.introVideo || "");
+      setProf({ name: userData.profileImage || "" });
+    }
+  }, [userData]);
+
+    const addSocialMedia = () => {
+      setSocialMedia([...socialMedia, ""]);
+    };
+
+    const handleSocialMediaChange = (index:number, value:string) => {
+      const updatedSocialMedia = [...socialMedia];
+      updatedSocialMedia[index] = value;
+      setSocialMedia(updatedSocialMedia);
+    };
+  const addLanguage = () => {
+    setLanguages([...languages, { language: "", proficiency: "" }]);
+  };
+
+  const handleLanguageChange = (
+    index: number,
+    key: keyof Language,
+    value: string
+  ) => {
+    const updatedLanguages = [...languages];
+    updatedLanguages[index][key] = value;
+    setLanguages(updatedLanguages);
+  };
+
+  
+  const addQualification = () => {
+    setQualifications([
+      ...qualifications,
+      { name: "", issuing_org: "", year: 0 },
+    ]);
+  };
+
+ const handleQualificationChange = (
+   index: number,
+   key: keyof Qualification,
+   value: string | number
+ ) => {
+   const updatedQualifications = [...qualifications];
+   updatedQualifications[index] = {
+     ...updatedQualifications[index],
+     [key]: value,
+   };
+   setQualifications(updatedQualifications);
+ };
+ const updateProfile = () => {
+   const updatedProfile: UserProfileData = {
+     firstName: firstname,
+     lastName: lastname,
+     profileImage: prof.name,
+     role: "MALE", // Assuming role is always "MALE". Adjust if dynamic
+     description: desc,
+     bio: bio,
+     country: country,
+     socials: socialMedia,
+     languages: languages,
+     qualifications: qualifications,
+     introVideo: videoUrl,
+   };
+
+   // Dispatch the action to update the user profile
+   dispatch(updateUserProfile(updatedProfile));
+ };
+
+
+
+
+
+
+  if (user?.fetchLoading) {
+    return (
+      <div className="px-6 ">
+        <LoadingComponent />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full flex flex-col rounded-[4px] bg-white mt-4 px-4 lg:px-0">
@@ -89,6 +206,9 @@ const UserProfile = () => {
             preUrl="https://www.mylangcoach/"
             placeholder="geo"
             value={username}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setUsername(e.target.value)
+            }
             setValue={setUsername}
             label="Username"
           />
@@ -122,20 +242,23 @@ const UserProfile = () => {
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Social media
           </h1>
-          <CapsuleBtn
-            name="Add social media"
-            onClick={() => console.log("first")}
-          />
+          <CapsuleBtn name="Add social media" onClick={addSocialMedia} />
         </div>
         {/* end */}
         {/* start of inout */}
-        <div className="w-full mt-4">
-          <UrlInput
-            placeholder="www.facebook.com"
-            value={socialMedia}
-            setValue={setSocialMedia}
-            label="Facebook"
-          />
+
+        <div className="w-full mt-4 flex flex-col gap-3">
+          {socialMedia.map((social: string, index: number) => (
+            <UrlInput
+              placeholder="www.facebook.com"
+              value={social}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleSocialMediaChange(index, e.target.value)
+              }
+              label={`Account ${index + 1}`}
+              key={index}
+            />
+          ))}
         </div>
         {/* end of input */}
         {/* start */}
@@ -143,33 +266,39 @@ const UserProfile = () => {
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Language
           </h1>
-          <CapsuleBtn
-            name="Add language"
-            onClick={() => console.log("first")}
-          />
+          <CapsuleBtn name="Add language" onClick={addLanguage} />
         </div>
         {/* end */}
         {/* start of an input */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-          <div>
-            <Input
-              value={lang}
-              setValue={setLang}
-              label="Language"
-              height="h-[36px]"
-              placeholder="French"
-            />
+        {languages.map((lang, index) => (
+          <div
+            key={index}
+            className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4"
+          >
+            <div>
+              <Input
+                value={lang.language}
+                setValue={(value: any) =>
+                  handleLanguageChange(index, "language", value)
+                }
+                label="Language"
+                height="h-[36px]"
+                placeholder="French"
+              />
+            </div>
+            <div>
+              <PrimarySelect
+                selected={{ name: lang.proficiency }}
+                setSelected={(value: any) =>
+                  handleLanguageChange(index, "proficiency", value.name)
+                }
+                label="Proficiency"
+                data={[{ name: "Expert" }, { name: "Master" }]}
+                name="Select"
+              />
+            </div>
           </div>
-          <div>
-            <PrimarySelect
-              selected={prof}
-              setSelected={setProf}
-              label="Proficiency"
-              data={[{ name: "Expert" }, { name: "Master" }]}
-              name="Select"
-            />
-          </div>
-        </div>
+        ))}
         {/* end of an input */}
         {/* start */}
         <div className="flex justify-between items-center mt-8">
@@ -178,40 +307,57 @@ const UserProfile = () => {
           </h1>
           <CapsuleBtn
             name="Add Qualification"
-            onClick={() => console.log("first")}
+            onClick={addQualification}
           />
         </div>
         {/* end */}
         {/* start of an input */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-          <div>
-            <Input
-              value={lang}
-              setValue={setLang}
-              label="Name of Qualification"
-              height="h-[36px]"
-              placeholder=""
-            />
+        {qualifications.map((qual, index) => (
+          <div
+            key={index}
+            className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4"
+          >
+            <div>
+              <Input
+                value={qual.name}
+                setValue={(value:string) =>
+                  handleQualificationChange(index, "name", value)
+                }
+                label="Name of Qualification"
+                height="h-[36px]"
+                placeholder=""
+              />
+            </div>
+            <div>
+              <Input
+                value={qual.issuing_org}
+                setValue={(value:string) =>
+                  handleQualificationChange(index, "issuing_org", value)
+                }
+                label="Issuing Organization"
+                height="h-[36px]"
+                placeholder=""
+              />
+            </div>
+            <div>
+              <PrimarySelect
+                selected={{ name: qual.year.toString() }}
+                setSelected={(value:any) =>
+                  handleQualificationChange(index, "year", Number(value.name))
+                }
+                label="Year"
+                data={[
+                  { name: "1999" },
+                  { name: "2000" },
+                  { name: "2001" },
+                  // Add more years as needed
+                ]}
+                name="Select"
+              />
+            </div>
           </div>
-          <div>
-            <Input
-              value={lang}
-              setValue={setLang}
-              label="Issuing Organization"
-              height="h-[36px]"
-              placeholder="French"
-            />
-          </div>
-          <div>
-            <PrimarySelect
-              selected={year}
-              setSelected={setYear}
-              label="Year"
-              data={[{ name: "1999" }, { name: "2000" }]}
-              name="Select"
-            />
-          </div>
-        </div>
+        ))}
+
         {/* end of an input */}
         {/* start */}
         <div className="flex justify-between items-center mt-8">
@@ -255,8 +401,10 @@ const UserProfile = () => {
         <div className="w-full mt-4">
           <UrlInput
             placeholder="www.facebook.com"
-            value={socialMedia}
-            setValue={setSocialMedia}
+            value={videoUrl}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setVideoUrl(e.target.value)
+            }
             label="Video URL"
           />
         </div>
@@ -266,8 +414,7 @@ const UserProfile = () => {
             <OutlineBtn name="Discard changes" />
           </span>
           <span>
-
-          <BigButton name="Update Profile" />
+            <BigButton name="Update Profile" onClick={updateProfile} />
           </span>
         </div>
       </div>

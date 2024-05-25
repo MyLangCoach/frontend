@@ -93,15 +93,17 @@ export default function UrlInput({
   setValue,
   type,
   placeholder,
-  preUrl
+  preUrl,
+  onChange,
 }: {
   className?: string;
   label: string;
   value: any;
-  setValue: any;
+  setValue?: any;
   placeholder?: string;
-    type?: string;
-  preUrl?:string
+  type?: string;
+  preUrl?: string;
+  onChange: any;
 }) {
   return (
     <div className="w-full">
@@ -122,9 +124,7 @@ export default function UrlInput({
           className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-[#E0E0E0] sm:text-sm "
           placeholder={placeholder}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setValue(e.target.value)
-          }
+        onChange={onChange}
         />
       </div>
     </div>

@@ -104,8 +104,8 @@ export const offeringsSlice = createSlice({
 
 export const createOffering = createAsyncThunk(
   "createOffering",
-  async (payload: any, { rejectWithValue }) => {
-      const { auth }: any = getState();
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.post(`${url.offerings}`, payload, {
         headers: {
@@ -121,10 +121,10 @@ export const createOffering = createAsyncThunk(
   }
 );
 
-export const updatedOffering= createAsyncThunk(
+export const updatedOffering = createAsyncThunk(
   "updateOffering",
-  async (payload: any, { rejectWithValue }) => {
-      const { auth }: any = getState();
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.patch(
         `${url.offerings}/${payload.id}`,
@@ -145,8 +145,8 @@ export const updatedOffering= createAsyncThunk(
 );
 export const getSingleOffering = createAsyncThunk(
   "getSingleOffering",
-  async (payload: any, { rejectWithValue }) => {
-      const { auth }: any = getState();
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offerings}/${payload.id}`, {
         headers: {
@@ -163,8 +163,8 @@ export const getSingleOffering = createAsyncThunk(
 );
 export const deleteSingleOffering = createAsyncThunk(
   "deleteSingleOffering",
-  async (payload: any, { rejectWithValue }) => {
-      const { auth }: any = getState();
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.delete(
         `${url.offerings}/${payload.id}`,
@@ -184,7 +184,7 @@ export const deleteSingleOffering = createAsyncThunk(
 );
 export const getAllOfferings = createAsyncThunk(
   "getAllOfferings",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue,getState }) => {
       const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offerings}`, {
@@ -207,7 +207,5 @@ export const authSelector = (state: any) => state.auth;
 
 export const { clearState,restoreDefault } = offeringsSlice.actions;
 export default offeringsSlice.reducer;
-function getState(): any {
-  throw new Error("Function not implemented.");
-}
+
 

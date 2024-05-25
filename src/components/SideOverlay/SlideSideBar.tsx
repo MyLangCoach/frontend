@@ -22,7 +22,8 @@ export default function SlideSidebar({current,open,setOpen} : any) {
     const handleLogout = () => {
       dispatch(clearState());
       navigate("/login");
-    };
+  };
+    const userRole = user?.userData?.role;
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -88,11 +89,36 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           My Classes
                         </p>
                       </div>
+                      {userRole === "STUDENT" ? (
+                        <div
+                          className={
+                            current === 5 ? styles.active : styles.inActive
+                          }
+                          onClick={() => navigate("/coaches")}
+                        >
+                          <StudentIcon />
+                          <p className="text-black text-sm font-medium inter">
+                            Coaches
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            current === 5 ? styles.active : styles.inActive
+                          }
+                          onClick={() => navigate("/students")}
+                        >
+                          <StudentIcon />
+                          <p className="text-black text-sm font-medium inter">
+                            Students
+                          </p>
+                        </div>
+                      )}
                       <div
                         className={
                           current === 100
                             ? styles.active
-                            : `${styles.inActive} opacity-20 cursor-not-allowed`
+                            : `${styles.inActive} opacity-0 cursor-not-allowed`
                         }
                         onClick={() => navigate("/")}
                       >
@@ -105,24 +131,13 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         className={
                           current === 201
                             ? styles.active
-                            : `${styles.inActive} opacity-20 cursor-not-allowed`
+                            : `${styles.inActive} opacity-0 cursor-not-allowed`
                         }
                         onClick={() => navigate("/")}
                       >
                         <MessageIcon />
                         <p className="text-black text-sm font-medium inter">
                           Messages
-                        </p>
-                      </div>
-                      <div
-                        className={
-                          current === 5 ? styles.active : styles.inActive
-                        }
-                        onClick={() => navigate("/")}
-                      >
-                        <StudentIcon />
-                        <p className="text-black text-sm font-medium inter">
-                          Students
                         </p>
                       </div>
 
@@ -140,17 +155,31 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           Profile
                         </p>
                       </div>
-                      <div
-                        className={
-                          current === 5 ? styles.active : styles.inActive
-                        }
-                        onClick={() => navigate("/")}
-                      >
-                        <RecieptIcon />
-                        <p className="text-black text-sm font-medium inter">
-                          Earnings
-                        </p>
-                      </div>
+                      {userRole === "STUDENT" ? (
+                        <div
+                          className={
+                            current === 7 ? styles.active : styles.inActive
+                          }
+                          onClick={() => navigate("/payouts")}
+                        >
+                          <RecieptIcon />
+                          <p className="text-black text-sm font-medium inter">
+                            Expenditure
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            current === 7 ? styles.active : styles.inActive
+                          }
+                          onClick={() => navigate("/payouts")}
+                        >
+                          <RecieptIcon />
+                          <p className="text-black text-sm font-medium inter">
+                            Earnings
+                          </p>
+                        </div>
+                      )}
                       <div
                         className={
                           current === 5 ? styles.active : styles.inActive

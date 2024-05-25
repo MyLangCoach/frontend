@@ -4,6 +4,7 @@ import { APIService } from "../../util/APIService";
 import { url } from "../../util/endpoints";
 export interface AuthState {
   loading: boolean;
+  fetchLoading: boolean;
   userData: any;
   token: string;
   verifiedStatus: boolean;
@@ -15,7 +16,8 @@ const initialState: AuthState = {
   userData: {},
   token: "",
   verifiedStatus: false,
-  registerSuccess : false
+  registerSuccess: false,
+  fetchLoading : false
 };
 
 export const authSlice = createSlice({
@@ -27,7 +29,6 @@ export const authSlice = createSlice({
     },
     restoreDefault: (state) => {
       state.registerSuccess = false;
-  
     },
   },
   extraReducers: (builder) => {
@@ -75,7 +76,29 @@ export const authSlice = createSlice({
       })
       .addCase(verifyUserEmail.rejected, (state, { payload }) => {
         state.loading = false;
-      });
+      })
+      .addCase(getUserProfile.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getUserProfile.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+      state.userData = payload.data
+      })
+      .addCase(getUserProfile.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+      state.userData = payload.data
+      })
+      .addCase(updateUserProfile.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      
+      ;
   },
 });
 
@@ -139,8 +162,8 @@ export const verifyUserEmail = createAsyncThunk(
 );
 
 export const getUserProfile = createAsyncThunk(
-  "getUserProfile",
-  async (_, { rejectWithValue }) => {
+  "getUserProfiles",
+  async (_, { rejectWithValue,getState }) => {
       const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.userProfile}`,
@@ -161,7 +184,7 @@ export const getUserProfile = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
   "updateUserProfile",
-  async (payload: any, { rejectWithValue }) => {
+  async (payload: any, { rejectWithValue,getState }) => {
           const { auth }: any = getState();
     try {
       const { data } = await APIService.patch(
@@ -185,7 +208,7 @@ export const authSelector = (state: any) => state.auth;
 
 export const { clearState,restoreDefault } = authSlice.actions;
 export default authSlice.reducer;
-function getState(): any {
-  throw new Error("Function not implemented.");
-}
+// function getState(): any {
+//   throw new Error("Function not implemented.");
+// }
 
