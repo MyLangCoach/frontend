@@ -6,14 +6,15 @@ import { Cost } from '../../util/types';
 import { useAppDispatch,useAppSelector } from '../../app/hooks';
 import { createOffering } from '../../features/offeringslice';
 import toast from 'react-hot-toast';
-
+import { useNavigate } from 'react-router-dom';
 const CreateClassHome = () => {
   const [current, setCurrent] = useState(1);
   const offering = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
-    const [title, setTitle] = useState<string>("string");
-    const [description, setDescription] = useState<string>("string");
-    const [coverImageUrl, setCoverImageUrl] = useState<string>("string");
+  const navigate = useNavigate();
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [coverImageUrl, setCoverImageUrl] = useState<string>("");
     const [type, setType] = useState<"ONE_TIME" | "RECURRING">("ONE_TIME");
     const [duration, setDuration] = useState<number>(30);
     const [costType, setCostType] = useState<"FREE" | "PAID">("FREE");
@@ -21,7 +22,7 @@ const CreateClassHome = () => {
     const [attendantType, setAttendantType] = useState<"LIMITED" | "UNLIMITED">(
       "LIMITED"
     );
-    const [datetime, setDatetime] = useState<string>("string");
+    const [datetime, setDatetime] = useState<string>("");
     const [numOfAttendees, setNumOfAttendees] = useState<number>(0);
 
   const handleCreate = () => {
@@ -30,12 +31,12 @@ const CreateClassHome = () => {
       description: description,
       coverImageUrl: coverImageUrl,
       type: type,
-      duration: duration,
+      duration: Number(duration),
       costType: costType,
       cost: cost,
       attendantType: attendantType,
-      datetime: datetime,
-      numOfAttendees: numOfAttendees,
+    
+      numOfAttendees: Number(numOfAttendees),
     };
 
     dispatch(createOffering(data))
@@ -45,7 +46,8 @@ const CreateClassHome = () => {
 
   useEffect(() => {
     if (offering?.createOfferingSuccess) {
-      toast.success("offering created successfully")
+      toast.success("offering created successfully");
+      navigate("/live-classes")
     }
   }, [offering?.createOfferingSuccess])
   

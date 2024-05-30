@@ -84,8 +84,9 @@ const LocationSettings = ({ setCurrent, handleCreate,loading }: any) => {
         </span>
         <span>
           <BigButton
-            name="Continue"
-            loading={loading}
+            name={loading? "Loading...": "Continue"}
+
+            // loading={loading}
 
             onClick={handleCreate}
           />

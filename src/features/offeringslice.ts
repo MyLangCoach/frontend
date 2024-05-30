@@ -187,7 +187,7 @@ export const getAllOfferings = createAsyncThunk(
   async (_, { rejectWithValue,getState }) => {
       const { auth }: any = getState();
     try {
-      const { data } = await APIService.get(`${url.offerings}`, {
+      const { data } = await APIService.get(`${url.getOfferings}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },

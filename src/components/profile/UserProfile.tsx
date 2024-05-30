@@ -9,6 +9,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getUserProfile,updateUserProfile } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { Language,Qualification,UserProfileData } from "../../util/types";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import toast from "react-hot-toast";
+import { storage } from "../../firebase";
 const UserProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.auth);
@@ -20,11 +23,18 @@ const UserProfile = () => {
 
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
+  const [profileUrl, setProfileUrl] = useState<string>("");
+  
   const [country, setCountry] = useState<any>("");
   const [desc, setDesc] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   const [socialMedia, setSocialMedia] = useState<string[]>([""]);
+  const [fileUrl, setFileUrl] = useState("");
+  const [, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<Blob | MediaSource | any>();
+  const [preview, setPreview] = useState("");
+  const [success, setSuccess] = useState(false);
   const [qualification, setQualification] = useState<string>("");
   const [isOrg, setIsOrg] = useState<string>("");
   const [year, setYear] = useState<{ name: string; value: number }>({
@@ -40,12 +50,12 @@ const UserProfile = () => {
     const [qualifications, setQualifications] = useState<Qualification[]>([
       { name: "", issuing_org: "", year: 0 },
     ]);
-  
+  console.log(userData)
   useEffect(() => {
     if (userData) {
       setFirstname(userData.firstName || "");
       setLastname(userData.lastName || "");
-      setUsername(userData.username || ""); // assuming username exists in userData
+      setProfileUrl(userData.profileImage || ""); // assuming username exists in userData
       setCountry(userData.country || "");
       setDesc(userData.description || "");
       setBio(userData.bio || "");
@@ -111,8 +121,6 @@ const UserProfile = () => {
    const updatedProfile: UserProfileData = {
      firstName: firstname,
      lastName: lastname,
-     profileImage: "daniekeys.com",
-      // username:username,
      description: desc,
      bio: bio,
      country: country?.name,
@@ -127,8 +135,74 @@ const UserProfile = () => {
  };
 
 
+const getFiles = (files: any) => {
+  if (!files) return;
+  setSelectedFile(files[0]);
+
+  const objectUrl = URL?.createObjectURL(files[0]);
+  setPreview(objectUrl);
+
+};
 
 
+const uploadFile = () => {
+  // e.preventDefault();
+  setLoading(true);
+  const storageRef = ref(storage, `/files/${selectedFile.name}`);
+  const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      const prog = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      );
+      setProgress(prog);
+    },
+    () => {
+      setSuccess(false);
+      setLoading(false);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+        setFileUrl(url);
+        
+        setSuccess(true);
+        setSelectedFile("");
+        setLoading(false);
+        
+        toast.success("Image Upload Successful");
+        // setPreview("");
+      });
+    }
+  );
+};
+
+
+useEffect(() => {
+  if (selectedFile) {
+
+    uploadFile()
+  }
+}, [selectedFile])
+  useEffect(() => {
+    if (fileUrl) {
+      const data = {
+        profileImage: fileUrl,
+        firstName: firstname,
+        lastName: lastname,
+        description: desc,
+        bio: bio,
+        country: country?.name,
+        socials: socialMedia,
+        languages: languages,
+        qualifications: qualifications,
+        introVideo: videoUrl,
+      };
+         dispatch(updateUserProfile(data));
+    }
+  }, [fileUrl])
+  
+  console.log(fileUrl);
 
 
   if (user?.fetchLoading) {
@@ -149,6 +223,7 @@ const UserProfile = () => {
               name=""
               className="inset-0 opacity-0 absolute"
               id=""
+              // onChange={(e) => getFiles(e.target.files)}
             />
             <span>
               <img src={camera} alt="camera" />
@@ -158,7 +233,8 @@ const UserProfile = () => {
         <div
           className="flex -mt-12 z-pro mx-auto lg:ml-12 border-[3px] items-center justify-center border-white relative"
           style={{
-            backgroundImage: `url(${dp})`,
+            backgroundImage: `url(${profileUrl ? profileUrl  : dp})`,
+
             height: "96px",
             width: "96px",
             borderRadius: "50%",
@@ -172,6 +248,7 @@ const UserProfile = () => {
               name=""
               className="inset-0 opacity-0 absolute"
               id=""
+              onChange={(e) => getFiles(e.target.files)}
             />
             <span>
               <img src={camera} alt="camera" />
@@ -321,10 +398,7 @@ const UserProfile = () => {
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Professional Qualification
           </h1>
-          <CapsuleBtn
-            name="Add Qualification"
-            onClick={addQualification}
-          />
+          <CapsuleBtn name="Add Qualification" onClick={addQualification} />
         </div>
         {/* end */}
         {/* start of an input */}
@@ -336,7 +410,7 @@ const UserProfile = () => {
             <div>
               <Input
                 value={qual.name}
-                setValue={(value:string) =>
+                setValue={(value: string) =>
                   handleQualificationChange(index, "name", value)
                 }
                 label="Name of Qualification"
@@ -347,7 +421,7 @@ const UserProfile = () => {
             <div>
               <Input
                 value={qual.issuing_org}
-                setValue={(value:string) =>
+                setValue={(value: string) =>
                   handleQualificationChange(index, "issuing_org", value)
                 }
                 label="Issuing Organization"
@@ -358,7 +432,7 @@ const UserProfile = () => {
             <div>
               <PrimarySelect
                 selected={{ name: qual.year.toString() }}
-                setSelected={(value:any) =>
+                setSelected={(value: any) =>
                   handleQualificationChange(index, "year", Number(value.name))
                 }
                 label="Year"

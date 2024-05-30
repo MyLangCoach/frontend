@@ -13,7 +13,7 @@ export interface Qualification {
 export interface UserProfileData {
   firstName: string;
   lastName: string;
-  profileImage: string;
+  profileImage?: string;
   role?: string;
   description: string;
   bio: string;

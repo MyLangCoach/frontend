@@ -1,10 +1,31 @@
-import {useState} from 'react'
+import { useState,useEffect } from 'react'
+import { useAppDispatch,useAppSelector } from '../../app/hooks';
 import { CancelIcon, Plus, PlusCircle,  } from '../../assets';
 import filterIcon from "../../assets/png/caret-sort.png";
 import { OfferingsDummy } from '../../util/mockdata';
 import CreateNewServiceModal from './create-new-service-modal';
+import { getAllOfferings } from '../../features/offeringslice';
+import LoadingComponent from '../Loaders/skeleton-loading';
 const OfferingsTable = () => {
-    const [open, setOpen] = useState(false);
+  const offerings = useAppSelector(state => state.offerings);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getAllOfferings())
+  }, [])
+  
+
+  const allOfferings = offerings?.allOfferings?.offerings;
+  console.log(allOfferings)
+  const [open, setOpen] = useState(false);
+
+  if (offerings?.fetchLoading) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    )
+  }
+  
   return (
     <div className="w-full bg-white py-6 px-3 flex flex-col">
       <h1 className="text-black font-bold  red-hat text-base lg:text-[19px]">
@@ -22,7 +43,7 @@ const OfferingsTable = () => {
         {/* end of input */}
 
         {/* duration */}
-        <div className="w-3/12 h-[36px] flex items-center rounded-md border-dotted border border-[#E4E4E7] px-3 justify-center gap-2 ">
+        {/* <div className="w-3/12 h-[36px] flex items-center rounded-md border-dotted border border-[#E4E4E7] px-3 justify-center gap-2 ">
           <div className="flex items-center gap-3 border-r border-r-[#e4e4e7] pr-3">
             <span>
               <PlusCircle />
@@ -34,15 +55,15 @@ const OfferingsTable = () => {
           <div className="flex bg-[#F4F4F5] px-1 py-[2px] rounded-sm gap-[10px] text-xs text-[#09090B] ">
             3 Selected
           </div>
-        </div>
+        </div> */}
         {/* end of duration */}
         {/* reset */}
-        <div className="w-2/12 gap-3 flex items-center h-[36px] justify-center cursor-pointer">
+        {/* <div className="w-2/12 gap-3 flex items-center h-[36px] justify-center cursor-pointer">
           <span className="text-foreground text-sm inter font-medium">
             Reset
           </span>
           <CancelIcon />
-        </div>
+        </div> */}
         {/* end reset */}
         {/* new service */}
         <div className="w-3/12 rounded-md h-[36px] px-4 flex justify-center items-center gap-2 border border-[#E4E4E7] cursor-pointer" onClick={() => setOpen(true)}>
@@ -81,7 +102,7 @@ const OfferingsTable = () => {
             </td>
           </th>
           <tbody className="w-full flex flex-col">
-            {OfferingsDummy?.map((item, index) => {
+            {allOfferings?.map((item:any, index:number) => {
               return (
                 <tr
                   key={index}
@@ -98,7 +119,7 @@ const OfferingsTable = () => {
                     </span>
                     <div className="flex flex-col gap-[10px]">
                       <h1 className="text-foreground font-normal text-sm truncate inter">
-                        {item?.name}
+                        {item?.title}
                       </h1>
                       <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
                         Active
@@ -107,15 +128,15 @@ const OfferingsTable = () => {
                   </td>
                   <td className="w-full flex items-center">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.price}
+                      {item?.costType === "FREE" ? "FREE" : item?.cost?.amount}
                     </p>
                   </td>
                   <td className="w-full flex flex-col gap-[10px] justify-center">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.time}
+                      {item?.duration === 30 ? "30 MINS":"60 MINS"}
                     </p>
                     <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                      {item?.subType}
+                      {item?.type}
                     </p>
                   </td>
                 </tr>

@@ -32,7 +32,7 @@ const PriceAttendees = ({
     }
   }, [free,attendantType])
   useEffect(() => {
-  setCost({currency:"NGN", amount:price})
+  setCost({currency:"NGN", amount:Number(price)})
   }, [price])
 
   useEffect(() => {
@@ -59,15 +59,17 @@ const PriceAttendees = ({
             <p className="text-sm text-foreground font-medium dm-sans"> Paid</p>
           </span>
         </div>
-        <div className="w-full mt-4">
-          <Input
-            label={"Class price (NGN)"}
-            value={price}
-            setValue={setPrice}
-            height="h-9"
-            type="number"
-          />
-        </div>
+        {!free && (
+          <div className="w-full mt-4">
+            <Input
+              label={"Class price (NGN)"}
+              value={price}
+              setValue={setPrice}
+              height="h-9"
+              type="number"
+            />
+          </div>
+        )}
 
         <div className="w-full mt-4 flex flex-col">
           <label className="text-sm text-foreground font-medium dm-sans mb-2">
@@ -104,7 +106,8 @@ const PriceAttendees = ({
             label="Class time"
             data={[
               { name: "ONE TIME", value: "ONE_TIME" },
-              { name: "RECURRING", value: "RECURRING" },
+              { name: "ONE MONTHLY", value: "ONE_MONTHLY" },
+              { name: "LIVE GROUP", value: "LIVE_GROUP" },
             ]}
             name="Select"
           />
