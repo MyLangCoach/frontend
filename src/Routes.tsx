@@ -15,6 +15,8 @@ import CreateClass from "./pages/live-classes/create-new-class";
 import Payouts from "./pages/payouts";
 import SettingsPage from "./pages/settings";
 import CoachStudent from "./pages/student/coach-student-page";
+import Testing from "./pages/Testing";
+import AllCoaches from "./pages/student/all-coaches-page";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -30,6 +32,8 @@ const AppRoutes = () => {
         <Route path="/payouts" element={<Payouts />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/students" element={<CoachStudent />} />
+        <Route path="/testing" element={<Testing />} />
+        <Route path="/coaches" element={<AllCoaches />} />
         
      
 

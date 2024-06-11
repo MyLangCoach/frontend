@@ -56,8 +56,8 @@ const Register = () => {
   
 
   return (
-    <div className="w-full flex flex-col xl:flex-row ">
-      <div className="w-full hidden xl:flex xl:w-1/2 bg-[#fcfcff] h-screen justify-center items-center overflow-hidden">
+    <div className="w-full flex flex-col xl:flex-row lg:h-screen lg:overflow-y-hidden ">
+      <div className="w-full hidden xl:flex xl:w-1/2 bg-[#fcfcff]  justify-center items-center h-screen ">
         <span>
           <img
             src={signPic}
@@ -66,7 +66,7 @@ const Register = () => {
           />
         </span>
       </div>
-      <div className="w-full xl:w-1/2 flex items-center justify-center flow-hide h-screen">
+      <div className="w-full xl:w-1/2 flex items-center justify-center   ">
         {success ? (
           <div className="flex flex-col justify-center items-center">
             <h1 className="text-2xl font-extrabold text-black red-hat">
@@ -85,8 +85,8 @@ const Register = () => {
             </button>
           </div>
         ) : (
-          <div className="w-full px-4 md:max-w-[345px] flex flex-col flow-hide h-screen ">
-            <div className="mt-20">
+          <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-[90vh] flow-hide">
+            <div className="mt-10">
               <img src={logo} alt="logo" className="w-[150px] h-auto" />
             </div>
             <div className="flex flex-col mt-12">

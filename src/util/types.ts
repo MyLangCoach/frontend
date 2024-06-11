@@ -23,6 +23,8 @@ export interface UserProfileData {
   qualifications: Qualification[];
   introVideo: string;
   username?: string;
+  languageInterests?: string[];
+  costPerSession?:any
 }
 
  export interface Cost {

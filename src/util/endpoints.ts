@@ -11,5 +11,6 @@ export const url = {
   verifyUserEmail: "/auth/verify-email",
   offerings: "/offerings",
   getOfferings: "/offerings/all",
-  userProfile:"/users/profile"
+  userProfile: "/users/profile",
+  allUser:"/users/all"
 };

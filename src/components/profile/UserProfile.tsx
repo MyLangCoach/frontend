@@ -2,14 +2,15 @@ import  { useEffect, useState } from "react";
 import camera from "../../assets/icons/camera-icon.png";
 import dp from "../../assets/png/dp.jpg";
 import UrlInput, { Input } from "../Input";
-import { BigButton, Button, CapsuleBtn, OutlineBtn } from "../Button";
+import { BigButton, CapsuleBtn, OutlineBtn } from "../Button";
 import PrimarySelect from "../Selects/PrimarySelect";
 import { Location } from "../../util/location";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getUserProfile,updateUserProfile } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
-import { Language,Qualification,UserProfileData } from "../../util/types";
+import { UserProfileData } from "../../util/types";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { storage } from "../../firebase";
 const UserProfile = () => {
@@ -20,6 +21,7 @@ const UserProfile = () => {
   }, []);
   
   const userData: UserProfileData | undefined = user?.userData;
+  console.log(user?.userData)
 
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
@@ -34,23 +36,27 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<Blob | MediaSource | any>();
   const [preview, setPreview] = useState("");
+  const [languageList, setLanguageList] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
-  const [qualification, setQualification] = useState<string>("");
-  const [isOrg, setIsOrg] = useState<string>("");
-  const [year, setYear] = useState<{ name: string; value: number }>({
-    name: "",
-    value: 0,
-  });
-  const [languages, setLanguages] = useState<Language[]>([
-    { language: "", proficiency: "" },
-  ]);
-  const [cost, setCost] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
-  const [prof, setProf] = useState<{ name: string }>({ name: "" });
-    const [qualifications, setQualifications] = useState<Qualification[]>([
-      { name: "", issuing_org: "", year: 0 },
-    ]);
-  console.log(userData)
+const [languages, setLanguages] = useState<string[]>(["english", "french"]);
+const [newLanguage, setNewLanguage] = useState<string>("");
+const [showInput, setShowInput] = useState<boolean>(false);
+
+const handleAddLanguage = () => {
+  if (newLanguage && !languages.includes(newLanguage.toLowerCase())) {
+    setLanguages([...languages, newLanguage.toLowerCase()]);
+    setNewLanguage("");
+    setShowInput(false);
+  }
+};
+
+const handleDeleteLanguage = (languageToDelete: string) => {
+  setLanguages(languages.filter((language) => language !== languageToDelete));
+};
+
+
+
+
   useEffect(() => {
     if (userData) {
       setFirstname(userData.firstName || "");
@@ -60,17 +66,9 @@ const UserProfile = () => {
       setDesc(userData.description || "");
       setBio(userData.bio || "");
       setSocialMedia(userData.socials || [""]);
-         setQualifications(
-           userData.qualifications || [{ name: "", issuing_org: "", year: 0 }]
-         );// assuming single qualification
-      setIsOrg(userData.qualifications?.[0]?.issuing_org || "");
-      setYear({
-        name: userData.qualifications?.[0]?.name || "",
-        value: userData.qualifications?.[0]?.year || 0,
-      });
-      setLanguages(userData.languages || [{ language: "", proficiency: "" }]);
-      setVideoUrl(userData.introVideo || "");
-      setProf({ name: userData.profileImage || "" });
+      setLanguages(userData.languageInterests || []);
+  
+   
     }
   }, [userData]);
 
@@ -83,51 +81,17 @@ const UserProfile = () => {
       updatedSocialMedia[index] = value;
       setSocialMedia(updatedSocialMedia);
     };
-  const addLanguage = () => {
-    setLanguages([...languages, { language: "", proficiency: "" }]);
-  };
 
-  const handleLanguageChange = (
-    index: number,
-    key: keyof Language,
-    value: string
-  ) => {
-    const updatedLanguages = [...languages];
-    updatedLanguages[index][key] = value;
-    setLanguages(updatedLanguages);
-  };
-
-  
-  const addQualification = () => {
-    setQualifications([
-      ...qualifications,
-      { name: "", issuing_org: "", year: 0 },
-    ]);
-  };
-
- const handleQualificationChange = (
-   index: number,
-   key: keyof Qualification,
-   value: string | number
- ) => {
-   const updatedQualifications = [...qualifications];
-   updatedQualifications[index] = {
-     ...updatedQualifications[index],
-     [key]: value,
-   };
-   setQualifications(updatedQualifications);
- };
  const updateProfile = () => {
-   const updatedProfile: UserProfileData = {
+   const updatedProfile = {
      firstName: firstname,
      lastName: lastname,
      description: desc,
      bio: bio,
      country: country?.name,
      socials: socialMedia,
-     languages: languages,
-     qualifications: qualifications,
-     introVideo: videoUrl,
+     languageInterests:languages
+   
    };
 
    // Dispatch the action to update the user profile
@@ -171,6 +135,7 @@ const uploadFile = () => {
         setLoading(false);
         
         toast.success("Image Upload Successful");
+         dispatch(updateUserProfile({profileImage:url}));
         // setPreview("");
       });
     }
@@ -178,31 +143,15 @@ const uploadFile = () => {
 };
 
 
-useEffect(() => {
-  if (selectedFile) {
-
-    uploadFile()
-  }
-}, [selectedFile])
   useEffect(() => {
-    if (fileUrl) {
-      const data = {
-        profileImage: fileUrl,
-        firstName: firstname,
-        lastName: lastname,
-        description: desc,
-        bio: bio,
-        country: country?.name,
-        socials: socialMedia,
-        languages: languages,
-        qualifications: qualifications,
-        introVideo: videoUrl,
-      };
-         dispatch(updateUserProfile(data));
+    if (selectedFile) {
+
+      uploadFile()
     }
-  }, [fileUrl])
+  }, [selectedFile])
   
-  console.log(fileUrl);
+  
+    
 
 
   if (user?.fetchLoading) {
@@ -233,7 +182,7 @@ useEffect(() => {
         <div
           className="flex -mt-12 z-pro mx-auto lg:ml-12 border-[3px] items-center justify-center border-white relative"
           style={{
-            backgroundImage: `url(${profileUrl ? profileUrl  : dp})`,
+            backgroundImage: `url(${profileUrl ? profileUrl : dp})`,
 
             height: "96px",
             width: "96px",
@@ -357,148 +306,45 @@ useEffect(() => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Language
+            Language Preferences
           </h1>
-          <CapsuleBtn name="Add language" onClick={addLanguage} />
+          <CapsuleBtn name="Add language" onClick={() => setShowInput(true)} />
         </div>
         {/* end */}
-        {/* start of an input */}
-        {languages.map((lang, index) => (
-          <div
-            key={index}
-            className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4"
-          >
-            <div>
-              <Input
-                value={lang.language}
-                setValue={(value: any) =>
-                  handleLanguageChange(index, "language", value)
-                }
-                label="Language"
-                height="h-[36px]"
-                placeholder="French"
-              />
+        <div className="w-full flex gap-4 flex-wrap items-center mt-3">
+          {languages.map((language, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center px-4 py-2 h-[34px] border border-[#0E79FF]  gap-4 rounded-[48px]  font-medium text-xs dm-sans text-black capitalize "
+            >
+              {language}
+              <button
+                onClick={() => handleDeleteLanguage(language)}
+                className="   rounded"
+              >
+                <TiDelete className="text-red-500 text-xl" />
+              </button>
             </div>
-            <div>
-              <PrimarySelect
-                selected={{ name: lang.proficiency }}
-                setSelected={(value: any) =>
-                  handleLanguageChange(index, "proficiency", value.name)
-                }
-                label="Proficiency"
-                data={[{ name: "Expert" }, { name: "Master" }]}
-                name="Select"
-              />
-            </div>
-          </div>
-        ))}
-        {/* end of an input */}
-        {/* start */}
-        <div className="flex justify-between items-center mt-8">
-          <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Professional Qualification
-          </h1>
-          <CapsuleBtn name="Add Qualification" onClick={addQualification} />
+          ))}
         </div>
-        {/* end */}
-        {/* start of an input */}
-        {qualifications.map((qual, index) => (
-          <div
-            key={index}
-            className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4"
-          >
-            <div>
-              <Input
-                value={qual.name}
-                setValue={(value: string) =>
-                  handleQualificationChange(index, "name", value)
-                }
-                label="Name of Qualification"
-                height="h-[36px]"
-                placeholder=""
-              />
-            </div>
-            <div>
-              <Input
-                value={qual.issuing_org}
-                setValue={(value: string) =>
-                  handleQualificationChange(index, "issuing_org", value)
-                }
-                label="Issuing Organization"
-                height="h-[36px]"
-                placeholder=""
-              />
-            </div>
-            <div>
-              <PrimarySelect
-                selected={{ name: qual.year.toString() }}
-                setSelected={(value: any) =>
-                  handleQualificationChange(index, "year", Number(value.name))
-                }
-                label="Year"
-                data={[
-                  { name: "1999" },
-                  { name: "2000" },
-                  { name: "2001" },
-                  // Add more years as needed
-                ]}
-                name="Select"
-              />
-            </div>
+        {showInput && (
+          <div className=" mt-6 w-full flex flex-col lg:flex-row lg:w-1/2 gap-4 lg:items-center">
+            <input
+              type="text"
+              value={newLanguage}
+              onChange={(e) => setNewLanguage(e.target.value)}
+              placeholder="Enter a language"
+              className="border border-gray-300 px-2 py-1 rounded w-full max-h-[34px]"
+            />
+            <button
+              onClick={handleAddLanguage}
+              className="bg-black text-white px-4 flex items-center rounded hover:bg-green-700 max-h-[48px] focus:outline-none outline-none h-[34px] min-w-max"
+            >
+              Add Now
+            </button>
           </div>
-        ))}
+        )}
 
-        {/* end of an input */}
-        {/* start */}
-        <div className="flex justify-between items-center mt-8">
-          <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Offering <span className="font-[300] ">(Maximum two)</span>
-          </h1>
-          <CapsuleBtn
-            name="Add Offering"
-            onClick={() => console.log("first")}
-          />
-        </div>
-        {/* end */}
-        {/* start of an input */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-          <div>
-            <Input
-              value={firstname}
-              setValue={setFirstname}
-              label="Language"
-              height="h-[36px]"
-            />
-          </div>
-          <div>
-            <Input
-              value={lastname}
-              setValue={setLastname}
-              label="Cost per 45mins"
-              height="h-[36px]"
-            />
-          </div>
-        </div>
-        {/* end of an input */}
-        {/* start */}
-        <div className="flex justify-between items-center mt-8">
-          <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Intro video
-          </h1>
-        </div>
-        {/* end */}
-        {/* start of inout */}
-        <div className="w-full mt-4">
-          <UrlInput
-            placeholder="www.facebook.com"
-            value={videoUrl}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setVideoUrl(e.target.value)
-            }
-            label="Video URL"
-          />
-        </div>
-        {/* end of input */}
         <div className="flex gap-3 items-center mt-8">
           <span>
             <OutlineBtn name="Discard changes" />

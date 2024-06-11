@@ -9,6 +9,8 @@ export interface AuthState {
   token: string;
   verifiedStatus: boolean;
   registerSuccess: boolean;
+  allCoaches: any;
+  allStudents: any;
 }
 
 const initialState: AuthState = {
@@ -17,7 +19,9 @@ const initialState: AuthState = {
   token: "",
   verifiedStatus: false,
   registerSuccess: false,
-  fetchLoading : false
+  fetchLoading: false,
+  allCoaches: [],
+  allStudents:[],
 };
 
 export const authSlice = createSlice({
@@ -95,6 +99,26 @@ export const authSlice = createSlice({
       state.userData = payload.data
       })
       .addCase(updateUserProfile.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllCoaches.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllCoaches.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+      state.allCoaches = payload.data
+      })
+      .addCase(getAllCoaches.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllStudent.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllStudent.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+      state.allStudents = payload.data
+      })
+      .addCase(getAllStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
       
@@ -204,6 +228,52 @@ export const updateUserProfile = createAsyncThunk(
     }
   }
 );
+export const getAllCoaches = createAsyncThunk(
+  "getAllCoaches",
+  async (_, { rejectWithValue,getState }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.allUser}/coach`,
+        
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllStudent = createAsyncThunk(
+  "getAllStudent",
+  async (_, { rejectWithValue,getState }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.allUser}/student`,
+        
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+
 export const authSelector = (state: any) => state.auth;
 
 export const { clearState,restoreDefault } = authSlice.actions;
