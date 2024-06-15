@@ -13,7 +13,7 @@ const AllCoaches = () => {
 
   useEffect(() => {
     dispatch(getAllCoaches());
-    dispatch(getAllStudent());
+    // dispatch(getAllStudent());
 
   }, []);
 
@@ -48,7 +48,7 @@ const AllCoaches = () => {
           <h1 className="text-base  md:text-xl text-black font-bold red-hat">
             Based on your language preference
           </h1>
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {
               auth?.allCoaches?.map((item: any, index: any) => {
                 return (

@@ -24,7 +24,7 @@ const PaystackPayment: React.FC = () => {
   };
 
   return (
-    <div className="flex gap-6 items-center ">
+    <div className="flex gap-6 items-center flex-col ">
       <input
         type="text"
         placeholder="Name"

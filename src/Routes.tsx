@@ -17,6 +17,7 @@ import SettingsPage from "./pages/settings";
 import CoachStudent from "./pages/student/coach-student-page";
 import Testing from "./pages/Testing";
 import AllCoaches from "./pages/student/all-coaches-page";
+import PaymentPage from "./pages/payment";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ const AppRoutes = () => {
         <Route path="/students" element={<CoachStudent />} />
         <Route path="/testing" element={<Testing />} />
         <Route path="/coaches" element={<AllCoaches />} />
+        <Route path="/payment" element={<PaymentPage />} />
         
      
 

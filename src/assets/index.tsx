@@ -1,4 +1,260 @@
 
+
+
+
+export const NextIcon = () => {
+  return (
+    <svg
+      width="41"
+      height="41"
+      viewBox="0 0 41 41"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g filter="url(#filter0_d_1147_27318)">
+        <path
+          d="M2.5 7.5C2.5 4.18629 5.18629 1.5 8.5 1.5H32.5C35.8137 1.5 38.5 4.18629 38.5 7.5V31.5C38.5 34.8137 35.8137 37.5 32.5 37.5H8.5C5.18629 37.5 2.5 34.8137 2.5 31.5V7.5Z"
+          fill="white"
+        />
+        <path
+          d="M3 7.5C3 4.46243 5.46243 2 8.5 2H32.5C35.5376 2 38 4.46243 38 7.5V31.5C38 34.5376 35.5376 37 32.5 37H8.5C5.46243 37 3 34.5376 3 31.5V7.5Z"
+          stroke="#E4E4E7"
+        />
+        <path
+          d="M18.5 23.5L22.5 19.5L18.5 15.5"
+          stroke="#09090B"
+          stroke-width="1.33"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <filter
+          id="filter0_d_1147_27318"
+          x="0.5"
+          y="0.5"
+          width="40"
+          height="40"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="1" />
+          <feGaussianBlur stdDeviation="1" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_1147_27318"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_1147_27318"
+            result="shape"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+export const PrevIcon = () => {
+  return (
+    <svg
+      width="41"
+      height="41"
+      viewBox="0 0 41 41"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g filter="url(#filter0_d_1147_27316)">
+        <path
+          d="M2.5 7.5C2.5 4.18629 5.18629 1.5 8.5 1.5H32.5C35.8137 1.5 38.5 4.18629 38.5 7.5V31.5C38.5 34.8137 35.8137 37.5 32.5 37.5H8.5C5.18629 37.5 2.5 34.8137 2.5 31.5V7.5Z"
+          fill="white"
+        />
+        <path
+          d="M3 7.5C3 4.46243 5.46243 2 8.5 2H32.5C35.5376 2 38 4.46243 38 7.5V31.5C38 34.5376 35.5376 37 32.5 37H8.5C5.46243 37 3 34.5376 3 31.5V7.5Z"
+          stroke="#E4E4E7"
+        />
+        <path
+          d="M22.5 23.5L18.5 19.5L22.5 15.5"
+          stroke="#18181B"
+          stroke-width="1.33"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <filter
+          id="filter0_d_1147_27316"
+          x="0.5"
+          y="0.5"
+          width="40"
+          height="40"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="1" />
+          <feGaussianBlur stdDeviation="1" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_1147_27316"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_1147_27316"
+            result="shape"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+export const CancelX = () => {
+  return (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 25 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M18.5 6.5L6.5 18.5M6.5 6.5L18.5 18.5"
+        stroke="#71717A"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export const UsersIcon = () => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10.6667 14V12.6667C10.6667 11.9594 10.3857 11.2811 9.88562 10.781C9.38552 10.281 8.70724 10 8 10H4C3.29275 10 2.61448 10.281 2.11438 10.781C1.61428 11.2811 1.33333 11.9594 1.33333 12.6667V14M14.6667 14V12.6667C14.6662 12.0758 14.4696 11.5019 14.1076 11.0349C13.7456 10.5679 13.2388 10.2344 12.6667 10.0867M10.6667 2.08667C11.2403 2.23354 11.7487 2.56714 12.1118 3.03488C12.4748 3.50262 12.6719 4.07789 12.6719 4.67C12.6719 5.26212 12.4748 5.83739 12.1118 6.30513C11.7487 6.77287 11.2403 7.10647 10.6667 7.25334M8.66667 4.66667C8.66667 6.13943 7.47276 7.33333 6 7.33333C4.52724 7.33333 3.33333 6.13943 3.33333 4.66667C3.33333 3.19391 4.52724 2 6 2C7.47276 2 8.66667 3.19391 8.66667 4.66667Z"
+        stroke="#4F4F4F"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const LanguageIcon = () => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_1421_18707)">
+        <path
+          d="M3.33333 5.33398L7.33333 9.33398M2.66667 9.33398L6.66667 5.33398L8 3.33398M1.33333 3.33398H9.33333M4.66667 1.33398H5.33333M14.6667 14.6673L11.3333 8.00065L8 14.6673M9.33333 12.0007H13.3333"
+          stroke="#4F4F4F"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1421_18707">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+export const CapIcon = () => {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.6667 4.66732V8.66732M14.6667 4.66732L8 1.33398L1.33333 4.66732L8 8.00065L14.6667 4.66732ZM4 6.00065V9.33398C6 11.334 10 11.334 12 9.33398V6.00065"
+        stroke="#4F4F4F"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const Translation = () => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_1421_18707)">
+        <path
+          d="M3.33333 5.33398L7.33333 9.33398M2.66667 9.33398L6.66667 5.33398L8 3.33398M1.33333 3.33398H9.33333M4.66667 1.33398H5.33333M14.6667 14.6673L11.3333 8.00065L8 14.6673M9.33333 12.0007H13.3333"
+          stroke="#4F4F4F"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1421_18707">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+export const StopWatch = () => {
+  return (
+    <svg
+      width="12"
+      height="13"
+      viewBox="0 0 12 13"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5 1.5H7M6 7.5L7.5 6M10 7.5C10 9.70914 8.20914 11.5 6 11.5C3.79086 11.5 2 9.70914 2 7.5C2 5.29086 3.79086 3.5 6 3.5C8.20914 3.5 10 5.29086 10 7.5Z"
+        stroke="#71717A"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
 export const VerifyIcon = () => {
   return (
     <svg
