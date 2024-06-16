@@ -13,6 +13,7 @@ import ar from "../../assets/png/ar.png";
 import pic from "../../assets/png/pic.png"; 
 import { Button, OutlineBtn } from "../Button";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 interface CalendarProps {
     note: string;
@@ -32,44 +33,50 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
         lastName,
     }: CoachDetails = item;
       const selectedLanguage = languages?.[0];
-  const [currentWeek, setCurrentWeek] = useState(new Date());
-  const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
-  const startOfCurrentWeek = startOfWeek(currentWeek, { weekStartsOn: 1 });
-  const endOfCurrentWeek = endOfWeek(currentWeek, { weekStartsOn: 1 });
-  const daysOfWeek = eachDayOfInterval({
-    start: startOfCurrentWeek,
-    end: endOfCurrentWeek,
-  });
+   const [currentWeek, setCurrentWeek] = useState(moment());
+   const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
+   const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
+   const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
+   const daysOfWeek = Array.from({ length: 7 }, (_, i) =>
+     startOfCurrentWeek.clone().add(i, "days")
+   );
 
-  const times = (interval: number) => {
-    const start = new Date(currentWeek.setHours(8, 0, 0, 0));
-    const end = new Date(currentWeek.setHours(20, 0, 0, 0));
-    const timeSlots = [];
+   const times = (interval: number) => {
+     const start = currentWeek
+       .clone()
+       .set({ hour: 8, minute: 0, second: 0, millisecond: 0 });
+     const end = currentWeek
+       .clone()
+       .set({ hour: 20, minute: 0, second: 0, millisecond: 0 });
+     const timeSlots = [];
 
-    while (start <= end) {
-      timeSlots.push(new Date(start));
-      start.setMinutes(start.getMinutes() + interval);
-    }
+     while (start <= end) {
+       timeSlots.push(start.clone());
+       start.add(interval, "minutes");
+     }
 
-    return timeSlots;
-  };
+     return timeSlots;
+   };
 
-  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDuration(Number(event.target.value));
-  };
+   const handleDurationChange = (
+     event: React.ChangeEvent<HTMLInputElement>
+   ) => {
+     setDuration(Number(event.target.value));
+   };
 
-  const handleWeekChange = (direction: "prev" | "next") => {
-    setCurrentWeek(
-      direction === "next" ? addWeeks(currentWeek, 1) : subWeeks(currentWeek, 1)
-    );
-  };
+   const handleWeekChange = (direction: "prev" | "next") => {
+     setCurrentWeek(
+       direction === "next"
+         ? currentWeek.clone().add(1, "weeks")
+         : currentWeek.clone().subtract(1, "weeks")
+     );
+   };
 
-  const handleTimeClick = (time: Date) => {
-    const bookTime = time.toISOString();
-    const payload = { note, bookTime };
-    console.log(payload);
-  };
-
+   const handleTimeClick = (time: moment.Moment) => {
+     const bookTime = time.toISOString();
+     const payload = { note, bookTime };
+     console.log(payload);
+   };
   return (
     <div className="flex flex-col items-center p-4">
       <div className="w-full flex flex-col">
@@ -136,8 +143,8 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
             <PrevIcon />
           </span>
           <p className="font-semibold">
-            {format(startOfCurrentWeek, "MMMM d")} -{" "}
-            {format(endOfCurrentWeek, "MMMM d")}
+            {startOfCurrentWeek.format("MMMM D")} -{" "}
+            {endOfCurrentWeek.format("MMMM D")}
           </p>
           <span onClick={() => handleWeekChange("next")}>
             <NextIcon />
@@ -148,7 +155,7 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
             {daysOfWeek.map((day) => (
               <div key={day.toISOString()} className="text-center mx-2">
                 <h3 className="font-semibold mb-2 text-sm">
-                  {format(day, "EEEE").substring(0, 3)}
+                  {day.format("dddd")}
                 </h3>
                 {times(duration).map((time) => (
                   <button
@@ -156,7 +163,7 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
                     onClick={() => handleTimeClick(time)}
                     className="block underline mb-2 red-hat font-bold  text-black text-sm"
                   >
-                    {format(time, "HH:mm")}
+                    {time.format("HH:mm")}
                   </button>
                 ))}
               </div>
@@ -168,10 +175,15 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
         <OutlineBtn
           name="Cancel"
           onClick={() => setOpen(false)}
-                  height="h-[49px]"
-                  className="flex-grow"
+          height="h-[49px]"
+          className="flex-grow"
         />
-        <Button name="Continue to payment" height="h-[49px]" className="flex-grow" onClick={() => navigate("/payment")} />
+        <Button
+          name="Continue to payment"
+          height="h-[49px]"
+          className="flex-grow"
+          onClick={() => navigate("/payment")}
+        />
       </div>
     </div>
   );
