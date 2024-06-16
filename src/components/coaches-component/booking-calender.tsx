@@ -1,12 +1,5 @@
 import React, { SetStateAction, useState } from "react";
-import {
-  format,
-  addWeeks,
-  subWeeks,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-} from "date-fns";
+
 import { CoachDetails } from "../../util/types";
 import { CancelX, NextIcon, PrevIcon, VerifyIcon } from "../../assets";
 import ar from "../../assets/png/ar.png";
