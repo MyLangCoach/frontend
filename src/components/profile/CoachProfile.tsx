@@ -18,7 +18,7 @@ import { storage } from "../../firebase";
 const CoachProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth);
-  console.log(user?.userData)
+  
   useEffect(() => {
     dispatch(getUserProfile());
   }, []);

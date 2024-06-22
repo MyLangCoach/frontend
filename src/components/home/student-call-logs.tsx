@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState,useEffect } from "react";
 import { Button } from "../Button";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getAllSessionBookingCoach, getAllSessionBookingStudent } from "../../features/offeringslice";
+import { useAppDispatch,useAppSelector } from "../../app/hooks";
+import { getAllSessionBookingStudent } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
-
-const CallLogs = () => {
- 
+const StudentCallLogs = () => {
     const dispatch = useAppDispatch();
-    const offering = useAppSelector((state) => state.offerings);
+    const offering = useAppSelector(state => state.offerings);
     useEffect(() => {
-      dispatch(getAllSessionBookingCoach());
-    }, []);
-    const bookings = offering?.allBookingsSessionCoach;
+        dispatch(getAllSessionBookingStudent());
+    }, [])
+    const bookings = offering?.allBookingsSessionStudent;
     console.log(bookings);
-    const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(0);
     const [open, setOpen] = useState<boolean>(false);
-
+    
     if (offering.fetchLoading) {
-      return (
-        <div className="w-full">
-          <LoadingComponent />
-        </div>
-      );
+        return (
+            <div className="w-full">
+                        <LoadingComponent />
+            </div>
+        )
     }
-
   return (
     <div className="w-full flex flex-col mt-6">
       {/* tabs session */}
@@ -70,10 +67,6 @@ const CallLogs = () => {
               {bookings?.map((item: any, index: number) => (
                 <div className="flex flex-col gap-2 border-border border p-2 rounded-lg" key={index}>
                   <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">Student Name:</p>
-                    <p className="capitalize">{item?.student.firstName ?? ""} {" "} { item?.student?.lastName ?? ""}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
                     <p className="red-hat text-sm  text-muted">Note:</p>
                     <p>{item.note}</p>
                   </div>
@@ -85,7 +78,6 @@ const CallLogs = () => {
                     <p className="red-hat text-sm  text-muted">Book Type:</p>
                     <p className="capitalize">Session</p>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <p className="red-hat text-sm  text-muted">
                       {" "}
@@ -95,7 +87,6 @@ const CallLogs = () => {
                       {formatDateTime(item?.bookTime).date}
                     </p>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <p className="red-hat text-sm  text-muted">
                       {" "}
@@ -104,10 +95,10 @@ const CallLogs = () => {
                     <p className="capitalize">
                       {formatDateTime(item?.bookTime).time}
                     </p>
-                  </div>
-                  <span>
-                    <Button name="Join Session" />
-                  </span>
+                      </div>
+                      <span>
+                          <Button name="Join Session" />
+                      </span>
                 </div>
               ))}
             </div>
@@ -147,4 +138,4 @@ const CallLogs = () => {
   );
 };
 
-export default CallLogs;
+export default StudentCallLogs;

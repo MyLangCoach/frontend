@@ -52,7 +52,33 @@ export const getSimplifiedError = (error: object | any) => {
 };
 
 
+export function formatDateTime(isoString: string | any): {
+  date: string;
+  time: string;
+} {
+  const date = new Date(isoString);
 
+  // Extracting date components
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const year = date.getFullYear();
+
+  // Extracting time components
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const formattedDate = `${day} - ${month} - ${year}`;
+  const formattedTime = `${hours}:${minutes} ${ampm}`;
+
+  return {
+    date: formattedDate,
+    time: formattedTime,
+  };
+}
 
 export function convertDateFormat(dateString: any) {
   const months = [

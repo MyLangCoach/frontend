@@ -11,6 +11,9 @@ export interface AuthState {
   registerSuccess: boolean;
   allCoaches: any;
   allStudents: any;
+  saveCardData: any;
+  allSavedCard: any,
+  openCard: boolean;
 }
 
 const initialState: AuthState = {
@@ -21,7 +24,10 @@ const initialState: AuthState = {
   registerSuccess: false,
   fetchLoading: false,
   allCoaches: [],
-  allStudents:[],
+  allStudents: [],
+  saveCardData: {},
+  allSavedCard: [],
+  openCard: false
 };
 
 export const authSlice = createSlice({
@@ -30,9 +36,12 @@ export const authSlice = createSlice({
   reducers: {
     clearState: () => {
       return initialState;
+
     },
     restoreDefault: (state) => {
       state.registerSuccess = false;
+      state.openCard = false;
+      state.saveCardData = {}
     },
   },
   extraReducers: (builder) => {
@@ -121,6 +130,29 @@ export const authSlice = createSlice({
       .addCase(getAllStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
+      .addCase(saveMyCard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveMyCard.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.saveCardData = payload.data;
+        state.openCard = true
+      })
+      .addCase(saveMyCard.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(getAllSavedCards.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllSavedCards.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+        state.allSavedCard = payload.data;
+    
+      })
+      .addCase(getAllSavedCards.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+
       
       ;
   },
@@ -228,6 +260,28 @@ export const updateUserProfile = createAsyncThunk(
     }
   }
 );
+export const saveMyCard = createAsyncThunk(
+  "saveMyCard",
+  async (_: any, { rejectWithValue,getState }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(
+        `${url.saveCard}`,
+        "",
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
 export const getAllCoaches = createAsyncThunk(
   "getAllCoaches",
   async (_, { rejectWithValue,getState }) => {
@@ -235,6 +289,28 @@ export const getAllCoaches = createAsyncThunk(
     try {
       const { data } = await APIService.get(
         `${url.allUser}/coach`,
+        
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllSavedCards = createAsyncThunk(
+  "getAllSavedCard",
+  async (_, { rejectWithValue,getState }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.savedCard}`,
         
         {
           headers: {

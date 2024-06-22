@@ -1,5 +1,5 @@
-import React, { SetStateAction, useState } from "react";
-
+import React, { SetStateAction, useEffect, useState } from "react";
+import { useAppDispatch,useAppSelector } from "../../app/hooks";
 import { CoachDetails } from "../../util/types";
 import { CancelX, NextIcon, PrevIcon, VerifyIcon } from "../../assets";
 import ar from "../../assets/png/ar.png";
@@ -7,15 +7,21 @@ import pic from "../../assets/png/pic.png";
 import { Button, OutlineBtn } from "../Button";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { Input } from "../Input";
+import { createFirstBookingWithCoach, restoreDefault } from "../../features/offeringslice";
+import toast from "react-hot-toast";
 
 interface CalendarProps {
-    note: string;
+    // note: string;
     item: CoachDetails
-    setOpen:React.Dispatch<SetStateAction<boolean>>
+  setOpen: React.Dispatch<SetStateAction<boolean>>,
+ 
 }
 
-const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
+const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const offering = useAppSelector((state) => state.offerings);
       const {
         bio,
         profileImage,
@@ -25,7 +31,10 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
         firstName,
         lastName,
     }: CoachDetails = item;
-      const selectedLanguage = languages?.[0];
+  const selectedLanguage = languages?.[0];
+  const [note, setNote] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [active, setActive] = useState(false);
    const [currentWeek, setCurrentWeek] = useState(moment());
    const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
    const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
@@ -65,13 +74,45 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
      );
    };
 
+  useEffect(() => {
+    if (note && selectedTime) {
+  setActive(true)
+}
+  }, [note,selectedTime])
+  
    const handleTimeClick = (time: moment.Moment) => {
      const bookTime = time.toISOString();
+     setSelectedTime(bookTime);
      const payload = { note, bookTime };
      console.log(payload);
-   };
+  };
+  
+  const handleBook = () => {
+    if (active) { 
+      const sentdata = {
+        coachId: id,
+        data: {
+          note: note,
+          bookTime: selectedTime,
+        }
+      }
+      dispatch(createFirstBookingWithCoach(sentdata));
+    }
+    else {
+      toast.error("note and time must be provided");
+    }
+  }
+
+  useEffect(() => {
+    if (offering.createBookingSessionSuccess) {
+      toast.success("You have successfully booked a session with the coach");
+      dispatch(restoreDefault());
+      setOpen(false);
+    }
+  }, [offering?.createBookingSessionSuccess])
+  
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4 h-[85vh] flow-hide" >
       <div className="w-full flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl red-hat font-bold">Book a session</h2>
@@ -129,6 +170,9 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
             60 mins
           </label>
         </div>
+        <div className="w-full mb-4">
+          <Input label={"Add A Session Note"} placeholder="Enter Note..." value={note} setValue={setNote}  />
+        </div>
       </div>
       <div className="flex flex-col mb-4 w-full border-border border rounded-[6px] p-3">
         <div className="flex items-center justify-between ">
@@ -172,10 +216,11 @@ const Calendar: React.FC<CalendarProps> = ({ note, item, setOpen }) => {
           className="flex-grow"
         />
         <Button
-          name="Continue to payment"
+          name={offering?.loading ? "Loading..." : "Book Now"}
           height="h-[49px]"
-          className="flex-grow"
-          onClick={() => navigate("/payment")}
+          className={ `flex-grow ${!active && "opacity-40 cursor-not-allowed"}`}
+          onClick={handleBook}
+          disabled={!active}
         />
       </div>
     </div>

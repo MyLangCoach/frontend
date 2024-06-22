@@ -38,13 +38,24 @@ const Sidebar = ({ current }: { current: number }) => {
             <HomeIcon />
             <p className="text-black text-sm font-medium inter">Home</p>
           </div>
-          <div
-            className={current === 2 ? styles.active : styles.inActive}
-            onClick={() => navigate("/live-classes")}
-          >
-            <MicIcon />
-            <p className="text-black text-sm font-medium inter">My Classes</p>
-          </div>
+
+          {userRole === "STUDENT" ? (
+            <div
+              className={current === 2 ? styles.active : styles.inActive}
+              onClick={() => navigate("/student/live-classes")}
+            >
+              <MicIcon />
+              <p className="text-black text-sm font-medium inter">My Classes</p>
+            </div>
+          ) : (
+            <div
+              className={current === 2 ? styles.active : styles.inActive}
+              onClick={() => navigate("/live-classes")}
+            >
+              <MicIcon />
+              <p className="text-black text-sm font-medium inter">My Classes</p>
+            </div>
+          )}
           {userRole === "STUDENT" ? (
             <div
               className={current === 5 ? styles.active : styles.inActive}
@@ -102,7 +113,9 @@ const Sidebar = ({ current }: { current: number }) => {
               onClick={() => navigate("/payouts")}
             >
               <RecieptIcon />
-              <p className="text-black text-sm font-medium inter">Expenditure</p>
+              <p className="text-black text-sm font-medium inter">
+                Expenditure
+              </p>
             </div>
           ) : (
             <div

@@ -97,9 +97,9 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
       <ReUseModal
         open={open}
         setOpen={setOpen}
-        width="sm:max-w-[500px] sm:w-full"
+        width="sm:max-w-[630px] sm:w-full"
       >
-        <Calendar note='I love the class' item={item} setOpen={setOpen} />
+        <Calendar  item={item} setOpen={setOpen} />
       </ReUseModal>
     </div>
   );

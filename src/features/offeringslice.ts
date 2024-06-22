@@ -10,19 +10,43 @@ export interface OfferingsState {
     success: boolean;
     updateOfferingSuccess: boolean;
     deleteOfferingSuccess: boolean;
-    createOfferingSuccess: boolean;
+  createOfferingSuccess: boolean;
+  createBookingSuccess: boolean;
+  createOfferingBookingSuccess: boolean;
+  allBookingsSessionStudent: any;
+  allBookingsSessionCoach: any;
+  createBookingSessionSuccess: boolean;
+
+  allBookedOfferingsStudent: any;
+  allBookedOfferingsCoach: any;
+  giveFeedbackSuccess: boolean;
+  allFeedback: boolean;
+  editFeedbackSuccess: boolean;
+  deleteFeedbackSuccess: boolean;
+
 
 }
 
 const initialState: OfferingsState = {
-    loading: false,
-    fetchLoading: false,
-    allOfferings: [],
-    singleOffering: {},
-    success: false,
-    updateOfferingSuccess: false,
-    deleteOfferingSuccess: false,
-    createOfferingSuccess:false,
+  loading: false,
+  fetchLoading: false,
+  allOfferings: [],
+  singleOffering: {},
+  success: false,
+  updateOfferingSuccess: false,
+  deleteOfferingSuccess: false,
+  createOfferingSuccess: false,
+  createBookingSuccess: false,
+  createOfferingBookingSuccess: false,
+  allBookingsSessionStudent: [],
+  allBookingsSessionCoach: [],
+  createBookingSessionSuccess: false,
+  allBookedOfferingsStudent: [],
+  allBookedOfferingsCoach: [],
+  giveFeedbackSuccess: false,
+  allFeedback: false,
+  editFeedbackSuccess: false,
+  deleteFeedbackSuccess: false
 };
 
 export const offeringsSlice = createSlice({
@@ -35,7 +59,15 @@ export const offeringsSlice = createSlice({
       restoreDefault: (state) => {
           state.createOfferingSuccess = false;
           state.deleteOfferingSuccess = false;
-          state.updateOfferingSuccess = false;
+        state.updateOfferingSuccess = false;
+        state.editFeedbackSuccess = false;
+        state.giveFeedbackSuccess = false;
+        state.deleteFeedbackSuccess = false;
+        state.createBookingSessionSuccess = false;
+        state.createBookingSuccess = false;
+        state.createOfferingBookingSuccess = false;
+        state.deleteOfferingSuccess = false;
+        
       },
   },
   extraReducers: (builder) => {
@@ -97,6 +129,73 @@ export const offeringsSlice = createSlice({
       .addCase(updatedOffering.rejected, (state, { payload }) => {
         state.loading = false;
       })
+      .addCase(createFirstBookingWithCoach.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createFirstBookingWithCoach.fulfilled, (state, { payload }) => {
+          state.loading = false;
+          state.createBookingSessionSuccess = true;
+     
+      })
+      .addCase(createFirstBookingWithCoach.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(createOfferingBookingWithCoach.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createOfferingBookingWithCoach.fulfilled, (state, { payload }) => {
+          state.loading = false;
+          state.createOfferingBookingSuccess = true;
+     
+      })
+      .addCase(createOfferingBookingWithCoach.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(getAllSessionBookingStudent.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllSessionBookingStudent.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allBookingsSessionStudent = payload.data;
+     
+      })
+      .addCase(getAllSessionBookingStudent.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllSessionBookingCoach.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllSessionBookingCoach.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allBookingsSessionCoach = payload.data;
+     
+      })
+      .addCase(getAllSessionBookingCoach.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllOfferingBookingStudent.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllOfferingBookingStudent.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allBookedOfferingsStudent = payload.data;
+     
+      })
+      .addCase(getAllOfferingBookingStudent.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllOfferingBookingCoach.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllOfferingBookingCoach.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allBookedOfferingsCoach = payload.data;
+     
+      })
+      .addCase(getAllOfferingBookingCoach.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+
         
         ;
   },
@@ -200,6 +299,125 @@ export const getAllOfferings = createAsyncThunk(
     }
   }
 );
+
+// create a one on one booking session with a coach 
+export const createFirstBookingWithCoach = createAsyncThunk(
+  "createFirstBookingWithCoach",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(`${url.sessionBookings}/${payload.coachId}`, payload.data, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+
+export const getAllSessionBookingStudent = createAsyncThunk(
+  "getAllSessionBookingStudent",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.sessionBookings}/student`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+export const getAllSessionBookingCoach = createAsyncThunk(
+  "getAllSessionBookingCoach",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.sessionBookings}/coach`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+// create a  booking session from the coach offering with a coach 
+export const createOfferingBookingWithCoach = createAsyncThunk(
+  "createOfferingBookingWithCoach",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(`${url.offeringBookings}/${payload.offeringId}`, payload.data, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+
+export const getAllOfferingBookingStudent = createAsyncThunk(
+  "getAllOfferingBookingStudent",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.offeringBookings}/student`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+export const getAllOfferingBookingCoach = createAsyncThunk(
+  "getAllOfferingBookingCoach",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.offeringBookings}/coach`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
 
 
 

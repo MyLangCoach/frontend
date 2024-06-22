@@ -12,5 +12,9 @@ export const url = {
   offerings: "/offerings",
   getOfferings: "/offerings/all",
   userProfile: "/users/profile",
-  allUser:"/users/all"
+  allUser: "/users/all",
+  sessionBookings: "/bookings/session",
+  offeringBookings: "/bookings/offering",
+  saveCard: "/payments/save-card",
+  savedCard:"/users/cards"
 };

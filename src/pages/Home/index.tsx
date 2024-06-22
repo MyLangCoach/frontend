@@ -8,6 +8,7 @@ import TopCoaches from "../../components/home/top-coaches";
 import { useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import StudentCallLogs from "../../components/home/student-call-logs";
 const Home = () => {
   const user = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Home = () => {
       navigate("/login")
     }
   }, [])
+    const userRole = user?.userData?.role;
   
   
   return (
@@ -34,7 +36,10 @@ const Home = () => {
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
           <div className="w-full lg:w-2/3">
-            <CallLogs />
+            {userRole === "STUDENT"
+             ? (<StudentCallLogs />) : (<CallLogs />)
+            }
+        
             <GuideTour />
           </div>
           {/* end of the left side */}

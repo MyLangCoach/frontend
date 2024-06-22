@@ -18,6 +18,7 @@ import CoachStudent from "./pages/student/coach-student-page";
 import Testing from "./pages/Testing";
 import AllCoaches from "./pages/student/all-coaches-page";
 import PaymentPage from "./pages/payment";
+import StudentLiveClasses from "./pages/live-classes/student-classes";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/users" element={<Users />} />
         <Route path="/live-classes" element={<LiveClasses />} />
+        <Route path="/student/live-classes" element={<StudentLiveClasses />} />
         <Route path="/create-new-class" element={<CreateClass />} />
         <Route path="/payouts" element={<Payouts />} />
         <Route path="/settings" element={<SettingsPage />} />

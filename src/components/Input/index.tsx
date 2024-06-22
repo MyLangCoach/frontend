@@ -40,6 +40,7 @@ export const Input = ({
         type={type ? type : "text"}
         className={`  rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm  ${height ? height : "h-[46px"} ` }
         value={value}
+        placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
       />
     </div>
