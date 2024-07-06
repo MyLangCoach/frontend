@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getAllSessionBookingCoach, getAllSessionBookingStudent } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
+import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
 
 const CallLogs = () => {
  
@@ -68,46 +69,64 @@ const CallLogs = () => {
           {bookings.length > 0 ? (
             <div className="w-full flex flex-col px-4 py-4">
               {bookings?.map((item: any, index: number) => (
-                <div className="flex flex-col gap-2 border-border border p-2 rounded-lg" key={index}>
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">Student Name:</p>
-                    <p className="capitalize">{item?.student.firstName ?? ""} {" "} { item?.student?.lastName ?? ""}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">Note:</p>
-                    <p>{item.note}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">Status:</p>
-                    <p className="capitalize">{item.status}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">Book Type:</p>
-                    <p className="capitalize">Session</p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">
-                      {" "}
-                      Meeting Date:
-                    </p>
-                    <p className="capitalize">
-                      {formatDateTime(item?.bookTime).date}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <p className="red-hat text-sm  text-muted">
-                      {" "}
-                      Meeting Date:
-                    </p>
-                    <p className="capitalize">
-                      {formatDateTime(item?.bookTime).time}
-                    </p>
-                  </div>
-                  <span>
-                    <Button name="Join Session" />
-                  </span>
+                <div className="w-full flex flex-col px-4 py-4">
+                  {bookings?.map((item: any, index: number) => (
+                    <div
+                      className="flex flex-col gap-2 border-border border  rounded-[4px]"
+                      key={index}
+                    >
+                      <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
+                        <p className="red-hat text-foreground font-bold text-[23px]">
+                          {item.note}
+                        </p>
+                        <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+                          1:1 class
+                        </span>
+                      </div>
+                      <div className="w-full flex flex-col lg:px-6 pb-6">
+                        <div className="w-full mt-3 flex wrap gap-6 items-center">
+                          <span className="flex items-center gap-[10px] ">
+                            <p className="text-muted text-sm dm-sans">
+                              Student Name
+                            </p>
+                            <p className="text-sm dm-sans font-bold text-muted">
+                              {item?.student.firstName ?? ""}{" "}
+                              {item?.student?.lastName ?? ""}
+                            </p>
+                          </span>
+                          <span className="flex items-center gap-[10px] ">
+                            <p className="text-muted text-sm dm-sans">Status</p>
+                            <p className="text-sm dm-sans font-bold text-muted">
+                              {item.status}
+                            </p>
+                          </span>
+                          <span className="flex items-center gap-[10px] ">
+                            <p className="text-muted text-sm dm-sans">
+                              Book type
+                            </p>
+                            <p className="text-sm dm-sans font-bold text-muted">
+                              Session
+                            </p>
+                          </span>
+                          <span className="flex items-center gap-[10px] ">
+                            <BlueCalenderIcon />
+                            <p className="text-sm dm-sans font-medium text-muted">
+                              {formatDateTime(item?.startDateTime)?.date}
+                            </p>
+                          </span>
+                          <span className="flex items-center gap-[10px] ">
+                            <BlueTimeIcon />
+                            <p className="text-sm dm-sans font-medium text-muted">
+                              {formatDateTime(item?.startDateTime)?.time}
+                            </p>
+                          </span>
+                        </div>
+                        <div className="w mt-7">
+                          <Button name="Join Session" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>

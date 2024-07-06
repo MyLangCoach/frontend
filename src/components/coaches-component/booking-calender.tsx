@@ -96,7 +96,7 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
           bookTime: selectedTime,
         }
       }
-      console.log(sentdata);
+     
       dispatch(createFirstBookingWithCoach(sentdata));
     }
     else {
