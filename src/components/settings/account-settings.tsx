@@ -14,6 +14,7 @@ const AccountSettings = () => {
   }, [])
   
 
+  
   useEffect(() => {
     if (auth.openCard) {
       dispatch(restoreDefault());
@@ -26,7 +27,7 @@ const AccountSettings = () => {
     }
   }, [auth.saveCardData, ]);
 
-console.log(auth?.allSavedCard)
+
 
   if (auth?.fetchLoading) {
     return (

@@ -84,16 +84,16 @@ const StudentCallLogs = () => {
                       Meeting Date:
                     </p>
                     <p className="capitalize">
-                      {formatDateTime(item?.bookTime).date}
+                      {formatDateTime(item?.startDateTime).date}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="red-hat text-sm  text-muted">
                       {" "}
-                      Meeting Date:
+                      Meeting Time:
                     </p>
                     <p className="capitalize">
-                      {formatDateTime(item?.bookTime).time}
+                      {formatDateTime(item?.startDateTime).time}
                     </p>
                       </div>
                       <span>

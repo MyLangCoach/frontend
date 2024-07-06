@@ -23,6 +23,8 @@ export interface OfferingsState {
   allFeedback: boolean;
   editFeedbackSuccess: boolean;
   deleteFeedbackSuccess: boolean;
+  singleCoachOffering: any;
+
 
 
 }
@@ -38,6 +40,7 @@ const initialState: OfferingsState = {
   createOfferingSuccess: false,
   createBookingSuccess: false,
   createOfferingBookingSuccess: false,
+  singleCoachOffering:[],
   allBookingsSessionStudent: [],
   allBookingsSessionCoach: [],
   createBookingSessionSuccess: false,
@@ -195,6 +198,17 @@ export const offeringsSlice = createSlice({
       .addCase(getAllOfferingBookingCoach.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
+      .addCase(getSingleCoachOffering.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getSingleCoachOffering.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.singleCoachOffering = payload.data;
+     
+      })
+      .addCase(getSingleCoachOffering.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
 
         
         ;
@@ -248,6 +262,24 @@ export const getSingleOffering = createAsyncThunk(
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offerings}/${payload.id}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getSingleCoachOffering = createAsyncThunk(
+  "getSingleCoachOffering",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.offerings}/coach/${payload.id}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },
