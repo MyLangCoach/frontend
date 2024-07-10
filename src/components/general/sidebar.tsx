@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, MicIcon, CatIcon, MessageIcon, StudentIcon, ProfileIcon, RecieptIcon, SettingsIcon } from '../../assets';
-import logo from "../../assets/png/lang-logo.png";
+import logo from "../../assets/icons/lang-logo.svg";
 import sampPic from "../../assets/png/samp-pic.png"
 import { useAppDispatch,useAppSelector } from '../../app/hooks';
 import { clearState } from '../../features/auth/authSlice';

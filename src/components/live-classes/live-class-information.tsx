@@ -4,7 +4,7 @@ import { DateInput, DateTimeInput, Input } from '../Input'
 import PrimarySelect from '../Selects/PrimarySelect';
 import { OutlineBtn, BigButton } from '../Button';
 import { useNavigate } from 'react-router-dom';
-const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration }: any) => {
+const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type }: any) => {
     const navigate = useNavigate();
     // const [name, setName] = useState<string>("");
     const [desc, setDesc] = useState<string>("");
@@ -82,6 +82,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
         </div>
         {/* end of class tab */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 mt-4 gap-4 ">
+        
           <div className="w-full flex flex-col">
             <label className="text-xs text-foreground font-medium dm-sans mb-2">
               Class Date & Time

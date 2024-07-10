@@ -12,33 +12,32 @@ const PriceAttendees = ({
   setAttendantType,
   numOfAttendees,
   setNumOfAttendees,
-  setCostType,setType
+  setCostType,
+  type,
+  handleCreate,
+  loading,
 }: any) => {
   const [free, setFree] = useState(true);
   const [limited, setLimited] = useState(true);
   const [price, setPrice] = useState<number>(0);
   const [population, setPopulation] = useState("");
-  const [classType,setClassType] = useState({name:"ONE TIME",value:"ONE_TIME"})
+  const [classType, setClassType] = useState({
+    name: "ONE TIME",
+    value: "ONE_TIME",
+  });
   useEffect(() => {
     if (free) {
-      setCostType("FREE")
-    }
-    else setCostType("PAID")
+      setCostType("FREE");
+    } else setCostType("PAID");
     if (limited) {
-      setAttendantType("LIMITED")
+      setAttendantType("LIMITED");
+    } else {
+      setAttendantType("UNLIMITED");
     }
-    else {
-       setAttendantType("UNLIMITED");
-    }
-  }, [free,attendantType])
+  }, [free, attendantType]);
   useEffect(() => {
-  setCost({currency:"NGN", amount:Number(price)})
-  }, [price])
-
-  useEffect(() => {
-    setType(classType?.value)
-  }, [classType])
-  
+    setCost({ currency: "NGN", amount: Number(price) });
+  }, [price]);
 
   return (
     <div className="w-full flex flex-col">
@@ -70,54 +69,53 @@ const PriceAttendees = ({
             />
           </div>
         )}
-
-        <div className="w-full mt-4 flex flex-col">
-          <label className="text-sm text-foreground font-medium dm-sans mb-2">
-            Number of Attendees
-          </label>
-          <div className="flex items-center gap-10">
-            <span className="flex gap-2 items-center">
-              <Radio active={limited} onClick={() => setLimited(!limited)} />
-              <p className="text-sm text-foreground font-medium dm-sans">
-                {" "}
-                Limited{" "}
-              </p>
-            </span>
-            <span className="flex gap-2 items-center">
-              <Radio active={!limited} onClick={() => setLimited(!limited)} />
-              <p className="text-sm text-foreground font-medium dm-sans">
-                {" "}
-                Unlimited
-              </p>
-            </span>
+        {type === "LIVE_GROUP" && (
+          <div className="w-full mt-4 flex flex-col">
+            <label className="text-sm text-foreground font-medium dm-sans mb-2">
+              Number of Attendees
+            </label>
+            <div className="flex items-center gap-10">
+              <span className="flex gap-2 items-center">
+                <Radio active={limited} onClick={() => setLimited(!limited)} />
+                <p className="text-sm text-foreground font-medium dm-sans">
+                  {" "}
+                  Limited{" "}
+                </p>
+              </span>
+              <span className="flex gap-2 items-center">
+                <Radio active={!limited} onClick={() => setLimited(!limited)} />
+                <p className="text-sm text-foreground font-medium dm-sans">
+                  {" "}
+                  Unlimited
+                </p>
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Input
-            label={"Attendees"}
-            value={numOfAttendees}
-            setValue={setNumOfAttendees}
-            height="h-9"
-            type="number"
-          />
-          <PrimarySelect
-            selected={classType}
-            setSelected={setClassType}
-            label="Class time"
-            data={[
-              { name: "ONE TIME", value: "ONE_TIME" },
-              { name: "ONE MONTHLY", value: "ONE_MONTHLY" },
-              { name: "LIVE GROUP", value: "LIVE_GROUP" },
-            ]}
-            name="Select"
-          />
-        </div>
+        )}
+
+        {type === "LIVE_GROUP" && (
+          <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Input
+              label={"Attendees"}
+              value={numOfAttendees}
+              setValue={setNumOfAttendees}
+              height="h-9"
+              type="number"
+            />
+          </div>
+        )}
+
         <div className="flex gap-3 items-center mt-8 justify-end">
           <span>
             <OutlineBtn name="Discard changes" onClick={() => setCurrent(1)} />
           </span>
           <span>
-            <BigButton name="Continue" onClick={() => setCurrent(3)} />
+            <BigButton
+              name={loading ? "Loading..." : "Continue"}
+              // loading={loading}
+
+              onClick={handleCreate}
+            />
           </span>
         </div>
       </div>

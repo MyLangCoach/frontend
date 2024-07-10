@@ -1,12 +1,30 @@
-import React from 'react'
+import {useEffect} from 'react'
 import filterIcon from "../../assets/png/caret-sort.png";
 import { PlusCircle, CancelIcon, ExportIcon, OptionsIcon } from '../../assets';
 import { transactionDummy, studentDummy } from '../../util/mockdata';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import LoadingComponent from '../Loaders/skeleton-loading';
+import { getAllMyStudent } from '../../features/auth/authSlice';
 const StudentList = () => {
+
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(state => state.auth);
+
+useEffect(() => {
+  dispatch(getAllMyStudent());
+}, [])
+console.log(auth?.allMyStudent)
+  if (auth?.fetchLoading) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    )
+  }
   return (
     <div className="w-full bg-white py-6 px-3 flex flex-col">
       <h1 className="text-black font-bold  red-hat text-base lg:text-[19px]">
-        All Students(6)
+        All Students ({auth?.allMyStudent?.length})
       </h1>
       <div className="w-full flex items-center mt-2 gap-3">
         {/* input */}
@@ -69,13 +87,13 @@ const StudentList = () => {
               </span>
             </td>
             <td className=" flex items-center gap-3 w-full">
-              <p className="text-muted text-sm inter font-medium">Reference</p>
+              <p className="text-muted text-sm inter font-medium">Gender</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
             </td>
             <td className=" flex items-center gap-3 w-full">
-              <p className="text-muted text-sm inter font-medium">Date Joined</p>
+              <p className="text-muted text-sm inter font-medium">Language Interests</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
@@ -86,7 +104,7 @@ const StudentList = () => {
             </td>
           </th>
           <tbody className="w-full flex flex-col">
-            {studentDummy?.map((item, index) => {
+            {auth?.allMyStudent?.map((item:any, index:number) => {
               return (
                 <tr
                   key={index}
@@ -103,7 +121,7 @@ const StudentList = () => {
                     </span>
                     <div className="flex flex-col gap-[10px]">
                       <h1 className="text-foreground font-normal text-sm truncate inter">
-                        {item?.name}
+                        {item?.firstName} <span>{item?.lastName} </span>
                       </h1>
                     </div>
                   </td>
@@ -116,13 +134,19 @@ const StudentList = () => {
                   </td>
                   <td className="w-full flex items-center gap-[10px] ">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.ref}
+                      {item?.gender}
                     </p>
                   </td>
                   <td className="flex items-center">
-                    <p className=" text-foreground font-normal text-sm truncate inter ">
-                      {item?.date}
-                    </p>
+                   
+                      {item?.languageInterests?.map((
+                        lang:any,index:number
+                      ) => (
+                        <p className=" text-foreground font-normal text-sm truncate inter " key={index}>
+                          {lang}
+                         </p>
+                      ))}
+                  
                   </td>
                   <td className="flex items-center">
                           <span>

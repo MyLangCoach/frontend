@@ -17,13 +17,13 @@ const LiveClasses = () => {
         </div>
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-          <div className="w-full lg:w-2/3 flex flex-col gap-6">
+          <div className="w-full lg:w-full 2xl:w-10/12 flex flex-col gap-6">
             <CallLogs />
            <OfferingsTable />
           </div>
           {/* end of the left side */}
           {/* right side */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-6">
+          <div className="w-full lg:w-2/12 2xl:flex hidden flex-col gap-6">
          <Tips />
           </div>
         </div>

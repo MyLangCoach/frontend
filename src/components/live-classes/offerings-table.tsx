@@ -6,6 +6,7 @@ import { OfferingsDummy } from '../../util/mockdata';
 import CreateNewServiceModal from './create-new-service-modal';
 import { getAllOfferings } from '../../features/offeringslice';
 import LoadingComponent from '../Loaders/skeleton-loading';
+import { formatDateTime } from '../../util';
 const OfferingsTable = () => {
   const offerings = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
@@ -15,7 +16,7 @@ const OfferingsTable = () => {
   
 
   const allOfferings = offerings?.allOfferings?.offerings;
-  console.log(allOfferings)
+
   const [open, setOpen] = useState(false);
 
   if (offerings?.fetchLoading) {
@@ -66,7 +67,7 @@ const OfferingsTable = () => {
         </div> */}
         {/* end reset */}
         {/* new service */}
-        <div className="w-3/12 rounded-md h-[36px] px-4 flex justify-center items-center gap-2 border border-[#E4E4E7] cursor-pointer" onClick={() => setOpen(true)}>
+        <div className="w-3/12 min-w-fit rounded-md h-[36px] px-4 flex justify-center items-center gap-2 border border-[#E4E4E7] cursor-pointer" onClick={() => setOpen(true)}>
           <span>
             <Plus />
           </span>
@@ -78,7 +79,7 @@ const OfferingsTable = () => {
       </div>
       <div className="w-full mt-5">
         <table className="w-full border border-border rounded-[4px]">
-          <th className="w-full grid grid-cols-3 h-[40px] border-b border-b-border px-2 ">
+          <th className="w-full grid grid-cols-5 h-[40px] border-b border-b-border px-2 ">
             <td className="flex items-center gap-3 w-full ">
               <input
                 type="checkbox"
@@ -100,13 +101,25 @@ const OfferingsTable = () => {
                 <img src={filterIcon} alt="filter" />
               </span>
             </td>
+            <td className=" flex items-center gap-3 w-full">
+              <p className="text-muted text-sm inter font-medium">Class Time</p>
+              <span>
+                <img src={filterIcon} alt="filter" />
+              </span>
+            </td>
+            <td className=" flex items-center gap-3 w-full">
+              <p className="text-muted text-sm inter font-medium">Attendees</p>
+              <span>
+                <img src={filterIcon} alt="filter" />
+              </span>
+            </td>
           </th>
           <tbody className="w-full flex flex-col">
             {allOfferings?.map((item:any, index:number) => {
               return (
                 <tr
                   key={index}
-                  className="grid grid-cols-3 px-2 border-b-border border-b last:border-none min-h-[68px] "
+                  className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] "
                 >
                   <td className="w-full flex items-center gap-3">
                     <span>
@@ -133,10 +146,31 @@ const OfferingsTable = () => {
                   </td>
                   <td className="w-full flex flex-col gap-[10px] justify-center">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.duration === 30 ? "30 MINS":"60 MINS"}
+                      {item?.duration === 30 ? "30 MINS" : "60 MINS"}
                     </p>
                     <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
                       {item?.type}
+                    </p>
+                  </td>
+                  <td className="w-full flex flex-col gap-[10px] justify-center">
+                    {item?.liveDateTime ? (
+                      <div className="flex flex-col gap-[10px] justify-center">
+                        <p className="text-foreground font-normal text-sm truncate inter">
+                          {formatDateTime(item?.liveDateTime)?.date}
+                        </p>
+                        <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+                          {formatDateTime(item?.liveDateTime)?.time}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-foreground font-normal text-sm truncate inter">
+                        Any Time
+                      </p>
+                    )}
+                  </td>
+                  <td className="w-full flex flex-col gap-[10px] justify-center">
+                    <p className="text-foreground font-normal text-sm truncate inter">
+                      {item?.numOfAttendees}
                     </p>
                   </td>
                 </tr>

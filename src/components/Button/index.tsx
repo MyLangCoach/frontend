@@ -27,7 +27,9 @@ export const Button = ({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`flex  justify-center dm-sans text-xs font-medium ${height ? height : "h-[32px]"}  items-center   bg-black rounded-[4px] text-white px-3 w-fit ${className}`}
+      className={`flex  justify-center dm-sans text-xs font-medium ${
+        height ? height : "h-[32px]"
+      }  items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit ${className}`}
     >
       {loading ? `${altText}` : `${name}`}
     </button>

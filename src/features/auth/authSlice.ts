@@ -14,6 +14,7 @@ export interface AuthState {
   saveCardData: any;
   allSavedCard: any,
   openCard: boolean;
+  allMyStudent: any;
 }
 
 const initialState: AuthState = {
@@ -27,7 +28,8 @@ const initialState: AuthState = {
   allStudents: [],
   saveCardData: {},
   allSavedCard: [],
-  openCard: false
+  openCard: false,
+  allMyStudent:[]
 };
 
 export const authSlice = createSlice({
@@ -128,6 +130,16 @@ export const authSlice = createSlice({
       state.allStudents = payload.data
       })
       .addCase(getAllStudent.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllMyStudent.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllMyStudent.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+      state.allMyStudent = payload.data
+      })
+      .addCase(getAllMyStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
       .addCase(saveMyCard.pending, (state) => {
@@ -333,6 +345,28 @@ export const getAllStudent = createAsyncThunk(
     try {
       const { data } = await APIService.get(
         `${url.allUser}/student`,
+        
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllMyStudent = createAsyncThunk(
+  "getAllMyStudent",
+  async (_, { rejectWithValue,getState }) => {
+          const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.allMyStudent}`,
         
         {
           headers: {

@@ -19,6 +19,8 @@ import Testing from "./pages/Testing";
 import AllCoaches from "./pages/student/all-coaches-page";
 import PaymentPage from "./pages/payment";
 import StudentLiveClasses from "./pages/live-classes/student-classes";
+import VerifyEmailSuccess from "./pages/auth/VerifyEmailSuccess";
+import VerifyEmailError from "./pages/auth/VerifyEmailError";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -38,6 +40,8 @@ const AppRoutes = () => {
         <Route path="/testing" element={<Testing />} />
         <Route path="/coaches" element={<AllCoaches />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/email-verification-success" element={<VerifyEmailSuccess />} />
+        <Route path="/email-verification-error" element={<VerifyEmailError />} />
         
      
 

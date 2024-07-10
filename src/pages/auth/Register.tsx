@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import logo from "../../assets/png/lang-logo.png";
+import logo from "../../assets/icons/lang-logo.svg";
 import signPic from "../../assets/png/sign-pic.png";
 import { GoogleLogo } from "../../assets";
 import { Input, Password } from "../../components/Input";

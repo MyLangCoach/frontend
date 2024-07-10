@@ -274,7 +274,7 @@ const CoachProfile = () => {
         </div>
         {/* end of an input */}
         {/* start */}
-        <div className="w-full mt-4">
+        {/* <div className="w-full mt-4">
           <UrlInput
             preUrl="https://www.mylangcoach/"
             placeholder="geo"
@@ -285,7 +285,7 @@ const CoachProfile = () => {
             setValue={setUserName}
             label="Username"
           />
-        </div>
+        </div> */}
         {/* end */}
         {/* start */}
         <div className="w-full mt-4 flex flex-col">

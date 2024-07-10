@@ -16,5 +16,6 @@ export const url = {
   sessionBookings: "/bookings/session",
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",
-  savedCard:"/users/cards"
+  savedCard: "/users/cards",
+  allMyStudent:"/users/coach/mystudents"
 };

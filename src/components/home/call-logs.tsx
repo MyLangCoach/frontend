@@ -4,7 +4,7 @@ import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getAllSessionBookingCoach, getAllSessionBookingStudent } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
-import { formatDateTime } from "../../util";
+import { formatDateTime, openInNewTab } from "../../util";
 import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
 
 const CallLogs = () => {
@@ -15,7 +15,7 @@ const CallLogs = () => {
       dispatch(getAllSessionBookingCoach());
     }, []);
     const bookings = offering?.allBookingsSessionCoach;
-    console.log(bookings);
+
     const [current, setCurrent] = useState(0);
     const [open, setOpen] = useState<boolean>(false);
 
@@ -76,31 +76,31 @@ const CallLogs = () => {
                       key={index}
                     >
                       <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
-                        <p className="red-hat text-foreground font-bold text-[23px]">
+                        <p className="red-hat text-foreground font-bold text-[23px] ">
                           {item.note}
                         </p>
-                        <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+                        <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white min-w-fit">
                           1:1 class
                         </span>
                       </div>
                       <div className="w-full flex flex-col lg:px-6 pb-6">
-                        <div className="w-full mt-3 flex wrap gap-6 items-center">
-                          <span className="flex items-center gap-[10px] ">
-                            <p className="text-muted text-sm dm-sans">
+                        <div className="w-full mt-3 flex flex-wrap gap-6 items-center">
+                          <span className="flex items-center gap-[10px] w-2/12 min-w-fit ">
+                            <p className="text-muted text-sm dm-sans min-w-fit">
                               Student Name
                             </p>
-                            <p className="text-sm dm-sans font-bold text-muted">
+                            <p className="text-sm dm-sans font-bold text-muted min-w-fit ">
                               {item?.student.firstName ?? ""}{" "}
                               {item?.student?.lastName ?? ""}
                             </p>
                           </span>
-                          <span className="flex items-center gap-[10px] ">
+                          <span className="flex items-center gap-[10px] w-2/12 min-w-fit ">
                             <p className="text-muted text-sm dm-sans">Status</p>
                             <p className="text-sm dm-sans font-bold text-muted">
                               {item.status}
                             </p>
                           </span>
-                          <span className="flex items-center gap-[10px] ">
+                          <span className="flex items-center gap-[10px]  w-2/12 min-w-fit">
                             <p className="text-muted text-sm dm-sans">
                               Book type
                             </p>
@@ -108,22 +108,29 @@ const CallLogs = () => {
                               Session
                             </p>
                           </span>
-                          <span className="flex items-center gap-[10px] ">
+                          <span className="flex items-center gap-[10px]  min-w-fit ">
                             <BlueCalenderIcon />
                             <p className="text-sm dm-sans font-medium text-muted">
                               {formatDateTime(item?.startDateTime)?.date}
                             </p>
                           </span>
-                          <span className="flex items-center gap-[10px] ">
+                          <span className="flex items-center gap-[10px]   min-w-fit">
                             <BlueTimeIcon />
                             <p className="text-sm dm-sans font-medium text-muted">
                               {formatDateTime(item?.startDateTime)?.time}
                             </p>
                           </span>
                         </div>
-                        <div className="w mt-7">
-                          <Button name="Join Session" />
-                        </div>
+                        {item?.meetingLink ? (
+                          <div className="w mt-7">
+                            <Button name="Join Session" onClick={() => openInNewTab(item.meetingLink)}  />
+                          </div>
+                        ) : (
+                          <div className="w mt-7">
+                            <Button name="Make Payment" />
+                          </div>
+                        )}
+                      
                       </div>
                     </div>
                   ))}

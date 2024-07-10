@@ -59,9 +59,9 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
               {/* end */}
               {/* start */}
               <div
-                onClick={() => setSelected(1)}
+                onClick={() => setSelected(2)}
                 className={`w-full hover:border-[1.5px] hover:border-primary border border-border rounded-[8px] flex flex-col gap-4 p-4 lg:p-6 cursor-pointer ${
-                  selected === 1
+                  selected === 2
                     ? "border-[1.5px] border-primary"
                     : "border border-border"
                 }`}
@@ -80,9 +80,9 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
               {/* end */}
               {/* start */}
               <div
-                onClick={() => setSelected(2)}
+                onClick={() => setSelected(3)}
                 className={`w-full hover:border-[1.5px] hover:border-primary border border-border rounded-[8px] flex flex-col gap-4 p-4 lg:p-6 cursor-pointer ${
-                  selected === 2
+                  selected === 3
                     ? "border-[1.5px] border-primary"
                     : "border border-border"
                 }`}
@@ -111,7 +111,12 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
                 name="Continue"
                 height="h-[49px]"
                 className="min-w-[107px]"
-                onClick={() => navigate("/create-new-class")}
+                onClick={() => {
+                  selected === 1 && navigate("/create-new-class?type=ONE_TIME");
+                  selected === 2 && navigate("/create-new-class?type=ONE_MONTHLY");
+                  selected === 3 && navigate("/create-new-class?type=LIVE_GROUP");
+                 
+                }}
               />
             </div>
           </div>

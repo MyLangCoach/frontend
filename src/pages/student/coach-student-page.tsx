@@ -36,15 +36,15 @@ const CoachStudent = () => {
         </div>
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-                  <div className="w-full lg:w-2/3 ">
+                  <div className="w-full 2xl:w-10/12 ">
             <StudentList />
             {/* <CallLogs />
             <GuideTour /> */}
           </div>
           {/* end of the left side */}
           {/* right side */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-6">
-            <TopStudents />
+          <div className="w-full 2xl:w-2/12 hidden 2xl:flex  flex-col gap-6">
+            {/* <TopStudents /> */}
             <ProperTeachingTools />
           </div>
         </div>
