@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
 import { Button } from "../Button";
+import { useNavigate } from "react-router-dom";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch,useAppSelector } from "../../app/hooks";
 import { getAllSessionBookingStudent } from "../../features/offeringslice";
@@ -7,7 +8,8 @@ import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
 import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
 const StudentCallLogs = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
     const offering = useAppSelector(state => state.offerings);
     useEffect(() => {
         dispatch(getAllSessionBookingStudent());
@@ -117,13 +119,12 @@ const StudentCallLogs = () => {
           ) : (
             <div className="flex h-full items-center justify-center flex-col">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any classes at the moment, Create a new group
-                class or private class to get started
+                You do not have any classes at the moment, You can proceed to book a coaching session or offerings to continue
               </p>
               <Button
-                name="Connect new live class"
+                name="Book a Coach Session"
                 className="mt-5 mx-auto"
-                onClick={() => setOpen(true)}
+                onClick={() => navigate("/coaches")}
               />
             </div>
           )}

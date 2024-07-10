@@ -6,7 +6,7 @@ import ar from "../../assets/png/ar.png";
 import pic from "../../assets/png/pic.png"; 
 import { Button, OutlineBtn } from "../Button";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Input } from "../Input";
 import { createFirstBookingWithCoach, restoreDefault } from "../../features/offeringslice";
 import toast from "react-hot-toast";
@@ -22,87 +22,101 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
-      const {
-        bio,
-        profileImage,
-        costPerSession,
-        languages,
-        id,
-        firstName,
-        lastName,
-    }: CoachDetails = item;
+  const {
+    bio,
+    profileImage,
+    costPerSession,
+    languages,
+    id,
+    firstName,
+    lastName,
+  } = item;
   const selectedLanguage = languages?.[0];
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
-   const [currentWeek, setCurrentWeek] = useState(moment());
-   const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
-   const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
-   const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
-   const daysOfWeek = Array.from({ length: 7 }, (_, i) =>
-     startOfCurrentWeek.clone().add(i, "days")
-   );
+  const [pickedTime, setPickedTime] = useState<string>("");
+  const [pickedDay, setPickedDay] = useState<string>("");
+  const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
+  const [currentWeek, setCurrentWeek] = useState(moment().tz("Africa/Lagos")); // Set the timezone to WAT
+  const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
+  const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
+  const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
+  const daysOfWeek = Array.from({ length: 7 }, (_, i) =>
+    startOfCurrentWeek.clone().add(i, "days")
+  );
 
-   const times = (interval: number) => {
-     const start = currentWeek
-       .clone()
-       .set({ hour: 8, minute: 0, second: 0, millisecond: 0 });
-     const end = currentWeek
-       .clone()
-       .set({ hour: 20, minute: 0, second: 0, millisecond: 0 });
-     const timeSlots = [];
+  const times = (interval: number) => {
+    const start = currentWeek
+      .clone()
+      .set({ hour: 8, minute: 0, second: 0, millisecond: 0 });
+    const end = currentWeek
+      .clone()
+      .set({ hour: 20, minute: 0, second: 0, millisecond: 0 });
+    const timeSlots = [];
 
-     while (start <= end) {
-       timeSlots.push(start.clone());
-       start.add(interval, "minutes");
-     }
+    while (start <= end) {
+      timeSlots.push(start.clone());
+      start.add(interval, "minutes");
+    }
 
-     return timeSlots;
-   };
+    return timeSlots;
+  };
 
-   const handleDurationChange = (
-     event: React.ChangeEvent<HTMLInputElement>
-   ) => {
-     setDuration(Number(event.target.value));
-   };
+  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDuration(Number(event.target.value));
+  };
 
-   const handleWeekChange = (direction: "prev" | "next") => {
-     setCurrentWeek(
-       direction === "next"
-         ? currentWeek.clone().add(1, "weeks")
-         : currentWeek.clone().subtract(1, "weeks")
-     );
-   };
+  const handleWeekChange = (direction: "prev" | "next") => {
+    setCurrentWeek(
+      direction === "next"
+        ? currentWeek.clone().add(1, "weeks")
+        : currentWeek.clone().subtract(1, "weeks")
+    );
+  };
 
   useEffect(() => {
     if (note && selectedTime) {
-  setActive(true)
-}
-  }, [note,selectedTime])
-  
-   const handleTimeClick = (time: moment.Moment) => {
-     const bookTime = time.toISOString();
-     setSelectedTime(bookTime);
-     const payload = { note, bookTime };
-     console.log(payload);
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [note, selectedTime]);
+
+  const handleTimeClick = (day: moment.Moment, time: moment.Moment) => {
+    const selectedDateTime = day
+      .clone()
+      .set({
+        hour: time.hour(),
+        minute: time.minute(),
+        second: 0,
+        millisecond: 0,
+      })
+      .tz("Africa/Lagos");
+    const bookTime = selectedDateTime.format(); // Convert to WAT and then to ISO string
+    setSelectedTime(bookTime);
+    setPickedTime(time.tz("Africa/Lagos").format());
+    setPickedDay(day.tz("Africa/Lagos").format());
+    setPickedDate(selectedDateTime);
+    const payload = { note, bookTime };
+    console.log(payload);
   };
-  
+
   const handleBook = () => {
-    if (active) { 
+    if (active) {
       const sentdata = {
         coachId: id,
         data: {
           note: note,
           bookTime: selectedTime,
-        }
-      }
-     
+        },
+      };
+      console.log(sentdata);
       dispatch(createFirstBookingWithCoach(sentdata));
+    } else {
+      toast.error("Note and time must be provided");
     }
-    else {
-      toast.error("note and time must be provided");
-    }
-  }
+  };
 
   useEffect(() => {
     if (offering.createBookingSessionSuccess) {
@@ -110,10 +124,10 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
       dispatch(restoreDefault());
       setOpen(false);
     }
-  }, [offering?.createBookingSessionSuccess])
+  }, [offering?.createBookingSessionSuccess]);
   
   return (
-    <div className="flex flex-col items-center p-4 h-[85vh] flow-hide" >
+    <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
       <div className="w-full flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl red-hat font-bold">Book a session</h2>
@@ -172,7 +186,12 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
           </label>
         </div>
         <div className="w-full mb-4">
-          <Input label={"Add A Session Note"} placeholder="Enter Note..." value={note} setValue={setNote}  />
+          <Input
+            label={"Add A Session Note"}
+            placeholder="Enter Note..."
+            value={note}
+            setValue={setNote}
+          />
         </div>
       </div>
       <div className="flex flex-col mb-4 w-full border-border border rounded-[6px] p-3">
@@ -198,10 +217,19 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
                 {times(duration).map((time) => (
                   <button
                     key={time.toISOString()}
-                    onClick={() => handleTimeClick(time)}
-                    className="block underline mb-2 red-hat font-bold  text-black text-sm"
+                    onClick={() => {
+                      handleTimeClick(day, time);
+                      setPickedTime(time.toISOString());
+                      setPickedDay(day.toISOString());
+                    }}
+                    className={`block underline mb-2 red-hat font-bold   text-sm ${
+                      pickedTime === time?.toISOString() &&
+                      pickedDay === day.toISOString()
+                        ? "bg-primary text-white rounded-sm px-2 "
+                        : "text-black"
+                    } `}
                   >
-                    {time.format("HH:mm")}
+                    {time.tz("Africa/Lagos").format("HH:mm")}
                   </button>
                 ))}
               </div>
@@ -219,7 +247,7 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
         <Button
           name={offering?.loading ? "Loading..." : "Book Now"}
           height="h-[49px]"
-          className={ `flex-grow ${!active && "opacity-40 cursor-not-allowed"}`}
+          className={`flex-grow ${!active && "opacity-40 cursor-not-allowed"}`}
           onClick={handleBook}
           disabled={!active}
         />

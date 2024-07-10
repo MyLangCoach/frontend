@@ -62,7 +62,7 @@ const CoachProfile = () => {
   const [qualifications, setQualifications] = useState<Qualification[]>([
     { name: "", issuing_org: "", year: 0 },
   ]);
-  console.log(userData);
+
   useEffect(() => {
     if (userData) {
       setFirstname(userData.firstName || "");
