@@ -11,6 +11,7 @@ const StudentOfferingsTable = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getAllOfferingBookingStudent());
+    //  dispatch(getAllOfferings());
   }, []);
 
   const allOfferings = offerings?.allBookedOfferingsStudent;
@@ -91,7 +92,7 @@ const StudentOfferingsTable = () => {
               <p className="text-muted text-sm inter font-medium">Name</p>
             </td>
             <td className="flex items-center gap-3 w-full ">
-              <p className="text-muted text-sm inter font-medium">Price</p>
+              <p className="text-muted text-sm inter font-medium">Payment Status</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
@@ -121,16 +122,16 @@ const StudentOfferingsTable = () => {
                     </span>
                     <div className="flex flex-col gap-[10px]">
                       <h1 className="text-foreground font-normal text-sm truncate inter">
-                        {item?.title}
+                        {item?.note}
                       </h1>
                       <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
-                        Active
+                        {item?.status}
                       </p>
                     </div>
                   </td>
                   <td className="w-full flex items-center">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.costType === "FREE" ? "FREE" : item?.cost?.amount}
+                    {item?.paymentConfirmed ? "Paid" : "Not Paid"}
                     </p>
                   </td>
                   <td className="w-full flex flex-col gap-[10px] justify-center">

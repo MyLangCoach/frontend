@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import camera from "../../assets/icons/camera-icon.png";
 import dp from "../../assets/png/dp.jpg";
 import UrlInput, { Input } from "../Input";
@@ -15,6 +15,9 @@ import { Language, Qualification, UserProfileData } from "../../util/types";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
 import { storage } from "../../firebase";
+import axios from "axios";
+const uploadEndpoint =
+  "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth);
@@ -199,7 +202,51 @@ const CoachProfile = () => {
     if (selectedFile) {
       uploadFile();
     }
-  }, [selectedFile]);
+  }, [selectedFile]); 
+  
+   const [image, setImage] = useState<File | null>(null);
+
+   useEffect(() => {
+     if (image) {
+       handleImageUpload();
+     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [image]);
+
+   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+     if (e.target.files && e.target.files[0]) {
+       setImage(e.target.files[0]);
+     }
+   };
+
+   const handleImageUpload = async () => {
+     if (!image) return;
+
+     setLoading(true);
+
+     const formData = new FormData();
+     formData.append("file", image);
+
+     try {
+       const response = await axios.post(uploadEndpoint, formData, {
+         headers: {
+           "Content-Type": "multipart/form-data",
+           accept: "application/json",
+         },
+       });
+
+       setLoading(false);
+       if (response?.data?.url) {
+         toast.success("Image Upload Successful");
+         dispatch(updateUserProfile({ profileImage: response?.data?.url }));
+       }
+     } catch (error) {
+       console.error("Error uploading image:", error);
+       setLoading(false);
+     }
+   };
+    
+
 
   if (user?.fetchLoading) {
     return (
@@ -244,7 +291,8 @@ const CoachProfile = () => {
               name=""
               className="inset-0 opacity-0 absolute"
               id=""
-              onChange={(e) => getFiles(e.target.files)}
+              // onChange={(e) => getFiles(e.target.files)}
+              onChange={handleImageChange}
             />
             <span>
               <img src={camera} alt="camera" />
@@ -486,13 +534,21 @@ const CoachProfile = () => {
             />
           </div>
           <div className="items-center flex gap-4 ">
-            <p className="text-black text-sm font-medium inter">Availability Status</p>
-            <input type="checkbox" className="w-5 h-5" name="" id="" checked={available === "available"} onClick={() => {
-              if (available === "available") {
-                setAvailable("")
-              }
-              else setAvailable("available")
-            }} />
+            <p className="text-black text-sm font-medium inter">
+              Availability Status
+            </p>
+            <input
+              type="checkbox"
+              className="w-5 h-5"
+              name=""
+              id=""
+              checked={available === "available"}
+              onClick={() => {
+                if (available === "available") {
+                  setAvailable("");
+                } else setAvailable("available");
+              }}
+            />
           </div>
         </div>
         {/* end of an input */}

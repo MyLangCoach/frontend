@@ -1,41 +1,44 @@
 import React, { SetStateAction, useEffect, useState } from "react";
-import { useAppDispatch,useAppSelector } from "../../app/hooks";
-import { CoachDetails } from "../../util/types";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { ClassDetails, CoachDetails } from "../../util/types";
 import { CancelX, NextIcon, PrevIcon, VerifyIcon } from "../../assets";
 import ar from "../../assets/png/ar.png";
-import pic from "../../assets/png/pic.png"; 
+import pic from "../../assets/png/pic.png";
 import { Button, OutlineBtn } from "../Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment-timezone";
 import { Input } from "../Input";
-import { createFirstBookingWithCoach, restoreDefault } from "../../features/offeringslice";
+import {
+    bookCoachOffering,
+  createFirstBookingWithCoach,
+  restoreDefault,
+} from "../../features/offeringslice";
 import toast from "react-hot-toast";
+import { resetRedirect, saveRedirectUrl } from "../../features/auth/authSlice";
+import { store } from "../../app/store";
 
-interface CalendarProps {
-    // note: string;
-    item: CoachDetails
-  setOpen: React.Dispatch<SetStateAction<boolean>>,
- 
+interface OfferingCalendarProps {
+  // note: string;
+  item: ClassDetails;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
+const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) => {
   const navigate = useNavigate();
+    const authenticated = store.getState().auth?.token;
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
-    const handleError = (e: any) => {
-      e.target.onerror = null; // Prevent looping
-      e.target.src = pic;
-    };
+    const urlId = useParams();
   const {
-    bio,
-    profileImage,
-    costPerSession,
-    languages,
+    description,
+    coverImageUrl,
+   
+      costType, 
     id,
-    firstName,
-    lastName,
+    
+    title
   } = item;
-  const selectedLanguage = languages?.[0];
+
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
@@ -103,33 +106,42 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
     setPickedDay(day.tz("Africa/Lagos").format());
     setPickedDate(selectedDateTime);
     const payload = { note, bookTime };
-    console.log(payload);
+  
   };
 
   const handleBook = () => {
-    if (active) {
-      const sentdata = {
-        coachId: id,
-        data: {
+    if (authenticated) {
+
+      if (active) {
+        const sentdata = {
+          id: id,
+          data: {
           note: note,
           bookTime: selectedTime,
         },
       };
       console.log(sentdata);
-      dispatch(createFirstBookingWithCoach(sentdata));
+      dispatch(bookCoachOffering(sentdata));
     } else {
       toast.error("Note and time must be provided");
+    }
+    }
+    else {
+      dispatch(saveRedirectUrl(`/view-coach/${urlId?.id}`));
+      navigate("/login")
     }
   };
 
   useEffect(() => {
-    if (offering.createBookingSessionSuccess) {
-      toast.success("You have successfully booked a session with the coach");
+    if (offering.bookCoachOfferingSuccess) {
+      toast.success("You have successfully booked this coach offering with the coach");
       dispatch(restoreDefault());
+      dispatch(resetRedirect());
+      navigate("/")
       setOpen(false);
     }
-  }, [offering?.createBookingSessionSuccess]);
-  
+  }, [offering?.bookCoachOfferingSuccess]);
+
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
       <div className="w-full flex flex-col">
@@ -142,17 +154,16 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
         <div className="flex items-start gap-3 pb-3 border-b-border1 border-b">
           <div>
             <img
-              src={profileImage}
+              src={coverImageUrl ?? pic}
               alt=""
               className="w-9 h-9 rounded-full object-cover"
-              onError={handleError}
             />
           </div>
           <div className="flex flex-col">
             <span className="flex items-center gap-[10px]">
               <p className="font-bold red-hat capitalize">
                 {" "}
-                {firstName} {lastName}
+                              {title}
               </p>
               <img src={ar} alt="ar" />
               <span>
@@ -161,7 +172,7 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
             </span>
             <p className="text-sm text-subTopic dm-sans">
               {" "}
-              {selectedLanguage?.language ?? ""} Tutor
+              {description ?? ""} 
             </p>
           </div>
         </div>
@@ -261,4 +272,4 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
   );
 };
 
-export default Calendar;
+export default OfferingCalendar;

@@ -18,7 +18,11 @@ const Home = () => {
     }
   }, [])
     const userRole = user?.userData?.role;
-  
+   useEffect(() => {
+     if (user?.redirectUrl) {
+       navigate(user?.redirectUrl);
+     }
+   }, [user?.redirectUrl, navigate]);
   
   return (
     <DashboardLayout current={1}>

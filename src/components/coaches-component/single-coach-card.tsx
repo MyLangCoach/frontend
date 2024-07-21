@@ -7,6 +7,7 @@ import { Button } from '../Button'
 import { CoachDetails } from '../../util/types'
 import ReUseModal from '../modal/Modal'
 import Calendar from './booking-calender'
+import { useNavigate } from 'react-router-dom'
 interface SingleCardProps {
   item:any
 }
@@ -14,14 +15,15 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
   const { bio, profileImage, costPerSession, languages, id,firstName,lastName } : CoachDetails = item;
   const selectedLanguage = languages?.[0]
   const [open, setOpen] = useState<boolean>(false);
-
+  const navigate = useNavigate();
 
   return (
     <div className="w-full flex flex-col lg:w-[257px] bg-white rounded-[8px]" key={id}>
       <img
         src={item?.profileImage ?? pic}
         alt=""
-        className="lg:w-[257px] h-[200px] rounded-t-[8px] object-cover"
+        className="lg:w-full  h-[200px] rounded-t-[8px] object-cover cursor-pointer"
+onClick={() => navigate(`/view-coach/${id}`)}
       />
       <div className="w-full px-4 py-3 flex flex-col">
         <div className="flex gap-3 items-center">

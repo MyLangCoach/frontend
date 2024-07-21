@@ -21,6 +21,7 @@ import PaymentPage from "./pages/payment";
 import StudentLiveClasses from "./pages/live-classes/student-classes";
 import VerifyEmailSuccess from "./pages/auth/VerifyEmailSuccess";
 import VerifyEmailError from "./pages/auth/VerifyEmailError";
+import ViewSingleCoach from "./pages/coach/view-single-coach";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -28,37 +29,62 @@ const AppRoutes = () => {
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/live-classes" element={<LiveClasses />} />
-        <Route path="/student/live-classes" element={<StudentLiveClasses />} />
-        <Route path="/create-new-class" element={<CreateClass />} />
+        <Route
+          path="/live-classes"
+          element={
+            <ProtectedRoute>
+              <LiveClasses />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/student/live-classes" element={
+           <ProtectedRoute>
+          <StudentLiveClasses />
+             </ProtectedRoute>
+        } />
+        <Route path="/create-new-class" element={
+           <ProtectedRoute>
+             <CreateClass />
+           </ProtectedRoute>
+        
+        } />
+            
         <Route path="/payouts" element={<Payouts />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/students" element={<CoachStudent />} />
         <Route path="/testing" element={<Testing />} />
         <Route path="/coaches" element={<AllCoaches />} />
         <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/email-verification-success" element={<VerifyEmailSuccess />} />
-        <Route path="/email-verification-error" element={<VerifyEmailError />} />
-        
-     
+        <Route
+          path="/email-verification-success"
+          element={<VerifyEmailSuccess />}
+        />
+        <Route
+          path="/view-coach/:id"
+          element={<ViewSingleCoach />}
+        />
+        <Route
+          path="/email-verification-error"
+          element={<VerifyEmailError />}
+        />
 
         {/* Protected Routes */}
-        {/* <Route
+        <Route
           path="/"
           element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           }
-        /> */}
+        />
         <Route
           path="/profile"
           element={
             // <ProtectedRoute>
-              <Profile />
+            <Profile />
             // </ProtectedRoute>
           }
         />

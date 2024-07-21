@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getSimplifiedError } from "../../util";
 import { APIService } from "../../util/APIService";
 import { url } from "../../util/endpoints";
+import { SingleBankDetail } from "../../util/types";
 export interface AuthState {
   loading: boolean;
   fetchLoading: boolean;
@@ -10,11 +11,11 @@ export interface AuthState {
   verifiedStatus: boolean;
   registerSuccess: boolean;
   allCoaches: any;
-  allStudents: any;
-  saveCardData: any;
-  allSavedCard: any,
-  openCard: boolean;
   allMyStudent: any;
+  updateProfileSuccess: boolean;
+  allStudents: any;
+  redirectUrl: string;
+ 
 }
 
 const initialState: AuthState = {
@@ -26,10 +27,10 @@ const initialState: AuthState = {
   fetchLoading: false,
   allCoaches: [],
   allStudents: [],
-  saveCardData: {},
-  allSavedCard: [],
-  openCard: false,
-  allMyStudent:[]
+  allMyStudent: [],
+  updateProfileSuccess: false,
+  redirectUrl: ""
+
 };
 
 export const authSlice = createSlice({
@@ -38,12 +39,20 @@ export const authSlice = createSlice({
   reducers: {
     clearState: () => {
       return initialState;
-
     },
     restoreDefault: (state) => {
       state.registerSuccess = false;
-      state.openCard = false;
-      state.saveCardData = {}
+
+      state.updateProfileSuccess = false;
+      state.redirectUrl = ""
+    },
+    resetRedirect: (state) => {
+    
+      state.redirectUrl = ""
+    },
+    
+    saveRedirectUrl: (state, action: PayloadAction<any>) => {
+      state.redirectUrl = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -53,7 +62,7 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.loading = false;
-     
+
         state.registerSuccess = true;
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
@@ -97,37 +106,38 @@ export const authSlice = createSlice({
       })
       .addCase(getUserProfile.fulfilled, (state, { payload }) => {
         state.fetchLoading = false;
-      state.userData = payload.data
+        state.userData = payload.data;
       })
       .addCase(getUserProfile.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
       .addCase(updateUserProfile.pending, (state) => {
-        state.fetchLoading = true;
+        state.loading = true;
       })
       .addCase(updateUserProfile.fulfilled, (state, { payload }) => {
-        state.fetchLoading = false;
-      state.userData = payload.data
+        state.loading = false;
+        state.userData = payload.data;
+        state.updateProfileSuccess = true;
       })
       .addCase(updateUserProfile.rejected, (state, { payload }) => {
-        state.fetchLoading = false;
+        state.loading = false;
       })
       .addCase(getAllCoaches.pending, (state) => {
-        state.fetchLoading = true;
+        state.loading = true;
       })
       .addCase(getAllCoaches.fulfilled, (state, { payload }) => {
-        state.fetchLoading = false;
-      state.allCoaches = payload.data
+        state.loading = false;
+        state.allCoaches = payload.data;
       })
       .addCase(getAllCoaches.rejected, (state, { payload }) => {
-        state.fetchLoading = false;
+        state.loading = false;
       })
       .addCase(getAllStudent.pending, (state) => {
         state.fetchLoading = true;
       })
       .addCase(getAllStudent.fulfilled, (state, { payload }) => {
         state.fetchLoading = false;
-      state.allStudents = payload.data
+        state.allStudents = payload.data;
       })
       .addCase(getAllStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
@@ -137,36 +147,11 @@ export const authSlice = createSlice({
       })
       .addCase(getAllMyStudent.fulfilled, (state, { payload }) => {
         state.fetchLoading = false;
-      state.allMyStudent = payload.data
+        state.allMyStudent = payload.data;
       })
       .addCase(getAllMyStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
-      })
-      .addCase(saveMyCard.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(saveMyCard.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.saveCardData = payload.data;
-        state.openCard = true
-      })
-      .addCase(saveMyCard.rejected, (state, { payload }) => {
-        state.loading = false;
-      })
-      .addCase(getAllSavedCards.pending, (state) => {
-        state.fetchLoading = true;
-      })
-      .addCase(getAllSavedCards.fulfilled, (state, { payload }) => {
-        state.fetchLoading = false;
-        state.allSavedCard = payload.data;
-    
-      })
-      .addCase(getAllSavedCards.rejected, (state, { payload }) => {
-        state.fetchLoading = false;
-      })
-
-      
-      ;
+      });
   },
 });
 
@@ -212,7 +197,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-
 export const verifyUserEmail = createAsyncThunk(
   "verifyUserEmail",
   async (payload: any, { rejectWithValue }) => {
@@ -231,16 +215,14 @@ export const verifyUserEmail = createAsyncThunk(
 
 export const getUserProfile = createAsyncThunk(
   "getUserProfiles",
-  async (_, { rejectWithValue,getState }) => {
-      const { auth }: any = getState();
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
-      const { data } = await APIService.get(`${url.userProfile}`,
-        {
+      const { data } = await APIService.get(`${url.userProfile}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },
-        }
-      );
+      });
       return data;
     } catch (error: any) {
       return rejectWithValue(
@@ -252,18 +234,14 @@ export const getUserProfile = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
   "updateUserProfile",
-  async (payload: any, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
-      const { data } = await APIService.put(
-        `${url.userProfile}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
-      );
+      const { data } = await APIService.put(`${url.userProfile}`, payload, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
       return data;
     } catch (error: any) {
       return rejectWithValue(
@@ -272,58 +250,15 @@ export const updateUserProfile = createAsyncThunk(
     }
   }
 );
-export const saveMyCard = createAsyncThunk(
-  "saveMyCard",
-  async (_: any, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
-    try {
-      const { data } = await APIService.post(
-        `${url.saveCard}`,
-        "",
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
-      );
-      return data;
-    } catch (error: any) {
-      return rejectWithValue(
-        getSimplifiedError(error.response ? error : error)
-      );
-    }
-  }
-);
+
 export const getAllCoaches = createAsyncThunk(
   "getAllCoaches",
-  async (_, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.get(
         `${url.allUser}/coach`,
-        
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
-      );
-      return data;
-    } catch (error: any) {
-      return rejectWithValue(
-        getSimplifiedError(error.response ? error : error)
-      );
-    }
-  }
-);
-export const getAllSavedCards = createAsyncThunk(
-  "getAllSavedCard",
-  async (_, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
-    try {
-      const { data } = await APIService.get(
-        `${url.savedCard}`,
-        
+
         {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
@@ -340,12 +275,12 @@ export const getAllSavedCards = createAsyncThunk(
 );
 export const getAllStudent = createAsyncThunk(
   "getAllStudent",
-  async (_, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.get(
         `${url.allUser}/student`,
-        
+
         {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
@@ -362,12 +297,12 @@ export const getAllStudent = createAsyncThunk(
 );
 export const getAllMyStudent = createAsyncThunk(
   "getAllMyStudent",
-  async (_, { rejectWithValue,getState }) => {
-          const { auth }: any = getState();
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
     try {
       const { data } = await APIService.get(
         `${url.allMyStudent}`,
-        
+
         {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
@@ -383,12 +318,10 @@ export const getAllMyStudent = createAsyncThunk(
   }
 );
 
-
 export const authSelector = (state: any) => state.auth;
 
-export const { clearState,restoreDefault } = authSlice.actions;
+export const { clearState, restoreDefault, resetRedirect, saveRedirectUrl } = authSlice.actions;
 export default authSlice.reducer;
 // function getState(): any {
 //   throw new Error("Function not implemented.");
 // }
-

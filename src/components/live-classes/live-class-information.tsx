@@ -4,6 +4,7 @@ import { DateInput, DateTimeInput, Input } from '../Input'
 import PrimarySelect from '../Selects/PrimarySelect';
 import { OutlineBtn, BigButton } from '../Button';
 import { useNavigate } from 'react-router-dom';
+import ImageUpload from '../UploadFile/ImageUpload';
 const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type }: any) => {
     const navigate = useNavigate();
     // const [name, setName] = useState<string>("");
@@ -16,7 +17,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
       setDuration(time.value)
     }, [time])
     
-
+console.log(coverImageUrl) 
 
   return (
     <div className="w-full flex flex-col">
@@ -51,13 +52,15 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
             Cover Image
           </label>
-          <textarea
+          {/* <textarea
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
             onChange={(e) => setCoverImageUrl(e.target.value)}
             value={coverImageUrl}
-          ></textarea>
+          ></textarea> */}
+          <ImageUpload imageUrl={coverImageUrl} setImageUrl={ setCoverImageUrl}
+            />
         </div>
         {/* end */}
         <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">

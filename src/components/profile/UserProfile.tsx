@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  { ChangeEvent, useEffect, useState } from "react";
 import camera from "../../assets/icons/camera-icon.png";
 import dp from "../../assets/png/dp.jpg";
 import UrlInput, { Input } from "../Input";
@@ -6,13 +6,15 @@ import { BigButton, CapsuleBtn, OutlineBtn } from "../Button";
 import PrimarySelect from "../Selects/PrimarySelect";
 import { Location } from "../../util/location";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getUserProfile,updateUserProfile } from "../../features/auth/authSlice";
+import { getUserProfile,restoreDefault,updateUserProfile } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { UserProfileData } from "../../util/types";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { storage } from "../../firebase";
+import axios from "axios";
+const uploadEndpoint = "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const UserProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.auth);
@@ -21,7 +23,7 @@ const UserProfile = () => {
   }, []);
   
   const userData: UserProfileData | undefined = user?.userData;
-  console.log(user?.userData)
+
 
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
@@ -135,22 +137,68 @@ const uploadFile = () => {
         setLoading(false);
         
         toast.success("Image Upload Successful");
-         dispatch(updateUserProfile({profileImage:url}));
+         dispatch(updateUserProfile({profileImage:url})); 
         // setPreview("");
       });
     }
   );
-};
+}; 
 
-
+  
   useEffect(() => {
-    if (selectedFile) {
+    if (user.updateProfileSuccess) { 
+      toast.success("Profile Updated Successfully");
+      dispatch(restoreDefault());
+       dispatch(getUserProfile());
+  }
+  }, [user?.updateProfileSuccess])  
+  
 
-      uploadFile()
-    }
-  }, [selectedFile])
+
   
-  
+   const [image, setImage] = useState<File | null>(null);
+
+
+   useEffect(() => {
+     if (image) {
+       handleImageUpload();
+     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [image]);
+
+   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+     if (e.target.files && e.target.files[0]) {
+       setImage(e.target.files[0]);
+     }
+   };
+
+   const handleImageUpload = async () => {
+     if (!image) return;
+
+     setLoading(true);
+
+     const formData = new FormData();
+     formData.append("file", image);
+
+     try {
+       const response = await axios.post(uploadEndpoint, formData, {
+         headers: {
+           "Content-Type": "multipart/form-data",
+           "accept": "application/json"
+         },
+       });
+
+
+       setLoading(false);
+       if (response?.data?.url) {
+             toast.success("Image Upload Successful");
+             dispatch(updateUserProfile({ profileImage: response?.data?.url }));
+       }
+     } catch (error) {
+       console.error("Error uploading image:", error);
+       setLoading(false);
+     }
+   };
     
 
 
@@ -196,8 +244,10 @@ const uploadFile = () => {
               type="file"
               name=""
               className="inset-0 opacity-0 absolute"
+              accept="image/*"
               id=""
-              onChange={(e) => getFiles(e.target.files)}
+              onChange={handleImageChange}
+              // onChange={(e) => getFiles(e.target.files)}
             />
             <span>
               <img src={camera} alt="camera" />

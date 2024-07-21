@@ -19,11 +19,13 @@ import session from "redux-persist/lib/storage/session";
 import counterReducer from "../features/counter/counterSlice";
 import authReducer from "../features/auth/authSlice";
 import offeringsSlice from "../features/offeringslice";
+import paymentSlice from "../features/paymentslice";
 
 const rootReducer = combineReducers({
   counter: counterReducer, //to be removed once we have more than one reducer
   auth: authReducer,
-  offerings:offeringsSlice
+  offerings:offeringsSlice,
+  payment:paymentSlice,
 });
 
 const persistConfig = {

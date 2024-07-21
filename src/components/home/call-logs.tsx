@@ -127,7 +127,7 @@ const CallLogs = () => {
                           </div>
                         ) : (
                           <div className="w mt-7">
-                            <Button name="Make Payment" />
+                            <Button name="waiting for payment" />
                           </div>
                         )}
                       

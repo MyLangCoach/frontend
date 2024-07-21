@@ -104,6 +104,10 @@ filter: blur(40px);
   box-shadow: 4px 4px 32px 0px #56E9AB1A;
 
 }
+.offering-shadow {
+  box-shadow: 2px 2px 24px 0px #0000001A;
+
+}
 
 .verify-shadow{
   box-shadow: 2px 2px 24px 0px #0000001A;

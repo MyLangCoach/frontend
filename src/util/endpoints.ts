@@ -17,5 +17,7 @@ export const url = {
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",
   savedCard: "/users/cards",
-  allMyStudent:"/users/coach/mystudents"
+  allMyStudent: "/users/coach/mystudents",
+  payment: "payments",
+  userBanks:"users/banks"
 };

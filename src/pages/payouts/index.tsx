@@ -4,8 +4,12 @@ import { NotificationIcon } from '../../assets';
 
 import PayoutOverview from '../../components/payouts/payout-overview';
 import PayoutTables from '../../components/payouts/payout-tables';
+import { useAppSelector } from '../../app/hooks';
+import BankCard from '../../components/payouts/bank-card';
 
 const Payouts = () => {
+  const user = useAppSelector((state) => state.auth);
+    const userRole = user?.userData?.role;
   return (
     <DashboardLayout current={7}>
       <div className="w-full flex flex-col">
@@ -17,6 +21,7 @@ const Payouts = () => {
             <NotificationIcon />
           </span>
         </div>
+        {userRole === "COACH" && <BankCard />}
         <PayoutOverview />
         <div className="w-full flex flex-col lg:flex-row gap-5">
          <PayoutTables />
