@@ -8,7 +8,7 @@ interface dateProps {
 }
 interface dateTimeProps {
   dateTime: string;
-  setDateTime: React.Dispatch<React.SetStateAction<string>>;
+  setDateTime: React.Dispatch<React.SetStateAction<string | any>>;
   className?: string;
   height?: string;
 }

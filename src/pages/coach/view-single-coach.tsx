@@ -30,7 +30,7 @@ const ViewSingleCoachPage = () => {
     
     const allOfferings : ClassDetails[] = offering?.singleCoachOffering;
     const oneOffering = offering?.singleCoachOffering?.[0];
-    console.log(oneOffering)
+ 
     if (auth?.fetchLoading || offering?.fetchLoading) {
         return (
             <div className="w-full">

@@ -7,6 +7,7 @@ import CreateNewServiceModal from './create-new-service-modal';
 import { getAllOfferings } from '../../features/offeringslice';
 import LoadingComponent from '../Loaders/skeleton-loading';
 import { formatDateTime } from '../../util';
+import ViewOfferingModal from '../modal/view-offering-modal';
 const OfferingsTable = () => {
   const offerings = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
@@ -14,8 +15,8 @@ const OfferingsTable = () => {
     dispatch(getAllOfferings())
   }, [])
   
-
   const allOfferings = offerings?.allOfferings?.offerings;
+  console.log(allOfferings);
 
   const [open, setOpen] = useState(false);
 
@@ -79,8 +80,8 @@ const OfferingsTable = () => {
       </div>
       <div className="w-full mt-5">
         <table className="w-full border border-border rounded-[4px]">
-          <th className="w-full grid grid-cols-5 h-[40px] border-b border-b-border px-2 ">
-            <td className="flex items-center gap-3 w-full ">
+          <thead className="w-full grid grid-cols-5 h-[40px] border-b border-b-border px-2 ">
+            <th className="flex items-center gap-3 w-full ">
               <input
                 type="checkbox"
                 name=""
@@ -88,93 +89,38 @@ const OfferingsTable = () => {
                 className="accent-black  w-4 h-4 rounded-md "
               />
               <p className="text-muted text-sm inter font-medium">Name</p>
-            </td>
-            <td className="flex items-center gap-3 w-full ">
+            </th>
+            <th className="flex items-center gap-3 w-full ">
               <p className="text-muted text-sm inter font-medium">Price</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
-            </td>
-            <td className=" flex items-center gap-3 w-full">
+            </th>
+            <th className=" flex items-center gap-3 w-full">
               <p className="text-muted text-sm inter font-medium">Duration</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
-            </td>
-            <td className=" flex items-center gap-3 w-full">
+            </th>
+            <th className=" flex items-center gap-3 w-full">
               <p className="text-muted text-sm inter font-medium">Class Time</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
-            </td>
-            <td className=" flex items-center gap-3 w-full">
+            </th>
+            <th className=" flex items-center gap-3 w-full">
               <p className="text-muted text-sm inter font-medium">Attendees</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
-            </td>
-          </th>
+            </th>
+          </thead>
           <tbody className="w-full flex flex-col">
-            {allOfferings?.map((item:any, index:number) => {
+            {allOfferings?.map((item: any, index: number) => {
               return (
-                <tr
-                  key={index}
-                  className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] "
-                >
-                  <td className="w-full flex items-center gap-3">
-                    <span>
-                      <input
-                        type="checkbox"
-                        name=""
-                        id=""
-                        className="accent-black  w-4 h-4 rounded-md "
-                      />
-                    </span>
-                    <div className="flex flex-col gap-[10px]">
-                      <h1 className="text-foreground font-normal text-sm truncate inter">
-                        {item?.title}
-                      </h1>
-                      <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
-                        Active
-                      </p>
-                    </div>
-                  </td>
-                  <td className="w-full flex items-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.costType === "FREE" ? "FREE" : item?.cost?.amount}
-                    </p>
-                  </td>
-                  <td className="w-full flex flex-col gap-[10px] justify-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.duration === 30 ? "30 MINS" : "60 MINS"}
-                    </p>
-                    <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                      {item?.type}
-                    </p>
-                  </td>
-                  <td className="w-full flex flex-col gap-[10px] justify-center">
-                    {item?.liveDateTime ? (
-                      <div className="flex flex-col gap-[10px] justify-center">
-                        <p className="text-foreground font-normal text-sm truncate inter">
-                          {formatDateTime(item?.liveDateTime)?.date}
-                        </p>
-                        <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                          {formatDateTime(item?.liveDateTime)?.time}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-foreground font-normal text-sm truncate inter">
-                        Any Time
-                      </p>
-                    )}
-                  </td>
-                  <td className="w-full flex flex-col gap-[10px] justify-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.numOfAttendees}
-                    </p>
-                  </td>
-                </tr>
-              );
+
+                <SingleRow item={item} index={index} key={index} />
+              )
             })}
           </tbody>
         </table>
@@ -185,3 +131,69 @@ const OfferingsTable = () => {
 }
 
 export default OfferingsTable
+
+
+const SingleRow = ({item, index} : any) => {
+    const [open, setOpen] = useState(false);
+    return (
+      <tr
+        key={index}
+        className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] cursor-pointer "
+        onClick={() => setOpen(true)}
+      >
+        <td className="w-full flex items-center gap-3">
+          <span>
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              className="accent-black  w-4 h-4 rounded-md "
+            />
+          </span>
+          <div className="flex flex-col gap-[10px]">
+            <h1 className="text-foreground font-normal text-sm truncate inter">
+              {item?.title}
+            </h1>
+            <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
+              Active
+            </p>
+          </div>
+        </td>
+        <td className="w-full flex items-center">
+          <p className="text-foreground font-normal text-sm truncate inter">
+            {item?.costType === "FREE" ? "FREE" : item?.cost?.amount}
+          </p>
+        </td>
+        <td className="w-full flex flex-col gap-[10px] justify-center">
+          <p className="text-foreground font-normal text-sm truncate inter">
+            {item?.duration === 30 ? "30 MINS" : "60 MINS"}
+          </p>
+          <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+            {item?.type}
+          </p>
+        </td>
+        <td className="w-full flex flex-col gap-[10px] justify-center">
+          {item?.liveDateTime ? (
+            <div className="flex flex-col gap-[10px] justify-center">
+              <p className="text-foreground font-normal text-sm truncate inter">
+                {formatDateTime(item?.liveDateTime)?.date}
+              </p>
+              <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+                {formatDateTime(item?.liveDateTime)?.time}
+              </p>
+            </div>
+          ) : (
+            <p className="text-foreground font-normal text-sm truncate inter">
+              Any Time
+            </p>
+          )}
+        </td>
+        <td className="w-full flex flex-col gap-[10px] justify-center">
+          <p className="text-foreground font-normal text-sm truncate inter">
+            {item?.numOfAttendees}
+          </p>
+        </td>
+        <ViewOfferingModal open={open} setOpen={setOpen} item={item} index={index} />
+      </tr>
+    );
+}

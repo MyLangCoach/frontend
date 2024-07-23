@@ -8,6 +8,7 @@ import { Location } from "../../util/location";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getUserProfile,
+  restoreDefault,
   updateUserProfile,
 } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
@@ -16,12 +17,13 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
 import { storage } from "../../firebase";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const uploadEndpoint =
   "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth);
-  
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getUserProfile());
   }, []);
@@ -157,6 +159,14 @@ const CoachProfile = () => {
     dispatch(updateUserProfile(updatedProfile));
   };
 
+  useEffect(() => {
+    if (user?.updateProfileSuccess) {
+      toast?.success("Profile Updated successfully");
+      dispatch(restoreDefault())
+      navigate("/");
+   }
+  }, [user?.updateProfileSuccess])
+  
   const getFiles = (files: any) => {
     if (!files) return;
     setSelectedFile(files[0]);

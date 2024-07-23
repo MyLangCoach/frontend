@@ -33,7 +33,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
     description,
     coverImageUrl,
    
-      costType, 
+    
     id,
     
     title
@@ -117,7 +117,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
           id: id,
           data: {
           note: note,
-          bookTime: selectedTime,
+          bookTimes: [ selectedTime],
         },
       };
       console.log(sentdata);

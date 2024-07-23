@@ -114,7 +114,8 @@ const PriceAttendees = ({
               name={loading ? "Loading..." : "Continue"}
               // loading={loading}
 
-              onClick={handleCreate}
+              onClick={() => setCurrent(3)}
+              
             />
           </span>
         </div>

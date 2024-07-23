@@ -1,18 +1,21 @@
 import {SetStateAction, useState} from 'react'
 import UrlInput from '../Input';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { OutlineBtn, BigButton } from '../Button';
 
-const LocationSettings = ({ setCurrent, handleCreate,loading }: any) => {
+const LocationSettings = ({ setCurrent, handleCreate,loading, redirectUrl, setRedirectUrl }: any) => {
     const [url, setUrl] = useState('');
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const _type = queryParams.get("type"); 
 
   return (
     <div className="w-full flex flex-col">
       <h1 className="text-black text-base lg:text-xl font-bold red-hat">
         Live Class Information
       </h1>
-      <div className="w-full flex mt-4">
+      {/* <div className="w-full flex mt-4">
         <UrlInput
           label={"Location (Add meeting link here)"}
           placeholder="www.meet.google.com"
@@ -21,7 +24,7 @@ const LocationSettings = ({ setCurrent, handleCreate,loading }: any) => {
           className="w-full"
           onChange={(e: any) => setUrl(e.target?.value)}
         />
-      </div>
+      </div> */}
       <div className="w-full flex flex-col mt-10">
         <h1 className="text-sm font-semibold text-black red-hat lg:text-base ">
           Settings
@@ -71,16 +74,24 @@ const LocationSettings = ({ setCurrent, handleCreate,loading }: any) => {
           <UrlInput
             label={"Redirect Url"}
             placeholder="www.meet.google.com"
-            value={url}
+            value={redirectUrl}
           
             className="w-full"
-            onChange={(e: any) => setUrl(e.target?.value)}
+            onChange={(e: any) => setRedirectUrl(e.target?.value)}
           />
         </div>
       </div>
       <div className="flex gap-3 items-center mt-8 justify-end">
         <span>
-          <OutlineBtn name="Discard changes" onClick={() => setCurrent(2)} />
+          <OutlineBtn name="Discard changes" onClick={() => {
+            if (_type === "ONE_MONTHLY") {
+              setCurrent(1)
+            }
+            else {
+
+              setCurrent(2)
+            }
+          }} />
         </span>
         <span>
           <BigButton

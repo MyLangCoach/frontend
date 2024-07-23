@@ -105,17 +105,29 @@ export interface SingleBankDetail {
 export interface ClassDetails {
   id: number;
   coachId: number;
-  title?: string;
-  description?: string;
-  coverImageUrl?: string;
-  type?: string;
-  duration?: number;
-  cost?: Cost;
-  costType?: string;
+  title: string;
+  description: string;
+  coverImageUrl: string;
+  type: string;
+  duration: number;
+  isFree: boolean;
+  cost: {
+    amount: number;
+    currency: string;
+  };
+  redirectLink: string;
+  isHidden: boolean;
+  seriesCount: number;
+  questionAndAnswer: {
+    answer: string;
+    question: string;
+  }[];
+  totalBookings: number;
   attendantType: string;
-  liveDateTime: string;
+  liveDateTimes: string[];
   numOfAttendees: number;
-  registeredAttendeesCount: number;
+  registeredAttendeesCount: number | null;
   createdAt: string;
   updatedAt: string;
 }
+
