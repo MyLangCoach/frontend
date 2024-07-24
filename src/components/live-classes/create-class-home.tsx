@@ -7,6 +7,21 @@ import { useAppDispatch,useAppSelector } from '../../app/hooks';
 import { createOffering, restoreDefault } from '../../features/offeringslice';
 import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
+type OfferingData = {
+  title: string;
+  description: string;
+  coverImageUrl: string;
+  type: string | null;
+  duration: number;
+  isFree: boolean;
+  cost: Cost;
+  questionAndAnswer: { question: string; answer: string }[];
+  seriesCount: number;
+  redirectLink: string;
+  liveDateTimes?: any[]; // Use the appropriate type instead of `any[]`
+  attendantType?: string; // Use the appropriate type
+  numOfAttendees?: number;
+};
 const CreateClassHome = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -31,10 +46,10 @@ const CreateClassHome = () => {
 
     const [liveDateTimes, setLiveDateTimes] = useState<string[]>([""]);
   const [numOfAttendees, setNumOfAttendees] = useState<number>(1);
-  const [redirectUrl, setRedirectUrl] = useState<string>("");
+  const [redirectUrl, setRedirectUrl] = useState<string>("example.com");
 
   const handleCreate = () => {
-    const data = {
+    const data: OfferingData = {
       title: title,
       description: description,
       coverImageUrl: coverImageUrl,
@@ -42,18 +57,30 @@ const CreateClassHome = () => {
       duration: Number(duration),
       isFree: costType === "FREE" && cost?.amount === 0 ? true : false,
       cost: cost,
-      attendantType: attendantType,
-      liveDateTimes: liveDateTimes,
+
       questionAndAnswer: [
         {
           question: "How do you learn German?",
           answer: "By booking my German offering",
         },
       ],
-      numOfAttendees: Number(numOfAttendees),
-      seriesCount: type === "LIVE_GROUP" ? liveDateTimes?.length : seriesCount?.value,
-      redirectLink:redirectUrl
+      // numOfAttendees: Number(numOfAttendees),
+      seriesCount:
+        type === "LIVE_GROUP" ? liveDateTimes?.length : seriesCount?.value,
+      redirectLink: redirectUrl,
     };
+      if (type === "LIVE_GROUP") {
+        data.liveDateTimes = liveDateTimes;
+        data.attendantType = attendantType;
+        data.numOfAttendees = Number(numOfAttendees);
+    }
+      if (type === "ONE_MONTHLY") {
+    
+        data.attendantType = attendantType;
+        data.numOfAttendees = Number(numOfAttendees);
+    }
+
+    
   
     dispatch(createOffering(data))
 
