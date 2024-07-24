@@ -13,6 +13,7 @@ export const url = {
   getOfferings: "/offerings/all",
   userProfile: "/users/profile",
   allUser: "/users/all",
+  user:"/users",
   sessionBookings: "/bookings/session",
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",

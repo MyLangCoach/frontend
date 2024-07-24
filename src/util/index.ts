@@ -28,6 +28,14 @@ export const getSimplifiedError = (error: object | any) => {
      
     }
   }
+  if (error.response?.status === 409) {
+    if (errorObject?.message === "Not Available") {
+      toast.error("This time is not available");
+    } else {
+      toast.error(error?.response?.data?.message);
+     
+    }
+  }
   if (error.response.status === 404) {
     toast.error(errorObject?.message ?? "Resource Not Found!");
     // console.error(error?.response?.error);

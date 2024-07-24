@@ -7,7 +7,7 @@ import { CapIcon, LanguageIcon, UsersIcon, VerifyIcon } from '../../assets';
 import { Button } from '../../components/Button';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import SingleCoachCard from '../../components/coaches-component/single-coach-card';
-import { getAllCoaches, resetRedirect } from '../../features/auth/authSlice';
+import { getAllCoaches, getSingleUserDetail, resetRedirect } from '../../features/auth/authSlice';
 import { getSingleCoachOffering } from '../../features/offeringslice';
 import { useParams } from 'react-router-dom';
 import LoadingComponent from '../../components/Loaders/skeleton-loading';
@@ -20,17 +20,25 @@ const ViewSingleCoachPage = () => {
     const offering = useAppSelector(state => state.offerings);
     const [isOffering, setIsOffering] = useState(false); 
   const id = useParams();
+  const userId = id.id;
       useEffect(() => {
           dispatch(getAllCoaches());
         dispatch(getSingleCoachOffering({ id: id?.id }))
-          dispatch(resetRedirect());
+        dispatch(resetRedirect());
+        dispatch(getSingleUserDetail(userId))
         // dispatch(getAllStudent());
       }, []);
-    
+   const handleError = (e: any) => {
+     e.target.onerror = null; // Prevent looping
+     e.target.src = pic;
+   };
     
     const allOfferings : ClassDetails[] = offering?.singleCoachOffering;
-    const oneOffering = offering?.singleCoachOffering?.[0];
- 
+
+  const coachDetail = auth?.singleUserProfile?.[0];
+  const recentOfferings : ClassDetails[] = auth?.singleUserProfile?.[1];
+
+
     if (auth?.fetchLoading || offering?.fetchLoading) {
         return (
             <div className="w-full">
@@ -54,7 +62,8 @@ const ViewSingleCoachPage = () => {
         <ContainerLayout>
           <div className="w-full flex items-end h-[380px] pb-4  ">
             <img
-              src={pic}
+              src={coachDetail?.profileImage}
+              onError={handleError}
               alt="pics"
               className="border border-white rounded-full w-[126px] h-[126px] object-cover"
             />
@@ -69,23 +78,25 @@ const ViewSingleCoachPage = () => {
           <div className="w-2/3 flex flex-col">
             <div className="flex flex-col w-full">
               <div className="flex items-center mt-4 gap-3">
-                <h1 className="text-[28px] font-bold red-hat">Gabriella H.</h1>
+                <h1 className="text-[28px] font-bold red-hat uppercase">
+                  {coachDetail?.firstName} {coachDetail?.lastName}
+                </h1>
                 <img src={ar} alt="ar" />
                 <span>
                   <VerifyIcon />
                 </span>
               </div>
               <p className="max-w-[644px] text-sm red-hat">
-                Unlock Fluent English Skills: Ace IELTS, Elevate Conversations,
-                Excel in Business English - TESOL-Certified, Proficient with
-                Youth & Senior Learners.
+                {coachDetail?.description}
               </p>
               <div className="w-full mt-4 flex flex-col gap-3">
                 <div className="flex items-center gap-[6px]">
                   <span>
                     <CapIcon />
                   </span>
-                  <p className="text-muted  text-sm">English</p>
+                  <p className="text-muted  text-sm">
+                    {coachDetail?.languages?.[0]?.language}
+                  </p>
                 </div>
                 <div className="gap-4 flex items-center ">
                   <div className="flex items-center gap-[6px]">
@@ -97,29 +108,43 @@ const ViewSingleCoachPage = () => {
 
                   <div className="flex items-center gap-[6px] ">
                     <span className="bg-muted w-[5px] h-[5px] rounded-full"></span>
-                    <p className="text-muted  text-sm">32 Lessons</p>
+                    <p className="text-muted  text-sm">
+                      {allOfferings?.length} Lessons
+                    </p>
                   </div>
                 </div>
                 <div className="w-full gap-3 items-center flex ">
                   <span>
                     <LanguageIcon />
                   </span>
-                  <p className="text-muted  text-sm">
-                    English (Native), French (Fluent)
-                  </p>
+                  <div className="text-muted  text-sm flex items-center gap-2">
+                    {coachDetail?.languages?.slice(0, 2)?.map((lang: any) => (
+                      <p className="text-muted text-sm">
+                        {lang?.language} {`(${lang.proficiency})`}{" "}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="w-full mt-8 flex gap-5">
               <div className="w-3/12">
                 <h1
-                  className="text-xl font-bold red-hat cursor-pointer"
+                  className={`text-xl  red-hat cursor-pointer ${
+                    isOffering
+                      ? "text-muted text-base"
+                      : "text-black font-bold text-xl"
+                  }`}
                   onClick={() => setIsOffering(false)}
                 >
                   About
                 </h1>
                 <h1
-                  className="text-base mt-3 cursor-pointer red-hat text-[#707070]"
+                  className={`text-base mt-3 cursor-pointer red-hat  ${
+                    isOffering
+                      ? "text-black font-bold text-xl"
+                      : "text-muted text-base"
+                  }`}
                   onClick={() => setIsOffering(true)}
                 >
                   Offerings
@@ -127,7 +152,9 @@ const ViewSingleCoachPage = () => {
               </div>
               {isOffering ? (
                 <div className="flex flex-col ">
-                  <h1 className="text-xl font-bold red-hat">Coach Offerings</h1>
+                  <h1 className="text-xl font-bold red-hat mb-6">
+                    Coach Offerings
+                  </h1>
                   <div className="flex flex-col gap-8">
                     {allOfferings?.map((item, index) => (
                       <div className="flex items-center " key={index}>
@@ -141,12 +168,7 @@ const ViewSingleCoachPage = () => {
                   <h1 className="text-xl font-bold red-hat">About the tutor</h1>
 
                   <p className="text-base red-hat leading-[27px]">
-                    Hello, I'm excited to teach you English as I love studying
-                    language and speak several of them. I was born and raised in
-                    the United States in the state of California and have
-                    traveled to over 30 countries across the world. I currently
-                    live in the Philippines with my loving wife where I teach
-                    and tutor English. I'm also a professional writer.
+                    {coachDetail?.bio}
                   </p>
                   <h1 className="text-xl font-bold red-hat mt-12">
                     Similar Coaches
@@ -166,8 +188,13 @@ const ViewSingleCoachPage = () => {
           {/* offering  */}
           <div className="w-1/3 flex flex-col">
             {!isOffering && (
-              <div className="flex mt-4">
-                <OfferingCard item={oneOffering} />
+              <div className="flex flex-col mt-4">
+                <h1 className="text-xl font-bold red-hat mb-4 ">Recent Offerings</h1>
+                <div className="flex flex-col gap-5">
+                  {recentOfferings?.map((item, index) => (
+                    <OfferingCard item={item} key={index} />
+                  ))}
+                </div>
               </div>
             )}
           </div>

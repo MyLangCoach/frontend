@@ -15,6 +15,7 @@ export interface AuthState {
   updateProfileSuccess: boolean;
   allStudents: any;
   redirectUrl: string;
+  singleUserProfile: any;
  
 }
 
@@ -29,7 +30,8 @@ const initialState: AuthState = {
   allStudents: [],
   allMyStudent: [],
   updateProfileSuccess: false,
-  redirectUrl: ""
+  redirectUrl: "",
+  singleUserProfile: []
 
 };
 
@@ -151,7 +153,19 @@ export const authSlice = createSlice({
       })
       .addCase(getAllMyStudent.rejected, (state, { payload }) => {
         state.fetchLoading = false;
-      });
+      })
+      .addCase(getSingleUserDetail.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getSingleUserDetail.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+        state.singleUserProfile = payload.data;
+      })
+      .addCase(getSingleUserDetail.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      
+      ;
   },
 });
 
@@ -258,6 +272,28 @@ export const getAllCoaches = createAsyncThunk(
     try {
       const { data } = await APIService.get(
         `${url.allUser}/coach`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getSingleUserDetail = createAsyncThunk(
+  "getSingleUserDetail",
+  async (payload:string | undefined, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.user}/${payload}`,
 
         {
           headers: {

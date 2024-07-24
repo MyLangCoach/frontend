@@ -120,7 +120,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
           bookTimes: [ selectedTime],
         },
       };
-      console.log(sentdata);
+   
       dispatch(bookCoachOffering(sentdata));
     } else {
       toast.error("Note and time must be provided");
@@ -142,12 +142,17 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
     }
   }, [offering?.bookCoachOfferingSuccess]);
 
+  const handleClose = () => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 50);
+  }
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
       <div className="w-full flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl red-hat font-bold">Book a session</h2>
-          <span className="cursor-point" onClick={() => setOpen(false)}>
+          <span className="cursor-pointer" onClick={handleClose}>
             <CancelX />
           </span>
         </div>
