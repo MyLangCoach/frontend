@@ -6,6 +6,9 @@ import { OfferingsDummy } from "../../util/mockdata";
 import CreateNewServiceModal from "./create-new-service-modal";
 import { getAllOfferingBookingStudent, getAllOfferings } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
+import { formatDateTime } from "../../util";
+import { Link } from "react-router-dom";
+import { Button } from "../Button";
 const StudentOfferingsTable = () => {
   const offerings = useAppSelector((state) => state.offerings);
   const dispatch = useAppDispatch();
@@ -15,9 +18,10 @@ const StudentOfferingsTable = () => {
   }, []);
 
   const allOfferings = offerings?.allBookedOfferingsStudent;
-  console.log(allOfferings);
+
   const [open, setOpen] = useState(false);
 
+  console.log(allOfferings);
   if (offerings?.fetchLoading) {
     return (
       <div>
@@ -25,6 +29,7 @@ const StudentOfferingsTable = () => {
       </div>
     );
   }
+
 
   return (
     <div className="w-full bg-white py-6 px-3 flex flex-col">
@@ -66,22 +71,12 @@ const StudentOfferingsTable = () => {
         </div> */}
         {/* end reset */}
         {/* new service */}
-        <div
-          className="w-3/12 rounded-md h-[36px] px-4 flex justify-center items-center gap-2 border border-[#E4E4E7] cursor-pointer"
-          onClick={() => setOpen(true)}
-        >
-          <span>
-            <Plus />
-          </span>
-          <span className="text-foreground text-sm inter font-medium">
-            Add new service
-          </span>
-        </div>
+    
         {/* end of new service */}
       </div>
       <div className="w-full mt-5">
         <table className="w-full border border-border rounded-[4px]">
-          <th className="w-full grid grid-cols-3 h-[40px] border-b border-b-border px-2 ">
+          <th className="w-full grid grid-cols-5 h-[40px] border-b border-b-border px-2 ">
             <td className="flex items-center gap-3 w-full ">
               <input
                 type="checkbox"
@@ -103,13 +98,25 @@ const StudentOfferingsTable = () => {
                 <img src={filterIcon} alt="filter" />
               </span>
             </td>
+            <td className=" flex items-center gap-3 w-full">
+              <p className="text-muted text-sm inter font-medium">Meeting Time</p>
+              <span>
+                <img src={filterIcon} alt="filter" />
+              </span>
+            </td>
+            <td className=" flex items-center gap-3 w-full justify-center">
+              <p className="text-muted text-sm inter font-medium">Action</p>
+              <span>
+                <img src={filterIcon} alt="filter" />
+              </span>
+            </td>
           </th>
           <tbody className="w-full flex flex-col">
             {allOfferings?.map((item: any, index: number) => {
               return (
                 <tr
                   key={index}
-                  className="grid grid-cols-3 px-2 border-b-border border-b last:border-none min-h-[68px] "
+                  className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] "
                 >
                   <td className="w-full flex items-center gap-3">
                     <span>
@@ -131,7 +138,13 @@ const StudentOfferingsTable = () => {
                   </td>
                   <td className="w-full flex items-center">
                     <p className="text-foreground font-normal text-sm truncate inter">
-                    {item?.paymentConfirmed ? "Paid" : "Not Paid"}
+                      {item?.paymentConfirmed &&
+                        item?.isFree === false &&
+                        "Paid"}
+                      {item?.isFree === true && "Free"}
+                      {item?.paymentConfirmed === false &&
+                        item?.isFree === false &&
+                        "Not Paid"}
                     </p>
                   </td>
                   <td className="w-full flex flex-col gap-[10px] justify-center">
@@ -141,6 +154,28 @@ const StudentOfferingsTable = () => {
                     <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
                       {item?.type}
                     </p>
+                  </td>
+                  <td className="w-full flex flex-col gap-[10px] justify-center">
+                    <p className="text-foreground font-normal text-sm truncate inter">
+                      {formatDateTime(item?.startDateTime)?.date},{" "}
+                      {formatDateTime(item?.startDateTime)?.time}
+                    </p>
+                    <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+                      {formatDateTime(item?.endDateTime)?.date},{" "}
+                      {formatDateTime(item?.endDateTime)?.time}
+                    </p>
+                  </td>
+                  <td className="w-full flex items-center justify-center">
+                    {item?.meetingLink ? (
+                      <Link
+                        to={item?.meetingLink}
+                        className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+                      >
+                        Join Call
+                      </Link>
+                    ) : (
+                      <Button name="Make Payment" />
+                    )}
                   </td>
                 </tr>
               );

@@ -15,7 +15,7 @@ const StudentCallLogs = () => {
         dispatch(getAllSessionBookingStudent());
     }, [])
     const bookings = offering?.allBookingsSessionStudent;
-    console.log(bookings);
+
   const [current, setCurrent] = useState(0);
     const [open, setOpen] = useState<boolean>(false);
     
