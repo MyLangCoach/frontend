@@ -19,6 +19,7 @@ const CallLogs = () => {
     const [current, setCurrent] = useState(0);
     const [open, setOpen] = useState<boolean>(false);
 
+  console.log({bookings})
     if (offering.fetchLoading) {
       return (
         <div className="w-full">
@@ -67,8 +68,8 @@ const CallLogs = () => {
       {current === 0 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
           {bookings.length > 0 ? (
-            <div className="w-full flex flex-col px-4 py-4">
-              {bookings?.map((item: any, index: number) => (
+        
+          
                 <div className="w-full flex flex-col px-4 py-4">
                   {bookings?.map((item: any, index: number) => (
                     <div
@@ -135,11 +136,11 @@ const CallLogs = () => {
                     </div>
                   ))}
                 </div>
-              ))}
-            </div>
+             
+           
           ) : (
-            <div className="flex h-full items-center justify-center flex-col">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
                 You do not have any classes at the moment, Create a new group
                 class or private class to get started
               </p>

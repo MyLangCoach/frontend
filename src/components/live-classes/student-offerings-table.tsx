@@ -9,6 +9,7 @@ import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
 import { Link } from "react-router-dom";
 import { Button } from "../Button";
+import { payForOffering, restoreDefault } from "../../features/paymentslice";
 const StudentOfferingsTable = () => {
   const offerings = useAppSelector((state) => state.offerings);
   const dispatch = useAppDispatch();
@@ -18,10 +19,11 @@ const StudentOfferingsTable = () => {
   }, []);
 
   const allOfferings = offerings?.allBookedOfferingsStudent;
+  console.log(allOfferings);
 
   const [open, setOpen] = useState(false);
 
-  console.log(allOfferings);
+ 
   if (offerings?.fetchLoading) {
     return (
       <div>
@@ -114,70 +116,7 @@ const StudentOfferingsTable = () => {
           <tbody className="w-full flex flex-col">
             {allOfferings?.map((item: any, index: number) => {
               return (
-                <tr
-                  key={index}
-                  className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] "
-                >
-                  <td className="w-full flex items-center gap-3">
-                    <span>
-                      <input
-                        type="checkbox"
-                        name=""
-                        id=""
-                        className="accent-black  w-4 h-4 rounded-md "
-                      />
-                    </span>
-                    <div className="flex flex-col gap-[10px]">
-                      <h1 className="text-foreground font-normal text-sm truncate inter">
-                        {item?.note}
-                      </h1>
-                      <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
-                        {item?.status}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="w-full flex items-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.paymentConfirmed &&
-                        item?.isFree === false &&
-                        "Paid"}
-                      {item?.isFree === true && "Free"}
-                      {item?.paymentConfirmed === false &&
-                        item?.isFree === false &&
-                        "Not Paid"}
-                    </p>
-                  </td>
-                  <td className="w-full flex flex-col gap-[10px] justify-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {item?.duration === 30 ? "30 MINS" : "60 MINS"}
-                    </p>
-                    <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                      {item?.type}
-                    </p>
-                  </td>
-                  <td className="w-full flex flex-col gap-[10px] justify-center">
-                    <p className="text-foreground font-normal text-sm truncate inter">
-                      {formatDateTime(item?.startDateTime)?.date},{" "}
-                      {formatDateTime(item?.startDateTime)?.time}
-                    </p>
-                    <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                      {formatDateTime(item?.endDateTime)?.date},{" "}
-                      {formatDateTime(item?.endDateTime)?.time}
-                    </p>
-                  </td>
-                  <td className="w-full flex items-center justify-center">
-                    {item?.meetingLink ? (
-                      <Link
-                        to={item?.meetingLink}
-                        className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
-                      >
-                        Join Call
-                      </Link>
-                    ) : (
-                      <Button name="Make Payment" />
-                    )}
-                  </td>
-                </tr>
+              <SingleRow item={item} index={index} key={index} />
               );
             })}
           </tbody>
@@ -189,3 +128,93 @@ const StudentOfferingsTable = () => {
 };
 
 export default StudentOfferingsTable;
+
+const SingleRow = ({ item, index }: { item: any, index: number }) => {
+  const dispatch = useAppDispatch();
+  const payment = useAppSelector(state => state.payment);
+
+  const handlePayment = () => {
+    const data = {
+      seriesId: item?.seriesId,
+      paymentMethod:"TRANSFER"
+    }
+    console.log({ data });
+    dispatch(payForOffering(data))
+  }
+
+  useEffect(() => {
+    if (payment?.offeringPaymentSuccess && payment?.offeringPaymentResp?.authorization_url) {
+      
+      window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
+      setTimeout(() => {
+        
+        dispatch(restoreDefault());
+      }, 3000);
+    }
+  }, [payment?.offeringPaymentSuccess])
+  
+  return (
+    <tr
+      key={index}
+      className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] "
+    >
+      <td className="w-full flex items-center gap-3">
+        <span>
+          <input
+            type="checkbox"
+            name=""
+            id=""
+            className="accent-black  w-4 h-4 rounded-md "
+          />
+        </span>
+        <div className="flex flex-col gap-[10px]">
+          <h1 className="text-foreground font-normal text-sm truncate inter capitalize">
+            {item?.offeringTitle}
+          </h1>
+          <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
+            {item?.status}
+          </p>
+        </div>
+      </td>
+      <td className="w-full flex items-center">
+        <p className="text-foreground font-normal text-sm truncate inter">
+          {item?.paymentConfirmed && item?.isFree === false && "Paid"}
+          {item?.isFree === true && "Free"}
+          {item?.paymentConfirmed === false &&
+            item?.isFree === false &&
+            "Not Paid"}
+        </p>
+      </td>
+      <td className="w-full flex flex-col gap-[10px] justify-center">
+        <p className="text-foreground font-normal text-sm truncate inter">
+          {item?.duration === 30 ? "30 MINS" : "60 MINS"}
+        </p>
+        <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+          {item?.type}
+        </p>
+      </td>
+      <td className="w-full flex flex-col gap-[10px] justify-center">
+        <p className="text-foreground font-normal text-sm truncate inter">
+          {formatDateTime(item?.startDateTime)?.date},{" "}
+          {formatDateTime(item?.startDateTime)?.time}
+        </p>
+        <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
+          {formatDateTime(item?.endDateTime)?.date},{" "}
+          {formatDateTime(item?.endDateTime)?.time}
+        </p>
+      </td>
+      <td className="w-full flex items-center justify-center">
+        {item?.meetingLink ? (
+          <Link
+            to={item?.meetingLink}
+            className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+          >
+            Join Call
+          </Link>
+        ) : (
+          <Button name="Make Payment" onClick={handlePayment} />
+        )}
+      </td>
+    </tr>
+  );
+}

@@ -379,16 +379,19 @@ const uploadFile = () => {
         </div>
         {showInput && (
           <div className=" mt-6 w-full flex flex-col lg:flex-row lg:w-1/2 gap-4 lg:items-center">
-            <input
+            <Input
               type="text"
               value={newLanguage}
-              onChange={(e) => setNewLanguage(e.target.value)}
+              // onChange={(e) => setNewLanguage(e.target.value)}
+              label=""
+              setValue={setNewLanguage}
+              height="h-9"
               placeholder="Enter a language"
-              className="border border-gray-300 px-2 py-1 rounded w-full max-h-[34px]"
+              // className="border border-gray-300 px-2 py-1 rounded w-full max-h-[34px]"
             />
             <button
               onClick={handleAddLanguage}
-              className="bg-black text-white px-4 flex items-center rounded hover:bg-green-700 max-h-[48px] focus:outline-none outline-none h-[34px] min-w-max"
+              className="bg-black text-white px-4 flex items-center rounded hover:bg-green-700   focus:outline-none outline-none h-[36px] min-w-max"
             >
               Add Now
             </button>

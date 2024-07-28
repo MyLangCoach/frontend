@@ -17,7 +17,9 @@ export interface PaymentState {
   allBanks: SingleBankDetail[];
     resolveBankData: any;
     sessionPaymentSuccess: boolean;
-    offeringPaymentSuccess: boolean;
+  offeringPaymentSuccess: boolean;
+  offeringPaymentResp: any;
+  sessionPaymentResp: any;
   withdrawalSuccess: boolean;
   allUserBanks: any;
 }
@@ -38,6 +40,8 @@ const initialState: PaymentState = {
     sessionPaymentSuccess: false,
     offeringPaymentSuccess: false,
   withdrawalSuccess: false,
+  offeringPaymentResp:{},
+  sessionPaymentResp:{},
     allUserBanks: []
 };
 
@@ -56,7 +60,8 @@ export const paymentSlice = createSlice({
         state.deleteCardSuccess = false;
         state.offeringPaymentSuccess = false;
         state.sessionPaymentSuccess = false;
-        state.withdrawalSuccess = false;
+      state.withdrawalSuccess = false;
+      state.offeringPaymentResp = {};
 
 
   
@@ -94,6 +99,28 @@ export const paymentSlice = createSlice({
       })
       .addCase(getAllUserBanks.rejected, (state, { payload }) => {
         state.fetchLoading = false;
+      })
+      .addCase(payForOffering.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(payForOffering.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.offeringPaymentSuccess = true;
+        state.offeringPaymentResp = payload.data;
+      })
+      .addCase(payForOffering.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(payForSession.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(payForSession.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.sessionPaymentSuccess = true;
+        state.sessionPaymentResp = payload.data;
+      })
+      .addCase(payForSession.rejected, (state, { payload }) => {
+        state.loading = false;
       })
       
       ;

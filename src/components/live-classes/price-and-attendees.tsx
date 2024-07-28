@@ -111,7 +111,7 @@ const PriceAttendees = ({
           </span>
           <span>
             <BigButton
-              name={loading ? "Loading..." : "Continue"}
+              name={ "Continue"}
               // loading={loading}
 
               onClick={() => setCurrent(3)}

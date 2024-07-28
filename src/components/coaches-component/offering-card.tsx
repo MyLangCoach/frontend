@@ -64,7 +64,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
           id: item?.id,
           data: {
             note: note,
-            bookTimes: liveDateTimes,
+            bookTimes: liveDateTimes?.filter((item:string) => item?.length > 0),
           },
         };
 
@@ -109,7 +109,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
     setLiveDateTimes(updatedDateTimes);
   };
     useEffect(() => {
-      const isFilled = liveDateTimes?.every(verifyItems);
+      const isFilled = liveDateTimes?.some(verifyItems);
      
       if (isFilled && note) {
         setActive(true);
@@ -234,6 +234,9 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
               // onChange={(e: any) => setNote(e.target.value)}
             />
           </div>
+          <p className="text-muted text-xs dm-sans mb-4">
+            This offering has {item?.seriesCount} series.  you can choose to fill all or fill the amount that you want to do . 
+          </p>
           <div className="flex flex-col gap-3">
             {liveDateTimes.map((dateTime, index) => (
               <DateTimeInput
