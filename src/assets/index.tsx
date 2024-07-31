@@ -1,8 +1,69 @@
 
+export const YellowCalender = () => {
+  return (
+    <svg
+      width="21"
+      height="22"
+      viewBox="0 0 21 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M19 6.5V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58579C1.21071 3.96086 1 4.46957 1 5V19C1 19.5304 1.21071 20.0391 1.58579 20.4142C1.96086 20.7893 2.46957 21 3 21H6.5M14 1V5M6 1V5M1 9H6M15.5 16.5L14 15.25V13M20 15C20 16.5913 19.3679 18.1174 18.2426 19.2426C17.1174 20.3679 15.5913 21 14 21C12.4087 21 10.8826 20.3679 9.75736 19.2426C8.63214 18.1174 8 16.5913 8 15C8 13.4087 8.63214 11.8826 9.75736 10.7574C10.8826 9.63214 12.4087 9 14 9C15.5913 9 17.1174 9.63214 18.2426 10.7574C19.3679 11.8826 20 13.4087 20 15Z"
+        stroke="#FABC4E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
 
-
-
-
+export const YellowCap = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M22 10V16M22 10L12 5L2 10L12 15L22 10ZM6 12V17C9 20 15 20 18 17V12"
+        stroke="#FABC4E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const BlueVideoIcon = () => {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M16.5 6L12 9L16.5 12V6Z"
+        stroke="#0E79FF"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.5 4.5H3C2.17157 4.5 1.5 5.17157 1.5 6V12C1.5 12.8284 2.17157 13.5 3 13.5H10.5C11.3284 13.5 12 12.8284 12 12V6C12 5.17157 11.3284 4.5 10.5 4.5Z"
+        stroke="#0E79FF"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
 export const BlueTimeIcon = () => {
   return (
     <svg
@@ -224,6 +285,8 @@ export const CancelX = () => {
     </svg>
   );
 }
+
+
 
 export const UsersIcon = () => {
   return (

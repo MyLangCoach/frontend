@@ -59,7 +59,7 @@ export   interface UserProfileData {
   qualifications: Qualification[];
   introVideo: string;
   username?: string;
-  languageInterests?: string[];
+  languageInterests?: string[] | any;
   costPerSession?:any
 }
 

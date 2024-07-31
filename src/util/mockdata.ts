@@ -1,3 +1,18 @@
+
+interface Year {
+  name: string;
+}
+
+function generateYears(startYear: number, endYear: number): Year[] {
+  const years: Year[] = [];
+  for (let year = startYear; year <= endYear; year++) {
+    years.push({ name: year.toString() });
+  }
+  return years;
+}
+
+export const yearsArray = generateYears(1980, 2024);
+
 export const OfferingsDummy = [
     {
         name: "Introduction to korean",

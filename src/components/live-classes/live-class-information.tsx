@@ -1,11 +1,11 @@
-import {Key, useEffect, useState} from 'react'
-import { DateInput, DateTimeInput, Input } from '../Input'
+import {useEffect, useState} from 'react'
+import { DateTimeInput, Input } from '../Input'
 
 import PrimarySelect from '../Selects/PrimarySelect';
 import { OutlineBtn, BigButton, CapsuleBtn } from '../Button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ImageUpload from '../UploadFile/ImageUpload';
-const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type, seriesCount,setSeriesCount, cost, setCost, liveDateTimes,setLiveDateTimes }: any) => {
+const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type, seriesCount,setSeriesCount, cost, setCost, liveDateTimes,setLiveDateTimes, setCostType }: any) => {
   const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -25,8 +25,11 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
   if (_type === "ONE_MONTHLY") {
 
       setCost({ currency: "NGN", amount: Number(price) });
-     }
-  }, [price]);
+    }
+    if (Number(price) === 0 && _type === "ONE_MONTHLY") {
+      setCostType( "FREE")
+    }
+  }, [price, seriesCount]);
     const addNewTime = () => {
       setLiveDateTimes([...liveDateTimes, ""]);
     };

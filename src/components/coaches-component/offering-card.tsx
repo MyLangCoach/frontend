@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ClassDetails } from '../../util/types';
 import pic from "../../assets/png/face-woman.png";
-import { CancelX, DollarIcon } from '../../assets';
+import { BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, YellowCalender, YellowCap } from '../../assets';
 import ReUseModal from '../modal/Modal';
 import OfferingCalendar from './offering-booking';
 import { DateTimeInput, Input } from "../Input";
@@ -98,9 +98,9 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
       }
     }, [offering?.bookCoachOfferingSuccess]);
   
-  const [liveDateTimes, setLiveDateTimes] = useState<string[]>(
-    Array(item?.seriesCount).fill("")
+  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]
   );
+
 
   // Update a specific date-time value
   const updateDateTime = (index: number, newDateTime: string) => {
@@ -146,11 +146,29 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
       <div className="flex flex-col p-[18px] bg-white ">
         <h1 className="font-bold text-lg red-hat capitalize">{item?.title}</h1>
         <p className="text-base red-hat mt-6">{item?.description}</p>
-        <p className="text-base red-hat mt-6">
+        {/* <p className="text-base red-hat mt-6">
           {item?.type === "LIVE_GROUP" && "LIVE GROUP"}
           {item?.type === "ONE_MONTHLY" && "ONE MONTHLY"}
           {item?.type === "ONE_TIME" && "ONE TIME"}
-        </p>
+        </p> */}
+
+        <div className="w-full flex items-center mt-6 justify-between">
+          <span className="flex items-center gap-2">
+            <YellowCap />
+            <p className="text-muted dm-sans ">
+              {item?.seriesCount}  {`Class${item?.seriesCount > 1 ? "es":""}`} Offered
+            </p>
+          </span>
+          <span className="flex items-center gap-2">
+            <YellowCalender />
+            <p className="text-muted dm-sans ">
+              {item?.type === "LIVE_GROUP" && "LIVE GROUP"}
+              {item?.type === "ONE_MONTHLY" && "ONE MONTHLY"}
+              {item?.type === "ONE_TIME" && "ONE TIME"}
+            </p>
+          </span>
+        </div>
+
         <div className="w-full flex items-center gap-4 mt-6 border-t  border-t-border pt-3">
           <div className="flex gap-3  items-center">
             <span>
@@ -160,9 +178,10 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
               {item?.isFree ? "FREE" : item?.cost?.amount}
             </p>
           </div>
+
           <div className="flex gap-3 items-center ">
             <span>
-              <DollarIcon />
+              <BlueTimeIcon />
             </span>
             <p className="text-muted font-medium dm-sams">
               {item?.duration ?? "45 mins"}
@@ -170,7 +189,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
           </div>
           <div className="flex gap-3 items-center ">
             <span>
-              <DollarIcon />
+              <BlueVideoIcon />
             </span>
             <p className="text-muted font-medium dm-sams">Video Call</p>
           </div>
@@ -235,7 +254,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
             />
           </div>
           <p className="text-muted text-xs dm-sans mb-4">
-            This offering has {item?.seriesCount} series.  you can choose to fill all or fill the amount that you want to do . 
+            Select Date and time
           </p>
           <div className="flex flex-col gap-3">
             {liveDateTimes.map((dateTime, index) => (

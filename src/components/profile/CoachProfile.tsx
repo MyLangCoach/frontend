@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { storage } from "../../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { yearsArray } from "../../util/mockdata";
 const uploadEndpoint =
   "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
@@ -77,17 +78,17 @@ const CoachProfile = () => {
       setDesc(userData.description || "");
       setBio(userData?.bio || "");
       setUserName(userData?.username || "");
-      setSocialMedia(userData.socials || [""]);
+      setSocialMedia(userData.socials?.length === 0 ? [" "] : userData?.socials);
       setSessionPrice(userData?.costPerSession?.amount);
       setQualifications(
-        userData.qualifications || [{ name: "", issuing_org: "", year: 0 }]
+        userData.qualifications?.length === 0  ? [{ name: "", issuing_org: "", year: 0 }] : userData?.qualifications
       ); // assuming single qualification
       setIsOrg(userData.qualifications?.[0]?.issuing_org || "");
       setYear({
         name: userData.qualifications?.[0]?.name || "",
         value: userData.qualifications?.[0]?.year || 0,
       });
-      setLanguages(userData.languages || [{ language: "", proficiency: "" }]);
+      setLanguages(userData.languages?.length === 0  ? [{ language: "", proficiency: "" }] : userData?.languages);
       setVideoUrl(userData.introVideo || "");
       setProf({ name: userData.profileImage || "" });
       setSessionType({name:userData?.costPerSession?.sessionType, value:userData?.costPerSession?.sessionType})
@@ -96,7 +97,9 @@ const CoachProfile = () => {
 
   const addSocialMedia = () => {
     setSocialMedia([...socialMedia, ""]);
+
   };
+ 
 
   const handleSocialMediaChange = (index: number, value: string) => {
     const updatedSocialMedia = [...socialMedia];
@@ -163,7 +166,8 @@ const CoachProfile = () => {
     if (user?.updateProfileSuccess) {
       toast?.success("Profile Updated successfully");
       dispatch(restoreDefault())
-      navigate("/");
+      dispatch(getUserProfile());
+      
    }
   }, [user?.updateProfileSuccess])
   
@@ -256,6 +260,10 @@ const CoachProfile = () => {
      }
    };
     
+      const handleError = (e: any) => {
+        e.target.onerror = null; // Prevent looping
+        e.target.src = dp;
+      };
 
 
   if (user?.fetchLoading) {
@@ -285,8 +293,9 @@ const CoachProfile = () => {
         </div>
         <div
           className="flex -mt-12 z-pro mx-auto lg:ml-12 border-[3px] items-center justify-center border-white relative"
+          onError={handleError}
           style={{
-            backgroundImage: `url(${profileUrl ? profileUrl : dp})`,
+            backgroundImage: `url(${profileUrl})`,
 
             height: "96px",
             width: "96px",
@@ -490,12 +499,7 @@ const CoachProfile = () => {
                   handleQualificationChange(index, "year", Number(value.name))
                 }
                 label="Year"
-                data={[
-                  { name: "1999" },
-                  { name: "2000" },
-                  { name: "2001" },
-                  // Add more years as needed
-                ]}
+                data={yearsArray}
                 name="Select"
               />
             </div>

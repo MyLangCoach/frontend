@@ -35,7 +35,7 @@ const CreateClassHome = () => {
     const [description, setDescription] = useState<string>("");
     const [coverImageUrl, setCoverImageUrl] = useState<string>("");
   // const [type, setType] = useState<"ONE_TIME" | "RECURRING">("ONE_TIME");
-  const [seriesCount, setSeriesCount] = useState({name:"one", value:1})
+  const [seriesCount, setSeriesCount] = useState({name:"Select", value:1})
     const [duration, setDuration] = useState<number>(30);
     const [costType, setCostType] = useState<"FREE" | "PAID" | any>("");
     const [cost, setCost] = useState<Cost>({ currency: "NGN", amount: 0 });
@@ -81,7 +81,7 @@ const CreateClassHome = () => {
     }
 
     
-  
+  // console.log({data})
     dispatch(createOffering(data))
 
     
@@ -196,6 +196,7 @@ const CreateClassHome = () => {
             coverImageUrl={coverImageUrl}
             duration={duration}
             dateTime={datetime}
+            setCostType={setCostType}
             setCoverImageUrl={setCoverImageUrl}
             setDuration={setDuration}
             setDatetime={setDatetime}

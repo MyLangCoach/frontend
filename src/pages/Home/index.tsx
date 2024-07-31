@@ -9,6 +9,7 @@ import { useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import StudentCallLogs from "../../components/home/student-call-logs";
+import toast from "react-hot-toast";
 const Home = () => {
   const user = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -19,10 +20,15 @@ const Home = () => {
   }, [])
     const userRole = user?.userData?.role;
    useEffect(() => {
-     if (user?.redirectUrl) {
+     if (userRole === "STUDENT" && user?.redirectUrl) {
        navigate(user?.redirectUrl);
      }
+     if ( userRole === "COACH" && user?.userData?.costPerSession === null ) {
+       toast.success("Please complete your profile");
+       navigate("/profile")
+     }
    }, [user?.redirectUrl, navigate]);
+  console.log(user?.userData)
   
   return (
     <DashboardLayout current={1}>

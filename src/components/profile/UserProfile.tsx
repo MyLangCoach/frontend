@@ -57,8 +57,6 @@ const handleDeleteLanguage = (languageToDelete: string) => {
 };
 
 
-
-
   useEffect(() => {
     if (userData) {
       setFirstname(userData.firstName || "");
@@ -67,7 +65,7 @@ const handleDeleteLanguage = (languageToDelete: string) => {
       setCountry(userData.country || "");
       setDesc(userData.description || "");
       setBio(userData.bio || "");
-      setSocialMedia(userData.socials || [""]);
+      setSocialMedia(userData.socials?.length === 0 ? [""] : userData?.socials);
       setLanguages(userData.languageInterests || []);
   
    
@@ -199,7 +197,7 @@ const uploadFile = () => {
        setLoading(false);
      }
    };
-    
+    console.log(languages)
 
 
   if (user?.fetchLoading) {
@@ -362,7 +360,7 @@ const uploadFile = () => {
         </div>
         {/* end */}
         <div className="w-full flex gap-4 flex-wrap items-center mt-3">
-          {languages.map((language, index) => (
+          {languages?.map((language, index) => (
             <div
               key={index}
               className="flex justify-between items-center px-4 py-2 h-[34px] border border-[#0E79FF]  gap-4 rounded-[48px]  font-medium text-xs dm-sans text-black capitalize "

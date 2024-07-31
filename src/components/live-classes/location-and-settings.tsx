@@ -95,7 +95,7 @@ const LocationSettings = ({ setCurrent, handleCreate,loading, redirectUrl, setRe
         </span>
         <span>
           <BigButton
-            name={loading? "Loading...": "Continue"}
+            name={"Continue"}
 
             // loading={loading}
 
