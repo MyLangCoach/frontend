@@ -7,7 +7,7 @@ import { bookNextSession, getAllOfferingBookingStudent, getAllSessionBookingStud
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
 import { BlueCalenderIcon, BlueStopWatch, BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, PaddedArrow, StopWatch } from "../../assets";
-import { payForSession, restoreDefault } from "../../features/paymentslice";
+import { payForOffering, payForSession, restoreDefault } from "../../features/paymentslice";
 import toast from "react-hot-toast";
 
 import { DateTimeInput,Input } from "../Input";
@@ -17,7 +17,7 @@ const StudentCallLogs = () => {
   const navigate = useNavigate();
     const offering = useAppSelector(state => state.offerings);
     useEffect(() => {
- 
+     dispatch(getAllOfferingBookingStudent());
      
     }, [])
   useEffect(() => {
@@ -131,11 +131,11 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
    const offering = useAppSelector((state) => state.offerings);
    const handlePayment = () => {
      const data = {
-       bookingId: item?.id,
+       seriesId: item?.seriesId,
        paymentMethod: "TRANSFER",
      };
      console.log({ data });
-     dispatch(payForSession(data));
+     dispatch(payForOffering(data));
    };
 
    useEffect(() => {
@@ -261,8 +261,13 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
             </span>
           </div>
           <div className=" mt-7 flex items-center gap-[10px] ">
-            {(item?.meetingLink && item?.transactionReference) ||
-              (item?.isFree === true && (
+            {item?.meetingLink && item?.transactionReference && item?.isFree === false &&  <Link
+                  to={item?.meetingLink}
+                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+                >
+                  Join Class
+                </Link>  }
+              {(item?.isFree === true && (
                 <Link
                   to={item?.meetingLink}
                   className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
