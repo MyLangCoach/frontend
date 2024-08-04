@@ -171,7 +171,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
             id: item?.seriesId,
             data: {
               note: note,
-              bookTimes: [],
+              bookTimes: liveDateTimes,
             },
           };
 
