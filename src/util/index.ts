@@ -13,13 +13,15 @@ export const getSimplifiedError = (error: object | any) => {
     toast.error("Sorry an unexpected error occurred.");
     return "Sorry an unexpected error occurred.";
   }
-  if (error.response?.status === 400) {
-    if (errorObject?.message === "Email already taken") {
-      toast.error("Phone or Email already taken");
-    } else {
-      toast.error("Oops something went wrong!");
-    }
+if (error.response?.status === 400) {
+  if (Array.isArray(errorObject)) {
+    toast.error(errorObject[0]?.message);
+  } else if (errorObject?.message === "Email already taken") {
+    toast.error("Phone or Email already taken");
+  } else {
+    toast.error(errorObject?.message);
   }
+}
   if (error.response?.status === 403) {
     if (errorObject?.message === "Email already taken") {
       toast.error("Phone or Email already taken");

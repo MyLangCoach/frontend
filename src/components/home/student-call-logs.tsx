@@ -1,25 +1,38 @@
 import { useState,useEffect } from "react";
-import { Button } from "../Button";
+import { ActionBtn, Button } from "../Button";
 import { Link, useNavigate } from "react-router-dom";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch,useAppSelector } from "../../app/hooks";
-import { getAllSessionBookingStudent } from "../../features/offeringslice";
+import { bookNextSession, getAllOfferingBookingStudent, getAllSessionBookingStudent, restoreDefault as restore } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
-import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
+import { BlueCalenderIcon, BlueStopWatch, BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, PaddedArrow, StopWatch } from "../../assets";
 import { payForSession, restoreDefault } from "../../features/paymentslice";
+import toast from "react-hot-toast";
+
+import { DateTimeInput,Input } from "../Input";
+import ReUseModal from "../modal/Modal";
 const StudentCallLogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
     const offering = useAppSelector(state => state.offerings);
     useEffect(() => {
-        dispatch(getAllSessionBookingStudent());
+ 
+     
     }, [])
-    const bookings = offering?.allBookingsSessionStudent;
+  useEffect(() => {
+    if (offering?.nextSessionBookingSuccess) {
+      toast.success("Next Session Booked Successfully");
+       dispatch(getAllOfferingBookingStudent());
+     }
+  }, [offering?.nextSessionBookingSuccess])
+  
+  const allOfferings = offering?.allBookedOfferingsStudent;
+  console.log({allOfferings})
 
   const [current, setCurrent] = useState(0);
   const [open, setOpen] = useState<boolean>(false);
-  console.log(bookings)
+
     
     if (offering.fetchLoading) {
         return (
@@ -69,10 +82,10 @@ const StudentCallLogs = () => {
       {/* end of tabs session */}
       {current === 0 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
-          {bookings.length > 0 ? (
-            <div className="w-full flex flex-col px-4 py-4">
-              {bookings?.map((item: any, index: number) => (
-              <SingleRow item={item} index={index} />
+          {allOfferings.length > 0 ? (
+            <div className="w-full flex flex-col px-4 py-4 gap-5">
+              {allOfferings?.map((item: any, index: number) => (
+              <SingleRow item={item} index={index} key={index} />
               ))}
             </div>
           ) : (
@@ -115,7 +128,7 @@ export default StudentCallLogs;
 export const SingleRow = ({ item, index }: { item: any, index: number }) => {
    const dispatch = useAppDispatch();
    const payment = useAppSelector((state) => state.payment);
-
+   const offering = useAppSelector((state) => state.offerings);
    const handlePayment = () => {
      const data = {
        bookingId: item?.id,
@@ -135,66 +148,203 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
          dispatch(restoreDefault());
        }, 3000);
      }
-   }, [payment?.sessionPaymentSuccess]);
+     if (offering?.nextSessionBookingSuccess) {
+       setOpenMonthly(false);
+     
+       dispatch(restore());
+           
+     }
+   }, [payment?.sessionPaymentSuccess,offering?.nextSessionBookingSuccess]);
+    const [note, setNote] = useState("");
+  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
+
+  // Update a specific date-time value
+  const updateDateTime = (index: number, newDateTime: string) => {
+    const updatedDateTimes = [...liveDateTimes];
+    updatedDateTimes[index] = newDateTime;
+    setLiveDateTimes(updatedDateTimes);
+  };
+    const handleBookNextSession = () => {
+     
+        if (note) {
+          const sentdata = {
+            id: item?.seriesId,
+            data: {
+              note: note,
+              bookTimes: [],
+            },
+          };
+
+          dispatch(bookNextSession(sentdata));
+        } else {
+          toast.error("Note  must be provided");
+        }
+  }
+
+    const [active, setActive] = useState(false);
+    const verifyItems = (time: string) => {
+      return time.split("")?.length > 2;
+  };
+    const [openMonthly, setOpenMonthly] = useState(false);
+       useEffect(() => {
+         const isFilled = liveDateTimes?.some(verifyItems);
+
+         if (isFilled && note) {
+           setActive(true);
+         } else {
+           setActive(false);
+         }
+       }, [note, liveDateTimes]);
+  const handleCloseMonthly = () => {
+    setTimeout(() => {
+    
+      setOpenMonthly(false);
+    }, 50);
+  }
+  
+  
+
 
   return (
-    <div
-      className="flex flex-col gap-2 border-border border  rounded-[4px]"
-      key={index}
-    >
-      <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
-        <p className="red-hat text-foreground font-bold text-[23px]">
-          {item.note}
-        </p>
-        <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
-          1:1 class
-        </span>
-      </div>
-      <div className="w-full flex flex-col lg:px-6 pb-6">
-        <div className="w-full mt-3 flex wrap gap-6 items-center">
-          <span className="flex items-center gap-[10px] ">
-            <p className="text-muted text-sm dm-sans">Status</p>
-            <p className="text-sm dm-sans font-bold text-muted">
-              {item.status}
-            </p>
-          </span>
-          <span className="flex items-center gap-[10px] ">
-            <p className="text-muted text-sm dm-sans">Book type</p>
-            <p className="text-sm dm-sans font-bold text-muted">Session</p>
-          </span>
-          <span className="flex items-center gap-[10px] ">
-            <BlueCalenderIcon />
-            <p className="text-sm dm-sans font-medium text-muted">
-              {formatDateTime(item?.startDateTime)?.date}
-            </p>
-          </span>
-          <span className="flex items-center gap-[10px] ">
-            <BlueTimeIcon />
-            <p className="text-sm dm-sans font-medium text-muted">
-              {formatDateTime(item?.startDateTime)?.time}
-            </p>
+    <>
+      <div
+        className="flex flex-col gap-2 border-border border  rounded-[4px]"
+        key={index}
+      >
+        <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
+          <p className="red-hat text-foreground font-bold text-[23px]">
+            {item.offeringTitle}
+          </p>
+          <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+            {item?.offeringType === "ONE_TIME" && "1:1 class"}
+            {item?.offeringType === "ONE_MONTHLY" && "1:1 Monthly"}
+            {item?.offeringType === "LIVE_GROUP" && "Live Group"}
           </span>
         </div>
-        <div className=" mt-7">
-          {item?.meetingLink && item?.transactionReference && (
-            <Link
-              to={item?.meetingLink}
-              className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
-            >
-              Join Call
-            </Link>
-          )}
-          {!item?.meetingLink && item?.transactionReference && (
-            <Button name="Processing..." />
-          )}
-          {!item?.meetingLink && !item?.transactionReference && (
-            <Button name="Make Payment" onClick={handlePayment} />
-          )}
+        <div className="w-full flex flex-col lg:px-6 pb-6">
+          <div className="w-full mt-3 flex wrap gap-6 items-center">
+            <div className="flex items-center gap-[10px] ">
+              <span>
+                <DollarIcon />
+              </span>
+              <p className="text-muted font-medium dm-sams">
+                {item?.isFree ? "FREE" : item?.cost?.amount}
+              </p>
+            </div>
+            <span className="flex items-center gap-[10px] ">
+              <p className="text-muted text-sm dm-sans">Book type</p>
+              <p className="text-sm dm-sans font-bold text-muted">Offering</p>
+            </span>
+            <span className="flex items-center gap-[10px] ">
+              <BlueCalenderIcon />
+              <p className="text-sm dm-sans font-medium text-muted">
+                {formatDateTime(item?.startDateTime)?.date}
+              </p>
+            </span>
+            <span className="flex items-center gap-[10px] ">
+              <BlueTimeIcon />
+              <p className="text-sm dm-sans font-medium text-muted">
+                {formatDateTime(item?.startDateTime)?.time}
+              </p>
+            </span>
+            <span className="flex items-center gap-[10px] ">
+              <BlueStopWatch />
+              <p className="text-sm dm-sans font-medium text-muted">
+                {item?.duration === 30 ? "30 MINS" : "60 MINS"}
+              </p>
+            </span>
+            <span className="flex items-center gap-[10px] ">
+              <BlueVideoIcon />
+              <p className="text-sm dm-sans font-medium text-muted">
+                Video Call
+              </p>
+            </span>
+          </div>
+          <div className=" mt-7 flex items-center gap-[10px] ">
+            {(item?.meetingLink && item?.transactionReference) ||
+              (item?.isFree === true && (
+                <Link
+                  to={item?.meetingLink}
+                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+                >
+                  Join Class
+                </Link>
+              ))}
+            {!item?.meetingLink &&
+              item?.transactionReference &&
+              item?.isFree === false && <Button name="Processing..." />}
+            {!item?.meetingLink &&
+              !item?.transactionReference &&
+              item?.isFree === false && (
+                <Button name="Make Payment" onClick={handlePayment} />
+              )}
 
-       
-          {/* <Button name="Join Session" /> */}
+            {/* <Button name="Join Session" /> */}
+            <span>
+              <ActionBtn name="View details" />
+            </span>
+            {item?.offeringType !== "LIVE_GROUP" && (
+              <ActionBtn name="Reschedule call" />
+            )}
+            <span></span>
+            {item?.nextSession && (
+              <span className="flex items-center gap-[10px]">
+                <ActionBtn
+                  name="Book next session"
+                  onClick={()=> setOpenMonthly(true)}
+                />
+                <PaddedArrow />
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      <ReUseModal open={openMonthly} setOpen={setOpenMonthly}>
+        <div className="w-full flex flex-col">
+          <div className="flex justify-end mb-3">
+            <button className="cursor-pointer" onClick={handleCloseMonthly}>
+              <CancelX />
+            </button>
+          </div>
+          <h1 className="text-xl font-bold red-hat mb-4 ">
+            Monthly Series Booking
+          </h1>
+          <div className="mb-4">
+            <Input
+              label={"Add A Session Note"}
+              placeholder="Enter Note..."
+              value={note}
+              setValue={setNote}
+              // onChange={(e: any) => setNote(e.target.value)}
+            />
+          </div>
+          <p className="text-muted text-xs dm-sans mb-4">
+            Select Date and time
+          </p>
+          <div className="flex flex-col gap-3">
+            {liveDateTimes.map((dateTime, index) => (
+              <DateTimeInput
+                key={index}
+                dateTime={dateTime}
+                setDateTime={(newDateTime) =>
+                  updateDateTime(index, newDateTime)
+                }
+              />
+            ))}
+          </div>
+          <div className="w-full mt-6">
+            <Button
+              name={offering?.loading ? "Loading..." : "Book Now"}
+              height="h-[49px]"
+              className={`flex-grow min-w-full ${
+                !active && "opacity-40 cursor-not-allowed"
+              }`}
+              onClick={handleBookNextSession}
+              disabled={!active}
+            />
+          </div>
+        </div>
+      </ReUseModal>
+    </>
   ); 
 }

@@ -6,6 +6,7 @@ import OfferingsTable from "../../components/live-classes/offerings-table";
 import Tips from "../../components/live-classes/tips-tricks";
 import StudentCallLogs from "../../components/home/student-call-logs";
 import StudentOfferingsTable from "../../components/live-classes/student-offerings-table";
+import StudentBookingTable from "../../components/live-classes/student-booking-table";
 
 const StudentLiveClasses = () => {
   return (
@@ -21,7 +22,8 @@ const StudentLiveClasses = () => {
           {/* start of left side */}
           <div className="w-full 2xl:w-10/12 flex flex-col gap-6">
             <StudentCallLogs />
-            <StudentOfferingsTable />
+            {/* <StudentOfferingsTable /> */}
+            <StudentBookingTable />
           </div>
           {/* end of the left side */}
           {/* right side */}

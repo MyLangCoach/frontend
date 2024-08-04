@@ -38,6 +38,45 @@ export const YellowCap = () => {
     </svg>
   );
 }
+export const BlueStopWatch = () => {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.5 1.5H10.5M9 10.5L11.25 8.25M15 10.5C15 13.8137 12.3137 16.5 9 16.5C5.68629 16.5 3 13.8137 3 10.5C3 7.18629 5.68629 4.5 9 4.5C12.3137 4.5 15 7.18629 15 10.5Z"
+        stroke="#0E79FF"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const PaddedArrow = () => {
+  return (
+    <svg
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="0.5" y="0.5" width="35" height="35" rx="3.5" stroke="#E4E4E7" />
+      <path
+        d="M12 15L18 21L24 15"
+        stroke="#18181B"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
 export const BlueVideoIcon = () => {
   return (
     <svg

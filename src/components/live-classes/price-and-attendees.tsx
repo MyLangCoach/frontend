@@ -107,7 +107,7 @@ const PriceAttendees = ({
 
         <div className="flex gap-3 items-center mt-8 justify-end">
           <span>
-            <OutlineBtn name="Discard changes" onClick={() => setCurrent(1)} />
+            <OutlineBtn name="Back" onClick={() => setCurrent(1)} />
           </span>
           <span>
             <BigButton

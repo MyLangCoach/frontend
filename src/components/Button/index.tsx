@@ -134,6 +134,26 @@ export const SocialSignIn = ({
   );
 };
 
+
+export const ActionBtn = ({
+  name,
+  type,
+  loading,
+  altText,
+  disabled,
+  onClick,
+  className,
+}: buttonProps) => {
+  return (
+    <button
+      className={`flex items-center gap-[10px] h-[36px] border border-[#E4E4E7] bg-white   rounded-md px-4 font-medium text-sm inter btn-shadow cursor-pointer text-black ${className} `}
+      onClick={onClick}
+    >
+    
+      {name}
+    </button>
+  );
+};
 export const CapsuleBtn = ({
   name,
   type,

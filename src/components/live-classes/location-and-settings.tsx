@@ -83,7 +83,7 @@ const LocationSettings = ({ setCurrent, handleCreate,loading, redirectUrl, setRe
       </div>
       <div className="flex gap-3 items-center mt-8 justify-end">
         <span>
-          <OutlineBtn name="Discard changes" onClick={() => {
+          <OutlineBtn name="Back" onClick={() => {
             if (_type === "ONE_MONTHLY") {
               setCurrent(1)
             }

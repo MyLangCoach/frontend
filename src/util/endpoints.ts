@@ -1,3 +1,5 @@
+import { bookNextSession } from "../features/offeringslice";
+
 /** this would wrap all the api endpoints and base urls */
 export const baseUrl = "https://mylangcoach-api.onrender.com/api/v1";
 
@@ -19,6 +21,8 @@ export const url = {
   saveCard: "/payments/save-card",
   savedCard: "/users/cards",
   allMyStudent: "/users/coach/mystudents",
-  payment: "payments",
-  userBanks:"users/banks"
+  payment: "/payments",
+  userBanks: "/users/banks",
+  bookNextSession:"/bookings/next-session"
+  
 };

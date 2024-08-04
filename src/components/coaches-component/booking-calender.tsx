@@ -1,31 +1,33 @@
 import React, { SetStateAction, useEffect, useState } from "react";
-import { useAppDispatch,useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { CoachDetails } from "../../util/types";
 import { CancelX, NextIcon, PrevIcon, VerifyIcon } from "../../assets";
 import ar from "../../assets/png/ar.png";
-import pic from "../../assets/png/pic.png"; 
+import pic from "../../assets/png/pic.png";
 import { Button, OutlineBtn } from "../Button";
 import { useNavigate } from "react-router-dom";
 import moment from "moment-timezone";
 import { Input } from "../Input";
-import { createFirstBookingWithCoach, restoreDefault } from "../../features/offeringslice";
+import {
+  createFirstBookingWithCoach,
+  restoreDefault,
+} from "../../features/offeringslice";
 import toast from "react-hot-toast";
 
 interface CalendarProps {
-    // note: string;
-    item: CoachDetails
-  setOpen: React.Dispatch<SetStateAction<boolean>>,
- 
+  // note: string;
+  item: CoachDetails;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
+const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
-    const handleError = (e: any) => {
-      e.target.onerror = null; // Prevent looping
-      e.target.src = pic;
-    };
+  const handleError = (e: any) => {
+    e.target.onerror = null; // Prevent looping
+    e.target.src = pic;
+  };
   const {
     bio,
     profileImage,
@@ -129,7 +131,7 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
       setOpen(false);
     }
   }, [offering?.createBookingSessionSuccess]);
-  
+
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
       <div className="w-full flex flex-col">
@@ -161,7 +163,7 @@ const Calendar: React.FC<CalendarProps> = ({  item, setOpen }) => {
             </span>
             <p className="text-sm text-subTopic dm-sans">
               {" "}
-              {selectedLanguage?.language ?? ""} Tutor
+              {selectedLanguage?.language ?? ""} coach
             </p>
           </div>
         </div>

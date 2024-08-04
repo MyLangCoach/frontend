@@ -25,6 +25,7 @@ export interface OfferingsState {
   deleteFeedbackSuccess: boolean;
   singleCoachOffering: any;
   bookCoachOfferingSuccess: boolean;
+  nextSessionBookingSuccess: boolean;
 
 
 
@@ -52,7 +53,8 @@ const initialState: OfferingsState = {
   allFeedback: false,
   editFeedbackSuccess: false,
   deleteFeedbackSuccess: false,
-  bookCoachOfferingSuccess: false
+  bookCoachOfferingSuccess: false,
+  nextSessionBookingSuccess: false,
 };
 
 export const offeringsSlice = createSlice({
@@ -74,6 +76,7 @@ export const offeringsSlice = createSlice({
         state.createOfferingBookingSuccess = false;
         state.deleteOfferingSuccess = false;
         state.bookCoachOfferingSuccess = false;
+        state.nextSessionBookingSuccess = false;
         
       },
   },
@@ -223,6 +226,17 @@ export const offeringsSlice = createSlice({
       })
       .addCase(getSingleCoachOffering.rejected, (state, { payload }) => {
         state.fetchLoading = false;
+      })
+      .addCase(bookNextSession.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(bookNextSession.fulfilled, (state, { payload }) => {
+          state.loading = false;
+          state.nextSessionBookingSuccess = true;
+     
+      })
+      .addCase(bookNextSession.rejected, (state, { payload }) => {
+        state.loading = false;
       })
 
         
@@ -374,6 +388,24 @@ export const bookCoachOffering = createAsyncThunk(
     const { auth }: any = getState();
     try {
       const { data } = await APIService.post(`${url.offeringBookings}/${payload.id}`, payload.data, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const bookNextSession = createAsyncThunk(
+  "bookNextSession",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(`${url.bookNextSession}/${payload.id}`, payload.data, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },
