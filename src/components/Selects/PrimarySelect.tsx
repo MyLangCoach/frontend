@@ -10,6 +10,7 @@ interface selectProps {
   data: any;
   name?: string;
   height?: string;
+  mapKey?: any;
 }
 
 function classNames(...classes: any) {
@@ -23,6 +24,7 @@ export default function PrimarySelect({
   data,
   name,
   height,
+  mapKey
 }: selectProps) {
   // const [selected, setSelected] = useState(people[3])
 
@@ -40,7 +42,7 @@ export default function PrimarySelect({
               } relative w-full  border  border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-[#E4E4E7] focus:border-[#E4E4E7] sm:text-sm`}
             >
               <span className="block truncate capitalize text-black">
-                {selected?.name ? selected?.name : name}
+                {selected?.[mapKey] ?? selected?.name ?? name}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <IoIosArrowDown
@@ -81,7 +83,7 @@ export default function PrimarySelect({
                             "block truncate"
                           )}
                         >
-                          {person?.name}
+                          {person?.[mapKey] ?? person?.name}
                         </span>
 
                         {selected ? (

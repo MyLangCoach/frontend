@@ -19,10 +19,11 @@ export const url = {
   sessionBookings: "/bookings/session",
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",
-  savedCard: "/users/cards",
+  savedCard: "/users/my/cards",
   allMyStudent: "/users/coach/mystudents",
   payment: "/payments",
-  userBanks: "/users/banks",
-  bookNextSession:"/bookings/next-session"
+  userBanks: "/users/my/banks",
+  bookNextSession: "/bookings/next-session",
+  transactions:"/transactions"
   
 };

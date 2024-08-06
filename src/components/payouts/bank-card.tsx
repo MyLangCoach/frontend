@@ -10,6 +10,12 @@ const BankCard = () => {
         dispatch(getAllUserBanks());
       
     }, [])
+    const allBank = payment?.allUserBanks;
+    const banksLength = payment?.allUserBanks?.length;
+    const lastBankIndex = banksLength - 1;
+
+    const recentBank = allBank[lastBankIndex];
+  
     
     
   return (
@@ -20,11 +26,18 @@ const BankCard = () => {
               </span>
               <div className="flex flex-col">
                   <p className='red-hat font-semibold text-base leading-[20px] uppercase mb-2 '>
-                      AYENI DANIEL ABIDEMI
+                      {recentBank?.accountName}
                   </p>
                   
                   <p className='red-hat'>
-                      Wema Bank - 1130621948
+                      <span>
+                          {recentBank?.bankName}
+                      </span>
+                      <span> - </span>
+                      <span>
+                          {recentBank?.accountNumber}
+                      </span>
+                    
                   </p>
               </div>
       </div>

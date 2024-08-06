@@ -189,6 +189,26 @@ export const handleInviteRedirect = (timer?: number) => {
   }
 };
 
+export function getCurrentFormattedDate(): string {
+  const date: Date = new Date(); // Get the current date
+
+  // Define the options for formatting the date
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  };
+
+  // Create a new instance of Intl.DateTimeFormat with the options
+  const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(
+    "en-GB",
+    options
+  );
+
+  // Format the date and return it with a comma
+  return formatter.format(date).replace(" ", ", ");
+}
+
 export const generateCode = () => {
   // create an array of possible characters
   let chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

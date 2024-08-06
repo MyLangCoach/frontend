@@ -22,6 +22,9 @@ export interface PaymentState {
   sessionPaymentResp: any;
   withdrawalSuccess: boolean;
   allUserBanks: any;
+  saveUserBankSuccess: boolean;
+  allUserTransactions: any;
+  withdrawSuccess: boolean;
 }
 
 const initialState: PaymentState = {
@@ -42,7 +45,10 @@ const initialState: PaymentState = {
   withdrawalSuccess: false,
   offeringPaymentResp:{},
   sessionPaymentResp:{},
-    allUserBanks: []
+  allUserBanks: [],
+  saveUserBankSuccess: false,
+  allUserTransactions: [],
+  withdrawSuccess: false,
 };
 
 export const paymentSlice = createSlice({
@@ -62,7 +68,9 @@ export const paymentSlice = createSlice({
         state.sessionPaymentSuccess = false;
       state.withdrawalSuccess = false;
       state.offeringPaymentResp = {};
-
+      state.resolveBankData = {};
+      state.saveUserBankSuccess = false;
+      state.withdrawalSuccess = false;
 
   
     },
@@ -122,6 +130,62 @@ export const paymentSlice = createSlice({
       .addCase(payForSession.rejected, (state, { payload }) => {
         state.loading = false;
       })
+      .addCase(getAllBanks.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllBanks.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+        
+        state.allBanks = payload.data;
+      })
+      .addCase(getAllBanks.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(resolveAccount.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resolveAccount.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        
+        state.resolveBankData = payload.data;
+      })
+      .addCase(resolveAccount.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(saveUserBank.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveUserBank.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        
+        state.saveUserBankSuccess = true;
+      })
+      .addCase(saveUserBank.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(getAllUserTransactions.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllUserTransactions.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+        
+        state.allUserTransactions = payload?.data;
+      })
+      .addCase(getAllUserTransactions.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(withdrawFund.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(withdrawFund.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        
+        state.withdrawalSuccess = true;
+      })
+      .addCase(withdrawFund.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+
       
       ;
   },
@@ -240,6 +304,24 @@ export const withdrawFund = createAsyncThunk(
     }
   }
 );
+export const saveUserBank = createAsyncThunk(
+  "saveUserBank",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(`${url.payment}/save-bank`, payload, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
 
 
 
@@ -273,6 +355,28 @@ export const getAllUserBanks = createAsyncThunk(
     try {
       const { data } = await APIService.get(
         `${url.userBanks}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllUserTransactions = createAsyncThunk(
+  "getAllUserTransactions",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(
+        `${url.transactions}`,
 
         {
           headers: {

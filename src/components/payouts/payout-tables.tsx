@@ -1,9 +1,10 @@
-import React,{useState} from 'react'
+import { useState } from 'react';
 import TransactionsTable from './transactions-table';
 import PaymentHistoryTable from './payment-history-table';
 
 const PayoutTables = () => {
-    const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(0);
+
   return (
     <div className="w-full flex flex-col mt-10">
       {/* tabs session */}

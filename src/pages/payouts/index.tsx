@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { NotificationIcon } from '../../assets';
 
 import PayoutOverview from '../../components/payouts/payout-overview';
 import PayoutTables from '../../components/payouts/payout-tables';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import BankCard from '../../components/payouts/bank-card';
+import { getAllUserTransactions } from '../../features/paymentslice';
 
 const Payouts = () => {
   const user = useAppSelector((state) => state.auth);
-    const userRole = user?.userData?.role;
+  const dispatch = useAppDispatch();
+  const userRole = user?.userData?.role;
+  useEffect(() => {
+    dispatch(getAllUserTransactions());
+  }, [])
+  
   return (
     <DashboardLayout current={7}>
       <div className="w-full flex flex-col">

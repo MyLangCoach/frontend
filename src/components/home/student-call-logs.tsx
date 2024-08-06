@@ -266,7 +266,14 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
                   className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
                 >
                   Join Class
-                </Link>  }
+            </Link>}
+            {item?.meetingLink && !item?.transactionReference && item?.isFree === false &&  <Link
+                  to={item?.meetingLink}
+                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+                >
+                  Join Class
+            </Link>}
+            
               {(item?.isFree === true && (
                 <Link
                   to={item?.meetingLink}
