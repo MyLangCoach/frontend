@@ -22,7 +22,7 @@ const StudentLiveClasses = () => {
           {/* start of left side */}
           <div className="w-full 2xl:w-10/12 flex flex-col gap-6">
             <StudentCallLogs />
-            <StudentOfferingsTable />
+     
             <StudentBookingTable />
           </div>
           {/* end of the left side */}
