@@ -32,6 +32,7 @@ const ViewSingleCoachPage = () => {
     dispatch(getSingleUserDetail(userId));
     // dispatch(getAllStudent());
   }, []);
+
   const handleError = (e: any) => {
     e.target.onerror = null; // Prevent looping
     e.target.src = pic;

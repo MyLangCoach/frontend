@@ -3,7 +3,7 @@ import { ActionBtn, Button } from "../Button";
 import { Link, useNavigate } from "react-router-dom";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch,useAppSelector } from "../../app/hooks";
-import { bookNextSession, getAllOfferingBookingStudent, getAllSessionBookingStudent, restoreDefault as restore } from "../../features/offeringslice";
+import { bookNextSession, getAllOfferingBookingStudent, getAllSessionBookingStudent, rescheduleOffering, restoreDefault as restore } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
 import { BlueCalenderIcon, BlueStopWatch, BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, PaddedArrow, StopWatch } from "../../assets";
@@ -140,10 +140,10 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
 
    useEffect(() => {
      if (
-       payment?.sessionPaymentSuccess &&
-       payment?.sessionPaymentResp?.authorization_url
+       payment?.offeringPaymentSuccess &&
+       payment?.offeringPaymentResp?.authorization_url
      ) {
-       window.open(payment?.sessionPaymentResp?.authorization_url, "_blank");
+       window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
        setTimeout(() => {
          dispatch(restoreDefault());
        }, 3000);
@@ -154,7 +154,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
        dispatch(restore());
            
      }
-   }, [payment?.sessionPaymentSuccess,offering?.nextSessionBookingSuccess]);
+   }, [payment?.offeringPaymentSuccess,offering?.nextSessionBookingSuccess]);
     const [note, setNote] = useState("");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
 
@@ -201,7 +201,25 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
       setOpenMonthly(false);
     }, 50);
   }
-  
+   const [openReschedule, setOpenReschedule] = useState(false);
+  const [date, setDate] = useState<string>("");
+  const [activeReschule, setActiveReschedule] = useState<boolean>(false);
+  const handleReschedule = () => {
+    if (active) {
+      const sentdata = {
+        id: item?.id,
+        data: {
+          note: note,
+          proposedDateTime: date,
+        },
+      };
+
+      dispatch(rescheduleOffering(sentdata));
+    } else {
+      toast.error("All Field   must be provided");
+    }
+  };
+
   
 
 
@@ -261,32 +279,40 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
             </span>
           </div>
           <div className=" mt-7 flex items-center gap-[10px] ">
-            {item?.meetingLink && item?.transactionReference && item?.isFree === false &&  <Link
-                  to={item?.meetingLink}
-                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
-                >
-                  Join Class
-            </Link>}
-            {item?.meetingLink && !item?.transactionReference && item?.isFree === false &&  <Link
-                  to={item?.meetingLink}
-                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
-                >
-                  Join Class
-            </Link>}
-            
-              {(item?.isFree === true && (
+            {item?.meetingLink &&
+              item?.transactionReference &&
+              item?.isFree === false && (
                 <Link
                   to={item?.meetingLink}
                   className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
                 >
                   Join Class
                 </Link>
-              ))}
+              )}
+            {item?.meetingLink &&
+              !item?.transactionReference &&
+              item?.isFree === false && (
+                <Link
+                  to={item?.meetingLink}
+                  className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+                >
+                  Join Class
+                </Link>
+              )}
+
+            {item?.isFree === true && (
+              <Link
+                to={item?.meetingLink}
+                className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
+              >
+                Join Class
+              </Link>
+            )}
             {!item?.meetingLink &&
-              item?.transactionReference &&
+              item?.paymentConfirmed &&
               item?.isFree === false && <Button name="Processing..." />}
             {!item?.meetingLink &&
-              !item?.transactionReference &&
+              !item?.paymentConfirmed  &&
               item?.isFree === false && (
                 <Button name="Make Payment" onClick={handlePayment} />
               )}
@@ -296,14 +322,14 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
               <ActionBtn name="View details" />
             </span>
             {item?.offeringType !== "LIVE_GROUP" && (
-              <ActionBtn name="Reschedule call" />
+              <ActionBtn name="Reschedule call" onClick={() => setOpenReschedule(true)} />
             )}
             <span></span>
             {item?.nextSession && (
               <span className="flex items-center gap-[10px]">
                 <ActionBtn
                   name="Book next session"
-                  onClick={()=> setOpenMonthly(true)}
+                  onClick={() => setOpenMonthly(true)}
                 />
                 <PaddedArrow />
               </span>
@@ -352,6 +378,47 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
                 !active && "opacity-40 cursor-not-allowed"
               }`}
               onClick={handleBookNextSession}
+              disabled={!active}
+            />
+          </div>
+        </div>
+      </ReUseModal>
+      <ReUseModal open={openReschedule} setOpen={setOpenReschedule}>
+        <div className="w-full flex flex-col">
+          <div className="flex justify-end mb-3">
+            <button
+              className="cursor-pointer"
+              onClick={() => setOpenReschedule(false)}
+            >
+              <CancelX />
+            </button>
+          </div>
+          <h1 className="text-xl font-bold red-hat mb-4 ">
+            Monthly Series Booking
+          </h1>
+          <div className="mb-4">
+            <Input
+              label={"Add A Session Note"}
+              placeholder="Enter Note..."
+              value={note}
+              setValue={setNote}
+              // onChange={(e: any) => setNote(e.target.value)}
+            />
+          </div>
+          <p className="text-muted text-xs dm-sans mb-4">
+            Select Proposed Date and time
+          </p>
+          <div className="flex flex-col gap-3">
+            <DateTimeInput key={index} dateTime={date} setDateTime={setDate} />
+          </div>
+          <div className="w-full mt-6">
+            <Button
+              name={offering?.loading ? "Loading..." : "Book Now"}
+              height="h-[49px]"
+              className={`flex-grow min-w-full ${
+                !active && "opacity-40 cursor-not-allowed"
+              }`}
+              onClick={handleReschedule}
               disabled={!active}
             />
           </div>

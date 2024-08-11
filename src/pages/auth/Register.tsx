@@ -139,7 +139,7 @@ const Register = () => {
                     setSelected={setSelected}
                     label="Choose personality"
                     data={[{ name: "Student" }, { name: "Coach" }]}
-                    name="Student"
+                    name="Select "
                   />
                 </span>
                 <div className="w-full flex items-center gap-4">

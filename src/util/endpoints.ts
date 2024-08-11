@@ -20,10 +20,11 @@ export const url = {
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",
   savedCard: "/users/my/cards",
-  allMyStudent: "/users/coach/mystudents",
+  allMyStudent: "/users/coach/mytopstudents",
   payment: "/payments",
   userBanks: "/users/my/banks",
   bookNextSession: "/bookings/next-session",
-  transactions:"/transactions"
+  transactions: "/transactions",
+  reschedule:"/reschedules/booking"
   
 };

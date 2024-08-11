@@ -14,6 +14,7 @@ type OfferingData = {
   type: string | null;
   duration: number;
   isFree: boolean;
+  languageTag: string;
   cost: Cost;
   questionAndAnswer: { question: string; answer: string }[];
   seriesCount: number;
@@ -55,6 +56,7 @@ const CreateClassHome = () => {
       coverImageUrl: coverImageUrl,
       type: type,
       duration: Number(duration),
+      languageTag:"English",
       isFree: costType === "FREE" && cost?.amount === 0 ? true : false,
       cost: cost,
 

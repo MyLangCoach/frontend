@@ -23,6 +23,10 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
   const dispatch = useAppDispatch();
     const navigate = useNavigate();
    const offering = useAppSelector((state) => state.offerings);
+  const auth = useAppSelector((state) => state.auth);
+
+
+  
   const [open, setOpen] = useState<boolean>(false);
 
   const [openLive, setOpenLive] = useState(false);
@@ -37,6 +41,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
           data: {
             note: note,
             bookTimes: [],
+            // email:userEmail
           },
         };
 

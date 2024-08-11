@@ -1,13 +1,18 @@
 import { useState,useEffect } from 'react'
 import { useAppDispatch,useAppSelector } from '../../app/hooks';
-import { CancelIcon, Plus, PlusCircle,  } from '../../assets';
+import { CancelIcon, CancelX, Plus, PlusCircle,  } from '../../assets';
 import filterIcon from "../../assets/png/caret-sort.png";
 import { OfferingsDummy } from '../../util/mockdata';
 import CreateNewServiceModal from './create-new-service-modal';
-import { getAllOfferings } from '../../features/offeringslice';
+import { bookCoachOffering, getAllOfferings } from '../../features/offeringslice';
 import LoadingComponent from '../Loaders/skeleton-loading';
 import { formatDateTime } from '../../util';
 import ViewOfferingModal from '../modal/view-offering-modal';
+
+import toast from 'react-hot-toast';
+import { Button } from '../Button';
+import { DateTimeInput, Input } from "../Input";
+import ReUseModal from '../modal/Modal';
 const OfferingsTable = () => {
   const offerings = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
@@ -109,7 +114,7 @@ const OfferingsTable = () => {
               </span>
             </th>
             <th className=" flex items-center gap-3 w-full">
-              <p className="text-muted text-sm inter font-medium">Attendees</p>
+              <p className="text-muted text-sm inter font-medium">Actions</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
@@ -134,14 +139,39 @@ export default OfferingsTable
 
 
 const SingleRow = ({item, index} : any) => {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openReschedule, setOpenReschedule] = useState(false);
+  const [note, setNote] = useState("");
+  const dispatch = useAppDispatch();
+  const offering = useAppSelector(state => state.offerings);
+  const [date, setDate] = useState<string>("");
+  const [active, setActive] = useState<boolean>(false)
+    const handleReschedule = () => {
+ 
+        if (active) {
+          const sentdata = {
+            id: item?.id,
+            data: {
+              note: note,
+            proposedDateTime:date
+            },
+          };
+
+          dispatch(bookCoachOffering(sentdata));
+        } else {
+          toast.error("All Field   must be provided");
+        }
+      
+    };
     return (
       <tr
         key={index}
         className="grid grid-cols-5 px-2 border-b-border border-b last:border-none min-h-[68px] cursor-pointer "
-        onClick={() => setOpen(true)}
       >
-        <td className="w-full flex items-center gap-3">
+        <td
+          className="w-full flex items-center gap-3"
+          onClick={() => setOpen(true)}
+        >
           <span>
             <input
               type="checkbox"
@@ -150,8 +180,11 @@ const SingleRow = ({item, index} : any) => {
               className="accent-black  w-4 h-4 rounded-md "
             />
           </span>
-          <div className="flex flex-col gap-[10px]">
-            <h1 className="text-foreground font-normal text-sm truncate inter">
+          <div
+            className="flex flex-col gap-[10px]  w-full overflow-x-hidden"
+            onClick={() => setOpen(true)}
+          >
+            <h1 className="text-foreground font-normal  text-sm truncate inter">
               {item?.title}
             </h1>
             <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
@@ -159,8 +192,11 @@ const SingleRow = ({item, index} : any) => {
             </p>
           </div>
         </td>
-        <td className="w-full flex items-center">
-          <p className="text-foreground font-normal text-sm truncate inter">
+        <td
+          className="w-full flex items-center  "
+          onClick={() => setOpen(true)}
+        >
+          <p className="text-foreground font-normal text-sm truncate inter pl-5 min-w-max">
             {item?.costType === "FREE" ? "FREE" : item?.cost?.amount}
           </p>
         </td>
@@ -172,14 +208,17 @@ const SingleRow = ({item, index} : any) => {
             {item?.type}
           </p>
         </td>
-        <td className="w-full flex flex-col gap-[10px] justify-center">
-          {item?.liveDateTime ? (
+        <td
+          className="w-full flex flex-col gap-[10px] justify-center"
+          onClick={() => setOpen(true)}
+        >
+          {item?.liveDateTimes?.length > 0 ? (
             <div className="flex flex-col gap-[10px] justify-center">
               <p className="text-foreground font-normal text-sm truncate inter">
-                {formatDateTime(item?.liveDateTime)?.date}
+                {formatDateTime(item?.liveDateTimes?.[0])?.date}
               </p>
               <p className=" rounded-[4px] px-[6px] bg-fadeBG text-xs inter text-foreground py-[2px] w-fit ">
-                {formatDateTime(item?.liveDateTime)?.time}
+                {formatDateTime(item?.liveDateTimes?.[0])?.time}
               </p>
             </div>
           ) : (
@@ -188,12 +227,73 @@ const SingleRow = ({item, index} : any) => {
             </p>
           )}
         </td>
-        <td className="w-full flex flex-col gap-[10px] justify-center">
-          <p className="text-foreground font-normal text-sm truncate inter">
+        <td className="w-full flex items-center gap-[10px] justify-start">
+          {/* <p className="text-foreground font-normal text-sm truncate inter">
             {item?.numOfAttendees}
-          </p>
+          </p> */}
+          {
+            item?.type === "LIVE_GROUP" && (
+              <Button name="Reschedule" onClick={() => setOpenReschedule(true)} />
+
+            )
+          }
+          <Button
+            className="min-w-max"
+            name="Feedbacks"
+            onClick={() => setOpenReschedule(true)}
+          />
         </td>
-        <ViewOfferingModal open={open} setOpen={setOpen} item={item} index={index} />
+        <ViewOfferingModal
+          open={open}
+          setOpen={setOpen}
+          item={item}
+          index={index}
+        />
+        <ReUseModal open={openReschedule} setOpen={setOpenReschedule}>
+          <div className="w-full flex flex-col">
+            <div className="flex justify-end mb-3">
+              <button
+                className="cursor-pointer"
+                onClick={() => setOpenReschedule(false)}
+              >
+                <CancelX />
+              </button>
+            </div>
+            <h1 className="text-xl font-bold red-hat mb-4 ">
+              Monthly Series Booking
+            </h1>
+            <div className="mb-4">
+              <Input
+                label={"Add A Session Note"}
+                placeholder="Enter Note..."
+                value={note}
+                setValue={setNote}
+                // onChange={(e: any) => setNote(e.target.value)}
+              />
+            </div>
+            <p className="text-muted text-xs dm-sans mb-4">
+              Select Proposed Date and time
+            </p>
+            <div className="flex flex-col gap-3">
+              <DateTimeInput
+                key={index}
+                dateTime={date}
+                setDateTime={setDate}
+              />
+            </div>
+            <div className="w-full mt-6">
+              <Button
+                name={offering?.loading ? "Loading..." : "Book Now"}
+                height="h-[49px]"
+                className={`flex-grow min-w-full ${
+                  !active && "opacity-40 cursor-not-allowed"
+                }`}
+                onClick={handleReschedule}
+                disabled={!active}
+              />
+            </div>
+          </div>
+        </ReUseModal>
       </tr>
     );
 }

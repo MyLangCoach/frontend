@@ -26,6 +26,8 @@ export interface OfferingsState {
   singleCoachOffering: any;
   bookCoachOfferingSuccess: boolean;
   nextSessionBookingSuccess: boolean;
+  rescheduleSuccess: boolean;
+  
 
 
 
@@ -55,6 +57,7 @@ const initialState: OfferingsState = {
   deleteFeedbackSuccess: false,
   bookCoachOfferingSuccess: false,
   nextSessionBookingSuccess: false,
+  rescheduleSuccess: false
 };
 
 export const offeringsSlice = createSlice({
@@ -270,6 +273,28 @@ export const updatedOffering = createAsyncThunk(
     try {
       const { data } = await APIService.patch(
         `${url.offerings}/${payload.id}`,
+        payload.data,
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const rescheduleOffering = createAsyncThunk(
+  "rescheduleOffering",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(
+        `${url.reschedule}/${payload.id}`,
         payload.data,
         {
           headers: {
