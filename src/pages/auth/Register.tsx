@@ -93,19 +93,19 @@ const Register = () => {
               <h1 className="text-2xl font-extrabold text-black red-hat">
                 Create a new account
               </h1>
-              <button className="w-full h-[35px] mt-6 rounded-[50px] gap-[10px] py-[6px] pl-12 pr-6 flex items-center border border-[#E0E0E9] ">
+              {/* <button className="w-full h-[35px] mt-6 rounded-[50px] gap-[10px] py-[6px] pl-12 pr-6 flex items-center border border-[#E0E0E9] ">
                 <span>
                   <GoogleLogo />
                 </span>
                 <span className="font-medium min-w-max text-xl inter text-[#1D1C2B] ">
                   Sign up with Google
                 </span>
-              </button>
-              <div className="flex items-center w-full gap-3 mt-6 ">
+              </button> */}
+              {/* <div className="flex items-center w-full gap-3 mt-6 ">
                 <hr className="flex flex-grow bg-[#cdcdcd] h-[0.5px] " />
                 <p className="dm-sans text-sm text-black">Or continue with</p>
                 <hr className="flex flex-grow bg-[#cdcdcd] h-[0.5px] " />
-              </div>
+              </div> */}
               <div className="flex flex-col mt-4 gap-y-4">
                 <Input
                   value={firstName}

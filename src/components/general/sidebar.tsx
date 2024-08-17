@@ -22,10 +22,10 @@ const Sidebar = ({ current }: { current: number }) => {
   return (
     <div className="w-full fixed top-0 left-0 bottom-0 h-screen flex flex-col max-w-[266px]    bg-white flow-hide   ">
       <div className="w-full flex flex-col items-center relative px-4 ">
-        <div className="mt-12 flex start">
-          <div className="">
-            <img src={logo} alt="logo" className="w-[193px] h-auto" />
-          </div>
+        <div className="mt-12 flex start w-full">
+       
+            <img src={logo} alt="logo" className="w-[140px] h-auto" />
+        
         </div>
         <div className="flex flex-col w-full mt-8">
           <h1 className="text-lg font-semibold inter text-[#09090B] mb-2 pl-4 ">

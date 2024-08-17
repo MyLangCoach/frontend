@@ -27,6 +27,7 @@ export interface OfferingsState {
   bookCoachOfferingSuccess: boolean;
   nextSessionBookingSuccess: boolean;
   rescheduleSuccess: boolean;
+  allBookedOfferingCoach: any;
   
 
 
@@ -57,7 +58,8 @@ const initialState: OfferingsState = {
   deleteFeedbackSuccess: false,
   bookCoachOfferingSuccess: false,
   nextSessionBookingSuccess: false,
-  rescheduleSuccess: false
+  rescheduleSuccess: false,
+  allBookedOfferingCoach:[],
 };
 
 export const offeringsSlice = createSlice({
@@ -80,6 +82,7 @@ export const offeringsSlice = createSlice({
         state.deleteOfferingSuccess = false;
         state.bookCoachOfferingSuccess = false;
         state.nextSessionBookingSuccess = false;
+        state.rescheduleSuccess = false;
         
       },
   },
@@ -240,6 +243,28 @@ export const offeringsSlice = createSlice({
       })
       .addCase(bookNextSession.rejected, (state, { payload }) => {
         state.loading = false;
+      })
+      .addCase(rescheduleOffering.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(rescheduleOffering.fulfilled, (state, { payload }) => {
+          state.loading = false;
+          state.rescheduleSuccess = true;
+     
+      })
+      .addCase(rescheduleOffering.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(getAllBookedOfferingCoach.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllBookedOfferingCoach.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allBookedOfferingCoach = payload?.data;
+     
+      })
+      .addCase(getAllBookedOfferingCoach.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
       })
 
         
@@ -541,6 +566,26 @@ export const getAllOfferingBookingCoach = createAsyncThunk(
     }
   }
 );
+export const getAllBookedOfferingCoach = createAsyncThunk(
+  "getAllBookedOfferingCoach",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.offeringBookings}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+
 
 
 

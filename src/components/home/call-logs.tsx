@@ -2,24 +2,29 @@ import { useEffect, useState } from "react";
 import { Button } from "../Button";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getAllSessionBookingCoach, getAllSessionBookingStudent } from "../../features/offeringslice";
+import { getAllBookedOfferingCoach, getAllSessionBookingCoach } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
-import { formatDateTime, openInNewTab } from "../../util";
-import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
+import CoachSessionCard from "../coaches-component/coach-session-card";
+import CoachOfferingCard from "../coaches-component/coach-offering-card";
 
 const CallLogs = () => {
  
     const dispatch = useAppDispatch();
-    const offering = useAppSelector((state) => state.offerings);
+  const offering = useAppSelector((state) => state.offerings);
+  
     useEffect(() => {
       dispatch(getAllSessionBookingCoach());
+      dispatch(getAllBookedOfferingCoach());
     }, []);
-    const bookings = offering?.allBookingsSessionCoach;
+  const bookings = offering?.allBookingsSessionCoach;
+  const offeringsList = offering?.allBookedOfferingCoach;
 
-    const [current, setCurrent] = useState(0);
+    const [currentSession, setCurrentSession] = useState(0);
+    const [currentOffering, setCurrentOffering] = useState(0);
+    const [present, setPresent] = useState(0);
     const [open, setOpen] = useState<boolean>(false);
 
-  console.log({bookings})
+
     if (offering.fetchLoading) {
       return (
         <div className="w-full">
@@ -30,145 +35,224 @@ const CallLogs = () => {
 
   return (
     <div className="w-full flex flex-col mt-6">
-      {/* tabs session */}
-      <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
-        <div
-          className={
-            current === 0
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(0)}
+      <div className="w-full flex items-center mb-6 gap-3">
+        <p
+          className={`cursor-pointer red-hat text-base ${
+            present === 0
+              ? "font-bold text-[#09090B] red-hat border-b-primary border-b  pb-1"
+              : "pb-1 text-[#09090B] "
+          } `}
+          onClick={() => setPresent(0)}
         >
-          All
-        </div>
-        <div
-          className={
-            current === 1
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(1)}
+          Offerings
+        </p>
+        <p
+          className={`cursor-pointer red-hat text-base ${
+            present === 1
+              ? "font-bold text-[#09090B] red-hat border-b-primary border-b  pb-1"
+              : "pb-1 text-muted "
+          } `}
+          onClick={() => setPresent(1)}
         >
-          Upcoming calls
-        </div>
-        <div
-          className={
-            current === 2
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(2)}
-        >
-          Past calls
-        </div>
+          Sessions
+        </p>
       </div>
+      {/* tabs session */}
+      {present === 0 && (
+        <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
+          <div
+            className={
+              currentOffering === 0
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(0)}
+          >
+            All
+          </div>
+          <div
+            className={
+              currentOffering === 1
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(1)}
+          >
+            Upcoming calls
+          </div>
+          <div
+            className={
+              currentOffering === 2
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(2)}
+          >
+            Past calls
+          </div>
+          <div
+            className={
+              currentOffering === 3
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(3)}
+          >
+            Reschedule
+          </div>
+        </div>
+      )}
+      {present === 1 && (
+        <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
+          <div
+            className={
+              currentSession === 0
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(0)}
+          >
+            All
+          </div>
+          <div
+            className={
+              currentSession === 1
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(1)}
+          >
+            Upcoming calls
+          </div>
+          <div
+            className={
+              currentSession === 2
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(2)}
+          >
+            Past calls
+          </div>
+          <div
+            className={
+              currentSession === 2
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(3)}
+          >
+            Reschedule
+          </div>
+        </div>
+      )}
 
-      {/* end of tabs session */}
-      {current === 0 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
-          {bookings.length > 0 ? (
-        
-          
-                <div className="w-full flex flex-col px-4 py-4">
-                  {bookings?.map((item: any, index: number) => (
-                    <div
-                      className="flex flex-col gap-2 border-border border  rounded-[4px]"
-                      key={index}
-                    >
-                      <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
-                        <p className="red-hat text-foreground font-bold text-[23px] ">
-                          {item.note}
-                        </p>
-                        <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white min-w-fit">
-                          1:1 class
-                        </span>
-                      </div>
-                      <div className="w-full flex flex-col lg:px-6 pb-6">
-                        <div className="w-full mt-3 flex flex-wrap gap-6 items-center">
-                          <span className="flex items-center gap-[10px] w-2/12 min-w-fit ">
-                            <p className="text-muted text-sm dm-sans min-w-fit">
-                              Student Name
-                            </p>
-                            <p className="text-sm dm-sans font-bold text-muted min-w-fit ">
-                              {item?.student.firstName ?? ""}{" "}
-                              {item?.student?.lastName ?? ""}
-                            </p>
-                          </span>
-                          <span className="flex items-center gap-[10px] w-2/12 min-w-fit ">
-                            <p className="text-muted text-sm dm-sans">Status</p>
-                            <p className="text-sm dm-sans font-bold text-muted">
-                              {item.status}
-                            </p>
-                          </span>
-                          <span className="flex items-center gap-[10px]  w-2/12 min-w-fit">
-                            <p className="text-muted text-sm dm-sans">
-                              Book type
-                            </p>
-                            <p className="text-sm dm-sans font-bold text-muted">
-                              Session
-                            </p>
-                          </span>
-                          <span className="flex items-center gap-[10px]  min-w-fit ">
-                            <BlueCalenderIcon />
-                            <p className="text-sm dm-sans font-medium text-muted">
-                              {formatDateTime(item?.startDateTime)?.date}
-                            </p>
-                          </span>
-                          <span className="flex items-center gap-[10px]   min-w-fit">
-                            <BlueTimeIcon />
-                            <p className="text-sm dm-sans font-medium text-muted">
-                              {formatDateTime(item?.startDateTime)?.time}
-                            </p>
-                          </span>
-                        </div>
-                        {item?.meetingLink ? (
-                          <div className="w mt-7">
-                            <Button name="Join Session" onClick={() => openInNewTab(item.meetingLink)}  />
-                          </div>
-                        ) : (
-                          <div className="w mt-7">
-                            <Button name="waiting for payment" />
-                          </div>
-                        )}
-                      
-                      </div>
-                    </div>
+      {/* end of tabs offerings */}
+      {present === 0 && (
+        <div className="w-full">
+          {currentSession === 0 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {bookings.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                  {offeringsList?.map((item: any, index: number) => (
+                    <CoachOfferingCard item={item} index={index} />
                   ))}
                 </div>
-             
-           
-          ) : (
-            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
-                You do not have any classes at the moment, Create a new group
-                class or private class to get started
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
+                    You do not have any classes at the moment, Create a new
+                    group class or private class to get started
+                  </p>
+                  <Button
+                    name="Connect new live class"
+                    className="mt-5 mx-auto"
+                    onClick={() => setOpen(true)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {currentSession === 1 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any upcoming calls.
               </p>
-              <Button
-                name="Connect new live class"
-                className="mt-5 mx-auto"
-                onClick={() => setOpen(true)}
-              />
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
+            </div>
+          )}
+          {currentSession === 2 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any past calls.
+              </p>
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
+            </div>
+          )}
+          {currentSession === 3 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any rescheduled calls.
+              </p>
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
             </div>
           )}
         </div>
       )}
-      {current === 1 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any upcoming calls.
-          </p>
-          <Button name="Connect new live class" className="mt-5 mx-auto" />
+{/* end of a offerings */}
+      {/* end of tabs session */}
+      {present === 1 && (
+        <div className="w-full">
+          {currentSession === 0 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {bookings.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4">
+                  {bookings?.map((item: any, index: number) => (
+                    <CoachSessionCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
+                    You do not have any classes at the moment, Create a new
+                    group class or private class to get started
+                  </p>
+                  <Button
+                    name="Connect new live class"
+                    className="mt-5 mx-auto"
+                    onClick={() => setOpen(true)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {currentSession === 1 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any upcoming calls.
+              </p>
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
+            </div>
+          )}
+          {currentSession === 2 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any past calls.
+              </p>
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
+            </div>
+          )}
+          {currentSession === 3 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any rescheduled calls.
+              </p>
+              <Button name="Connect new live class" className="mt-5 mx-auto" />
+            </div>
+          )}
         </div>
       )}
-      {current === 2 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any past calls.
-          </p>
-          <Button name="Connect new live class" className="mt-5 mx-auto" />
-        </div>
-      )}
+{/* end of a session */}
       <CreateNewServiceModal open={open} setOpen={setOpen} />
     </div>
   );
