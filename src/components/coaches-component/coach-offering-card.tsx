@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { DollarIcon, BlueCalenderIcon, BlueTimeIcon, BlueStopWatch, BlueVideoIcon, PaddedArrow, CancelX } from "../../assets";
-import { restoreDefault, bookNextSession, rescheduleOffering } from "../../features/offeringslice";
+import { restoreDefault, bookNextSession, rescheduleOffering, getAllBookedOfferingCoach } from "../../features/offeringslice";
 import { payForOffering } from "../../features/paymentslice";
 import { formatDateTime } from "../../util";
 import { Button, ActionBtn } from "../Button";
@@ -16,6 +16,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
   const payment = useAppSelector((state) => state.payment);
   const offering = useAppSelector((state) => state.offerings);
   const [openReschedule, setOpenReschedule] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
   const [note, setNote] = useState("");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
@@ -91,7 +92,8 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
     }, 50);
   };
 
-  const handleReschedule = () => {
+  const handleReschedule = async () => {
+    setLoading(true);
     if (activeReschule) {
       const sentdata = {
         id: item?.id,
@@ -101,16 +103,21 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
         },
       };
 
-      dispatch(rescheduleOffering(sentdata));
+      const { payload } = await dispatch(rescheduleOffering(sentdata));
+      if (payload?.status === "success") {
+        setLoading(false);
+        toast.success("Offering rescheduled");
+        setOpenReschedule(false);
+        dispatch(getAllBookedOfferingCoach());
+      }
+      else {
+        setLoading(false);
+      }
     } else {
       toast.error("All Field   must be provided");
     }
   };
-  useEffect(() => {
-    if (offering.rescheduleSuccess) {
-      setOpenReschedule(false);
-    }
-  }, [offering?.rescheduleSuccess]);
+
 
   return (
     <>
@@ -129,8 +136,8 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
           </span>
         </div>
         <div className="w-full flex flex-col lg:px-6 pb-6">
-          <div className="w-full mt-3 flex wrap gap-6 items-center">
-            <div className="flex items-center gap-[10px] ">
+          <div className="w-full mt-3 flex-wrap flex  gap-6 items-center">
+            <div className="flex items-center gap-[10px] min-w-max ">
               <span>
                 <DollarIcon />
               </span>
@@ -138,29 +145,29 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
                 {item?.isFree ? "FREE" : item?.cost?.amount}
               </p>
             </div>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <p className="text-muted text-sm dm-sans">Book type</p>
               <p className="text-sm dm-sans font-bold text-muted">Offering</p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueCalenderIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 {formatDateTime(item?.startDateTime)?.date}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueTimeIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 {formatDateTime(item?.startDateTime)?.time}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max">
               <BlueStopWatch />
               <p className="text-sm dm-sans font-medium text-muted">
                 {item?.duration === 30 ? "30 MINS" : "60 MINS"}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueVideoIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 Video Call
@@ -217,7 +224,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               />
             )}
             <span></span>
-            {item?.nextSession && (
+            {/* {item?.nextSession && (
               <span className="flex items-center gap-[10px]">
                 <ActionBtn
                   name="Book next session"
@@ -225,7 +232,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
                 />
                 <PaddedArrow />
               </span>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -286,7 +293,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
             </button>
           </div>
           <h1 className="text-xl font-bold red-hat mb-4 ">
-            Monthly Series Booking
+            Reschedule Call
           </h1>
           <div className="mb-4">
             <Input

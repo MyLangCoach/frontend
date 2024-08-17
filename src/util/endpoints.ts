@@ -25,6 +25,8 @@ export const url = {
   userBanks: "/users/my/banks",
   bookNextSession: "/bookings/next-session",
   transactions: "/transactions",
-  reschedule:"/reschedules/booking"
+  reschedule: "/reschedules/booking",
+  allReschedules: "/reschedules/my-pendings",
+  respondToReschedule:"/reschedules"
   
 };

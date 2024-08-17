@@ -3,7 +3,7 @@ import { ActionBtn, Button } from "../Button";
 import { Link, useNavigate } from "react-router-dom";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch,useAppSelector } from "../../app/hooks";
-import { bookNextSession, getAllOfferingBookingStudent, getAllSessionBookingStudent, rescheduleOffering, restoreDefault as restore } from "../../features/offeringslice";
+import { bookNextSession, getAllOfferingBookingStudent, getAllReschedules, getAllSessionBookingStudent, rescheduleOffering, restoreDefault as restore } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
 import { BlueCalenderIcon, BlueStopWatch, BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, PaddedArrow, StopWatch } from "../../assets";
@@ -12,12 +12,14 @@ import toast from "react-hot-toast";
 
 import { DateTimeInput,Input } from "../Input";
 import ReUseModal from "../modal/Modal";
+import CoachReschedules from "../Reschedules/coach-reschedule";
 const StudentCallLogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
     const offering = useAppSelector(state => state.offerings);
     useEffect(() => {
-     dispatch(getAllOfferingBookingStudent());
+      dispatch(getAllOfferingBookingStudent());
+         dispatch(getAllReschedules());
      
     }, [])
   useEffect(() => {
@@ -83,6 +85,16 @@ const StudentCallLogs = () => {
         >
           Past calls
         </div>
+        <div
+          className={
+            current === 3
+              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+          }
+          onClick={() => setCurrent(3)}
+        >
+          Reschedule
+        </div>
       </div>
       {/* <p className="capitalize">
         {item?.student.firstName ?? ""} {item?.student?.lastName ?? ""}
@@ -93,13 +105,14 @@ const StudentCallLogs = () => {
           {allOfferings.length > 0 ? (
             <div className="w-full flex flex-col px-4 py-4 gap-5">
               {allOfferings?.map((item: any, index: number) => (
-              <SingleRow item={item} index={index} key={index} />
+                <SingleRow item={item} index={index} key={index} />
               ))}
             </div>
           ) : (
             <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any classes at the moment, You can proceed to book a coaching session or offerings to continue
+                You do not have any classes at the moment, You can proceed to
+                book a coaching session or offerings to continue
               </p>
               <Button
                 name="Book a Coach Session"
@@ -126,6 +139,7 @@ const StudentCallLogs = () => {
           <Button name="Connect new live class" className="mt-5 mx-auto" />
         </div>
       )}
+      {current === 3 && <CoachReschedules />}
       <CreateNewServiceModal open={open} setOpen={setOpen} />
     </div>
   );
@@ -417,7 +431,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
             </button>
           </div>
           <h1 className="text-xl font-bold red-hat mb-4 ">
-            Monthly Series Booking
+            Reschedule this call 
           </h1>
           <div className="mb-4">
             <Input

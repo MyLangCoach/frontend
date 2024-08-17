@@ -28,11 +28,8 @@ export interface OfferingsState {
   nextSessionBookingSuccess: boolean;
   rescheduleSuccess: boolean;
   allBookedOfferingCoach: any;
+  allReschedules: any;
   
-
-
-
-
 }
 
 const initialState: OfferingsState = {
@@ -59,7 +56,9 @@ const initialState: OfferingsState = {
   bookCoachOfferingSuccess: false,
   nextSessionBookingSuccess: false,
   rescheduleSuccess: false,
-  allBookedOfferingCoach:[],
+  allBookedOfferingCoach: [],
+  allReschedules: [],
+  
 };
 
 export const offeringsSlice = createSlice({
@@ -266,6 +265,28 @@ export const offeringsSlice = createSlice({
       .addCase(getAllBookedOfferingCoach.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
+      .addCase(getAllReschedules.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllReschedules.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allReschedules = payload?.data;
+     
+      })
+      .addCase(getAllReschedules.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(respondToReschedule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(respondToReschedule.fulfilled, (state) => {
+          state.loading = false;
+       
+     
+      })
+      .addCase(respondToReschedule.rejected, (state) => {
+        state.loading = false;
+      })
 
         
         ;
@@ -313,6 +334,7 @@ export const updatedOffering = createAsyncThunk(
     }
   }
 );
+
 export const rescheduleOffering = createAsyncThunk(
   "rescheduleOffering",
   async (payload: any, { rejectWithValue, getState }) => {
@@ -335,12 +357,54 @@ export const rescheduleOffering = createAsyncThunk(
     }
   }
 );
+export const respondToReschedule = createAsyncThunk(
+  "respondToReschedule",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.post(
+        `${url.respondToReschedule}/${payload.id}/respond`,
+        payload.data,
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+
+
 export const getSingleOffering = createAsyncThunk(
   "getSingleOffering",
   async (payload: any, { rejectWithValue, getState }) => {
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offerings}/${payload.id}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllReschedules = createAsyncThunk(
+  "getSingleReschedules",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.allReschedules}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },

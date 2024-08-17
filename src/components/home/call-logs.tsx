@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "../Button";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getAllBookedOfferingCoach, getAllSessionBookingCoach } from "../../features/offeringslice";
+import { getAllBookedOfferingCoach, getAllReschedules, getAllSessionBookingCoach } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import CoachSessionCard from "../coaches-component/coach-session-card";
 import CoachOfferingCard from "../coaches-component/coach-offering-card";
+import CoachReschedules from "../Reschedules/coach-reschedule";
 
 const CallLogs = () => {
  
@@ -15,14 +16,19 @@ const CallLogs = () => {
     useEffect(() => {
       dispatch(getAllSessionBookingCoach());
       dispatch(getAllBookedOfferingCoach());
+      dispatch(getAllReschedules());
     }, []);
   const bookings = offering?.allBookingsSessionCoach;
   const offeringsList = offering?.allBookedOfferingCoach;
 
     const [currentSession, setCurrentSession] = useState(0);
     const [currentOffering, setCurrentOffering] = useState(0);
-    const [present, setPresent] = useState(0);
-    const [open, setOpen] = useState<boolean>(false);
+  const [present, setPresent] = useState(0);
+
+
+  const [open, setOpen] = useState<boolean>(false);
+  
+ 
 
 
     if (offering.fetchLoading) {
@@ -136,7 +142,7 @@ const CallLogs = () => {
           </div>
           <div
             className={
-              currentSession === 2
+              currentSession === 3
                 ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
@@ -150,7 +156,7 @@ const CallLogs = () => {
       {/* end of tabs offerings */}
       {present === 0 && (
         <div className="w-full">
-          {currentSession === 0 && (
+          {currentOffering === 0 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
               {bookings.length > 0 ? (
                 <div className="w-full flex flex-col px-4 py-4 gap-4">
@@ -173,7 +179,7 @@ const CallLogs = () => {
               )}
             </div>
           )}
-          {currentSession === 1 && (
+          {currentOffering === 1 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any upcoming calls.
@@ -181,7 +187,7 @@ const CallLogs = () => {
               <Button name="Connect new live class" className="mt-5 mx-auto" />
             </div>
           )}
-          {currentSession === 2 && (
+          {currentOffering === 2 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any past calls.
@@ -189,17 +195,10 @@ const CallLogs = () => {
               <Button name="Connect new live class" className="mt-5 mx-auto" />
             </div>
           )}
-          {currentSession === 3 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any rescheduled calls.
-              </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
-            </div>
-          )}
+          {currentOffering === 3 && <CoachReschedules />}
         </div>
       )}
-{/* end of a offerings */}
+      {/* end of a offerings */}
       {/* end of tabs session */}
       {present === 1 && (
         <div className="w-full">
@@ -242,17 +241,10 @@ const CallLogs = () => {
               <Button name="Connect new live class" className="mt-5 mx-auto" />
             </div>
           )}
-          {currentSession === 3 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any rescheduled calls.
-              </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
-            </div>
-          )}
+          {currentSession === 3 && <CoachReschedules />}
         </div>
       )}
-{/* end of a session */}
+      {/* end of a session */}
       <CreateNewServiceModal open={open} setOpen={setOpen} />
     </div>
   );
