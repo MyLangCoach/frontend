@@ -10,12 +10,13 @@ import PrimarySelect from "../Selects/PrimarySelect";
 import toast from "react-hot-toast";
 import { getCurrentFormattedDate } from "../../util";
 import { getUserProfile } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const PayoutOverview = () => {
       const dispatch = useAppDispatch();
   const payment = useAppSelector((state) => state.payment);
   const user = useAppSelector((state) => state.auth);
-  console.log(user?.userData)
+  const navigate = useNavigate();
   const [selectedBank, setSelectedBank] = useState<any>({});
   const [open, setOpen] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
@@ -45,6 +46,8 @@ const PayoutOverview = () => {
     if (payment?.withdrawalSuccess) { 
       setOpen(false);
       dispatch(restoreDefault());
+      setAmount(0);
+      setSelectedBank({});
       dispatch(getUserProfile());
       toast.success("Withdrawal Successful Check your Bank")
     }
@@ -107,7 +110,7 @@ const PayoutOverview = () => {
       <ReUseModal open={open} setOpen={setOpen}>
         <div className="w-full flex flex-col ">
           <div className="w-full justify-between items-center flex">
-            <p className="text-base font-bold lg:text-[19px]">Add Bank</p>
+            <p className="text-base font-bold lg:text-[19px]">Withdraw Earnings</p>
             <span onClick={() => setOpen(false)}>
               <CancelX />
             </span>
@@ -115,13 +118,13 @@ const PayoutOverview = () => {
           <div className="w-full mt-6 flex flex-col">
             <PrimarySelect
               data={allBank}
-              label="Choose bank"
+              label="Select bank to withdraw to "
               selected={selectedBank}
               setSelected={setSelectedBank}
               mapKey="bankName"
             />
             <Input
-              label={"Account number"}
+              label={"Enter Amount to withdraw"}
               value={amount}
               setValue={setAmount}
               height="h-[36px]"

@@ -7,6 +7,7 @@ import PrimarySelect from '../Selects/PrimarySelect';
 import { getAllBanks, getAllUserBanks, resolveAccount, restoreDefault, saveUserBank } from '../../features/paymentslice';
 import { Input } from '../Input';
 import bankSamp from "../../assets/png/bank-samp.png";
+import toast from 'react-hot-toast';
 const bankList = [
   { name: "Damisa Musa", bankName: "Access bank", accNumber: "0058348286" },
   { name: "Damisa Musa", bankName: "Access bank", accNumber: "0058348286" },
@@ -16,16 +17,13 @@ const BankInformation = () => {
     const dispatch = useAppDispatch();
     const payment = useAppSelector(state => state.payment);
     const [openAddBank, setOpenAddBank] = useState<boolean>(false);
-    const [openAddBankSuccess, setOpenAddBankSuccess] = useState<boolean>(false);
+  const [openAddBankSuccess, setOpenAddBankSuccess] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
     const [selectedBank, setSelectedBank] = useState<any>({});
     const [accNo, setAccNo] = useState("");
-    useEffect(() => {
-        dispatch(getAllUserBanks());
-        dispatch(getAllBanks());
-        dispatch(restoreDefault());
-    }, [])
   
-    console.log(payment.allUserBanks);
+  
+ 
     useEffect(() => {
         if (selectedBank?.code && accNo?.length === 10) {
             const data =  {
@@ -34,28 +32,37 @@ const BankInformation = () => {
             }
           dispatch(resolveAccount(data))
         }
-        if (payment?.saveUserBankSuccess) {
-            setOpenAddBank(false);
+        // if (payment?.saveUserBankSuccess) {
+        //     setOpenAddBank(false);
            
-            setAccNo("");
-            dispatch(restoreDefault());
-            setOpenAddBankSuccess(true);
-              dispatch(getAllUserBanks());
+        //     setAccNo("");
+        //     dispatch(restoreDefault());
+        //     setOpenAddBankSuccess(true);
+        //       dispatch(getAllUserBanks());
 
-        }
+        // }
 
         
-    }, [accNo,selectedBank, payment?.saveUserBankSuccess])
+    }, [accNo,selectedBank])
     
    
-    const handleAddBank = () => {
+    const handleAddBank = async () => {
         const sentData = {
           accountNumber: accNo,
           accountName: payment?.resolveBankData?.account_name,
           bankName: selectedBank?.name,
           bankCode: selectedBank?.code,
         };
-        dispatch(saveUserBank(sentData));
+      const { payload } = await dispatch(saveUserBank(sentData));
+      if (payload?.status === "success") {
+        setLoading(false);
+        setOpenAddBank(false);
+        setOpenAddBankSuccess(true);
+        dispatch(getAllUserBanks());
+        setSelectedBank({});
+        setAccNo("");
+        dispatch(restoreDefault())
+      }
 
     }
     
@@ -71,11 +78,22 @@ const BankInformation = () => {
       <p className="text-base leading-[24px] mt-3 ">
         Select a default bank to withdraw your money to
       </p>
-      <div className="w-full flex flex-col gap-3 mt-12">
-        {payment?.allUserBanks?.map((item: any, index: number) => {
-          return <SingleBank item={item} key={index} />;
-        })}
-      </div>
+      {payment?.allUserBanks?.length === 0 && (
+        <div>
+          <p className="text-muted dm-sans text-center lg:w-7/12 mx-auto mt-8 ">
+            No Bank Added yet. Click on Add bank to add a new bank detail to you
+            account
+          </p>
+        </div>
+      )}
+      {payment?.allUserBanks?.length > 0 && (
+        <div className="w-full flex flex-col gap-3 mt-12">
+          {payment?.allUserBanks?.map((item: any, index: number) => {
+            return <SingleBank item={item} key={index} />;
+          })}
+        </div>
+      )}
+
       <div className="flex mt-4">
         <CapsuleBtn name="Add bank" onClick={() => setOpenAddBank(true)} />
       </div>
@@ -124,6 +142,7 @@ const BankInformation = () => {
                   className="w-full min-w-full"
                   name="Add bank"
                   onClick={handleAddBank}
+                  loading={loading}
                 />
               </span>
             </div>

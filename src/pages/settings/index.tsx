@@ -1,14 +1,23 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import { NotificationIcon } from "../../assets";
-import { current } from "@reduxjs/toolkit";
+
 import AccountSettings from "../../components/settings/account-settings";
 import BankInformation from "../../components/settings/bank-information";
+import { restoreDefault } from "../../features/offeringslice";
+import { getAllUserBanks, getAllBanks } from "../../features/paymentslice";
+import { useAppDispatch } from "../../app/hooks";
 
 
 
 const SettingsPage = () => {
-    const [present, setPresent] = useState(0);
+  const [present, setPresent] = useState(0);
+  const dispatch = useAppDispatch();
+    useEffect(() => {
+      dispatch(getAllUserBanks());
+      dispatch(getAllBanks());
+      dispatch(restoreDefault());
+    }, []);
 
   return (
     <DashboardLayout current={8}>

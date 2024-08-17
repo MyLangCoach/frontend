@@ -49,6 +49,7 @@ const initialState: PaymentState = {
   saveUserBankSuccess: false,
   allUserTransactions: [],
   withdrawSuccess: false,
+
 };
 
 export const paymentSlice = createSlice({
@@ -71,6 +72,7 @@ export const paymentSlice = createSlice({
       state.resolveBankData = {};
       state.saveUserBankSuccess = false;
       state.withdrawalSuccess = false;
+      state.resolveBankData = {};
 
   
     },
