@@ -27,6 +27,7 @@ export const url = {
   transactions: "/transactions",
   reschedule: "/reschedules/booking",
   allReschedules: "/reschedules/my-pendings",
-  respondToReschedule:"/reschedules"
+  respondToReschedule: "/reschedules",
+  availability:"/bookings/availability"
   
 };

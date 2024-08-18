@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ClassDetails } from '../../util/types';
 import pic from "../../assets/png/face-woman.png";
 import { BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, YellowCalender, YellowCap } from '../../assets';
@@ -8,7 +8,7 @@ import { DateTimeInput, Input } from "../Input";
 import { store } from '../../app/store';
 import toast from 'react-hot-toast';
 import { resetRedirect, saveRedirectUrl } from '../../features/auth/authSlice';
-import { bookCoachOffering, restoreDefault } from '../../features/offeringslice';
+import { bookCoachOffering, getAvailability, restoreDefault } from '../../features/offeringslice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../Button';
@@ -24,6 +24,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
     const navigate = useNavigate();
    const offering = useAppSelector((state) => state.offerings);
   const auth = useAppSelector((state) => state.auth);
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   
@@ -32,6 +33,10 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
   const [openLive, setOpenLive] = useState(false);
   const [openMonthly, setOpenMonthly] = useState(false);
   const [note, setNote] = useState("");
+  const [message, setMessage] = useState("");
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([""]
+  );
   
   const handleBookLiveClass = () => {
     if (authenticated) {
@@ -103,9 +108,37 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
       }
     }, [offering?.bookCoachOfferingSuccess]);
   
-  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]
-  );
+  console.log(liveDateTimes) 
+    const id = useParams();
+    const userId = id.id;
+  const handleChecKAvailability = async () => {
+    setLoading(true);
+    const data = {
+      id: id.id,
+      date:liveDateTimes[0],
+    }
+    const { payload } = await dispatch(getAvailability(data));
+    if (payload?.status === "success") { 
+      setMessage("Available");
+      setIsAvailable(true);
+      setLoading(false);
+    }
+    else {
+      setMessage("Not Available");
+      setLoading(false);
+      setIsAvailable(false);
+    }
 
+  }
+  useEffect(() => {
+    if (liveDateTimes?.[0]?.length) {
+
+      handleChecKAvailability();
+    }
+
+  }, [liveDateTimes])
+  
+  console.log(liveDateTimes?.[0]?.length)
 
   // Update a specific date-time value
   const updateDateTime = (index: number, newDateTime: string) => {
@@ -272,6 +305,28 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
               />
             ))}
           </div>
+          {
+            isAvailable && loading === false && (
+<p className='text-muted text-sm mt-4'>
+              You can book this class
+            </p>
+            )
+}
+          {
+            !isAvailable && loading === false && message && (
+<p className=' text-sm mt-4 text-red-700'>
+              Not Available
+            </p>
+            )
+}
+          {
+            !isAvailable && loading  && (
+<p className=' text-sm mt-4 text-muted'>
+              Loading ...
+            </p>
+            )
+}
+         
           <div className="w-full mt-6">
             <Button
               name={offering?.loading ? "Loading..." : "Book Now"}
@@ -280,7 +335,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
                 !active && "opacity-40 cursor-not-allowed"
               }`}
               onClick={handleBookMonthly}
-              disabled={!active}
+              disabled={!active && !isAvailable}
             />
           </div>
         </div>

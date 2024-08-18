@@ -287,6 +287,18 @@ export const offeringsSlice = createSlice({
       .addCase(respondToReschedule.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(getAvailability.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAvailability.fulfilled, (state) => {
+          state.loading = false;
+       
+     
+      })
+      .addCase(getAvailability.rejected, (state) => {
+        state.loading = false;
+      })
+
 
         
         ;
@@ -381,12 +393,32 @@ export const respondToReschedule = createAsyncThunk(
 );
 
 
+
+
 export const getSingleOffering = createAsyncThunk(
   "getSingleOffering",
   async (payload: any, { rejectWithValue, getState }) => {
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offerings}/${payload.id}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAvailability = createAsyncThunk(
+  "getAvailability",
+  async (payload: any, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.availability}/${payload.id}/${payload?.date}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },
