@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { CalenderIcon, EyeSlash } from "../../assets";
+import { BsEye } from "react-icons/bs";
 interface dateProps {
   date: string;
   setDate: React.Dispatch<React.SetStateAction<string>>;
@@ -76,14 +77,14 @@ export const Password = ({
           placeholder="**********"
         />
         <span>
-          {show ? (
+          {!show ? (
             <span className="cursor-pointer" onClick={() => setShow(!show)}>
               <EyeSlash />{" "}
             </span>
           ) : (
-            <span className="cursor-pointer" onClick={() => setShow(!show)}>
+            <span className="cursor-pointer text-[#707070]" onClick={() => setShow(!show)}>
               {" "}
-              <EyeSlash />{" "}
+              <BsEye />
             </span>
           )}
         </span>

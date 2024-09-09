@@ -56,7 +56,7 @@ const Register = () => {
   
 
   return (
-    <div className="w-full flex flex-col xl:flex-row lg:h-screen lg:overflow-y-hidden ">
+    <div className="w-full flex flex-col xl:flex-row lg:h-screen  flow-hide ">
       <div className="w-full hidden xl:flex xl:w-1/2 bg-[#fcfcff]  justify-center items-center h-screen ">
         <span>
           <img
@@ -85,7 +85,8 @@ const Register = () => {
             </button>
           </div>
         ) : (
-          <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-[90vh] flow-hide">
+            <div className="h-screen overflow-y-scroll w-full  flex justify-center">
+          <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-full ">
             <div className="mt-10">
               <img src={logo} alt="logo" className="w-[150px] h-auto" />
             </div>
@@ -179,7 +180,8 @@ const Register = () => {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+            </div>
         )}
       </div>
     </div>

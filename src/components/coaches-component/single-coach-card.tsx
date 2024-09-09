@@ -18,7 +18,7 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex flex-col lg:w-[257px] bg-white rounded-[8px]" key={id}>
+    <div className="w-full flex flex-col carding-shadow lg:w-[257px] bg-white rounded-[8px]" key={id}>
       <img
         src={item?.profileImage ?? pic}
         alt=""

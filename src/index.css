@@ -42,7 +42,9 @@
 }
 
 
-
+.capsule-btn{
+  box-shadow: 4px 4px 32px 0px rgba(86, 233, 171, 0.10);
+}
 .flow-hide {
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
@@ -95,6 +97,9 @@ height: 106px;
 filter: blur(40px);
 }
 
+.carding-shadow{
+  box-shadow: 2px 2px 24px 0px rgba(0, 0, 0, 0.10);
+}
 .export-shadow{
   box-shadow: 0px 1px 2px 0px #0000000D;
 

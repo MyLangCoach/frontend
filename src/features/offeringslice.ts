@@ -189,10 +189,11 @@ export const offeringsSlice = createSlice({
         state.fetchLoading = false;
       })
       .addCase(getAllSessionBookingCoach.pending, (state) => {
-        state.loading = true;
+        state.fetchLoading = true;
       })
       .addCase(getAllSessionBookingCoach.fulfilled, (state, { payload }) => {
-          state.fetchLoading = false;
+        state.fetchLoading = false;
+        state.loading = false;
           state.allBookingsSessionCoach = payload.data;
      
       })

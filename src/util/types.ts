@@ -60,7 +60,8 @@ export   interface UserProfileData {
   introVideo: string;
   username?: string;
   languageInterests?: string[] | any;
-  costPerSession?:any
+  costPerSession?: any;
+  id?: string;
 }
 
  export   interface Cost {

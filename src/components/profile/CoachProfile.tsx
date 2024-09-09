@@ -19,6 +19,7 @@ import { storage } from "../../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { yearsArray } from "../../util/mockdata";
+import { ProfileViewIcon } from "../../assets";
 const uploadEndpoint =
   "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
@@ -68,6 +69,7 @@ const CoachProfile = () => {
   const [qualifications, setQualifications] = useState<Qualification[]>([
     { name: "", issuing_org: "", year: 0 },
   ]);
+
 
   useEffect(() => {
     if (userData) {
@@ -277,20 +279,15 @@ const CoachProfile = () => {
   return (
     <div className="w-full flex flex-col rounded-[4px] bg-white mt-4 px-4 lg:px-0">
       <div className="flex flex-col z-0">
-        <div className="w-full rounded-t-[4px] mt-2 h-[150px] lg:h-[178px] bg-[#0E79FF] flex relative justify-center items-center z-10  ">
-          <div className="flex relative">
-            <input
-              type="file"
-              name=""
-              className="inset-0 opacity-0 absolute"
-              id=""
-              // onChange={(e) => getFiles(e.target.files)}
-            />
-            <span>
-              <img src={camera} alt="camera" />
-            </span>
-          </div>
-        </div>
+        <div
+          className="w-full rounded-t-[4px] mt-2 h-[150px] lg:h-[178px] bg-[#0E79FF] flex relative justify-center items-center z-10 blur-sm  "
+          style={{
+            backgroundImage: `url(${profileUrl})`,
+
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        ></div>
         <div
           className="flex -mt-12 z-pro mx-auto lg:ml-12 border-[3px] items-center justify-center border-white relative"
           onError={handleError}
@@ -320,6 +317,22 @@ const CoachProfile = () => {
         </div>
       </div>
       <div className="w-full mt-12 flex flex-col px-2 lg:px-6 lg:py-6 py-4">
+        <div className="flex justify-between items-center mb-6">
+          <p className="red-hat text-base sm:text-[19px] font-bold  ">
+            Profile Information
+          </p>
+          <div
+            className="flex w-fit rounded-[48px] border border-[#0E79FF] px-3 justify-center gap-[10px] h-[34px] items-center cursor-pointer"
+            onClick={() => navigate(`/view-coach/${userData?.id}`)}
+          >
+            <span>
+              <ProfileViewIcon />
+            </span>
+            <span className="text-xs font-medium dm-sans text-black ">
+              View public profile
+            </span>
+          </div>
+        </div>
         {/* start of an input */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
@@ -371,7 +384,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Short Description
+            Description
           </label>
           <textarea
             id=""
@@ -449,7 +462,11 @@ const CoachProfile = () => {
                   handleLanguageChange(index, "proficiency", value.name)
                 }
                 label="Proficiency"
-                data={[{ name: "Expert" }, { name: "Master" }]}
+                data={[
+                  { name: "A1 - A2" },
+                  { name: "B1 - B2" },
+                  { name: "C1 - C2" },
+                ]}
                 name="Select"
               />
             </div>
@@ -510,7 +527,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Offering <span className="font-[300] ">(Maximum two)</span>
+            Hourly rate <span className="font-[300] ">(Maximum two)</span>
           </h1>
           <CapsuleBtn
             name="Add Offering"
@@ -521,19 +538,10 @@ const CoachProfile = () => {
         {/* start of an input */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 items-end">
           <div>
-            <Input
-              value={sessionPrice}
-              setValue={setSessionPrice}
-              label="Price"
-              height="h-[36px]"
-              type="number"
-            />
-          </div>
-          <div>
             <PrimarySelect
               selected={sessionType}
               setSelected={setSessionType}
-              label={"Session Type"}
+              label={"Duration"}
               name={userData?.costPerSession?.sessionType || 0}
               data={[
                 {
@@ -547,8 +555,49 @@ const CoachProfile = () => {
               ]}
             />
           </div>
+                <div>
+                  <Input
+                    value={sessionPrice}
+                    setValue={setSessionPrice}
+                    label="Price"
+                    height="h-[36px]"
+                    type="number"
+                  />
+                </div>
           <div className="items-center flex gap-4 ">
-            <p className="text-black text-sm font-medium inter">
+          
+          </div>
+        </div>
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 items-end">
+          <div>
+            <PrimarySelect
+              selected={sessionType}
+              setSelected={setSessionType}
+              label={"Duration"}
+              name={userData?.costPerSession?.sessionType || 0}
+              data={[
+                {
+                  name: "30",
+                  value: 30,
+                },
+                {
+                  name: "60",
+                  value: 60,
+                },
+              ]}
+            />
+          </div>
+          <div>
+            <Input
+              value={sessionPrice}
+              setValue={setSessionPrice}
+              label="Price"
+              height="h-[36px]"
+              type="number"
+            />
+          </div>
+          <div className="items-center flex gap-4 ">
+            {/* <p className="text-black text-sm font-medium inter">
               Availability Status
             </p>
             <input
@@ -562,7 +611,7 @@ const CoachProfile = () => {
                   setAvailable("");
                 } else setAvailable("available");
               }}
-            />
+            /> */}
           </div>
         </div>
         {/* end of an input */}

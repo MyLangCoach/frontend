@@ -164,7 +164,7 @@ export const CapsuleBtn = ({
   className,
 }: buttonProps) => {
   return (
-    <button className={`flex items-center gap-[10px] h-[34px] border border-[#0E79FF]   rounded-[48px] px-3 font-medium text-xs dm-sans text-black ${className} `} onClick={onClick}>
+    <button className={`flex items-center capsule-btn gap-[10px] h-[34px] border border-[#0E79FF]   rounded-[48px] px-3 font-medium text-xs dm-sans text-black ${className} `} onClick={onClick}>
       <span>
         <Plus />
       </span>

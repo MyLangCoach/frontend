@@ -1,4 +1,4 @@
-import { bookNextSession } from "../features/offeringslice";
+
 
 /** this would wrap all the api endpoints and base urls */
 export const baseUrl = "https://mylangcoach-api.onrender.com/api/v1";

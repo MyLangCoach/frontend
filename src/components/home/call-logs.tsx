@@ -10,16 +10,17 @@ import CoachReschedules from "../Reschedules/coach-reschedule";
 
 const CallLogs = () => {
  
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
   
-    useEffect(() => {
-      dispatch(getAllSessionBookingCoach());
-      dispatch(getAllBookedOfferingCoach());
-      dispatch(getAllReschedules());
-    }, []);
+  useEffect(() => {
+    dispatch(getAllSessionBookingCoach());
+    dispatch(getAllBookedOfferingCoach());
+    dispatch(getAllReschedules());
+  }, []);
   const bookings = offering?.allBookingsSessionCoach;
   const offeringsList = offering?.allBookedOfferingCoach;
+  console.log({offeringsList})
 
     const [currentSession, setCurrentSession] = useState(0);
     const [currentOffering, setCurrentOffering] = useState(0);
@@ -158,7 +159,7 @@ const CallLogs = () => {
         <div className="w-full">
           {currentOffering === 0 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
-              {bookings.length > 0 ? (
+              {offeringsList.length > 0 ? (
                 <div className="w-full flex flex-col px-4 py-4 gap-4">
                   {offeringsList?.map((item: any, index: number) => (
                     <CoachOfferingCard item={item} index={index} />

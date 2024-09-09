@@ -209,8 +209,8 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               item?.isFree === false && <Button name="Processing..." />}
             {!item?.meetingLink &&
               !item?.paymentConfirmed &&
-              item?.isFree === false && (
-                <Button name="Make Payment" onClick={handlePayment} />
+              item?.isFree === false && item?.offeringType !== "LIVE_GROUP" && (
+                <Button name="Waiting Payment"  />
               )}
 
             {/* <Button name="Join Session" /> */}

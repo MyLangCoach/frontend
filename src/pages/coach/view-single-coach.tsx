@@ -53,17 +53,19 @@ const ViewSingleCoachPage = () => {
     );
   }
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col relative">
       {/* start of banner side */}
       <div
-        className="w-full h-[400px] flow-hide "
+        className="w-full h-[400px] flow-hide blur-sm relative "
         style={{
-          background: `url(${banner})`,
+          background: `url(${coachDetail?.profileImage ?? banner})`,
           backgroundSize: "cover",
+          backgroundPosition:"center"
         }}
       >
+      </div>
         <ContainerLayout>
-          <div className="w-full flex items-end h-[380px] pb-4  ">
+          <div className="w-full flex items-end h-[380px] pb-4 absolute z-pro top-0  ">
             <img
               src={coachDetail?.profileImage}
               onError={handleError}
@@ -72,7 +74,6 @@ const ViewSingleCoachPage = () => {
             />
           </div>
         </ContainerLayout>
-      </div>
 
       {/* end of the banner side */}
       <ContainerLayout>
