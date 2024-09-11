@@ -211,24 +211,20 @@ const uploadFile = () => {
   return (
     <div className="w-full flex flex-col rounded-[4px] bg-white mt-4 px-4 lg:px-0">
       <div className="flex flex-col z-0">
-        <div className="w-full rounded-t-[4px] mt-2 h-[150px] lg:h-[178px] bg-[#0E79FF] flex relative justify-center items-center z-10  ">
-          <div className="flex relative">
-            <input
-              type="file"
-              name=""
-              className="inset-0 opacity-0 absolute"
-              id=""
-              // onChange={(e) => getFiles(e.target.files)}
-            />
-            <span>
-              <img src={camera} alt="camera" />
-            </span>
-          </div>
-        </div>
+        <div
+          className="w-full rounded-t-[4px] mt-2 h-[150px] lg:h-[178px] bg-[#0E79FF] flex relative justify-center items-center z-10 blur-sm "
+          style={{
+            backgroundImage: `url(${profileUrl})`,
+
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        ></div>
+
         <div
           className="flex -mt-12 z-pro mx-auto lg:ml-12 border-[3px] items-center justify-center border-white relative"
           style={{
-            backgroundImage: `url(${profileUrl ? profileUrl : dp})`,
+            backgroundImage: `url(${profileUrl})`,
 
             height: "96px",
             width: "96px",
@@ -354,7 +350,7 @@ const uploadFile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Language Preferences
+            Language Interests
           </h1>
           <CapsuleBtn name="Add language" onClick={() => setShowInput(true)} />
         </div>

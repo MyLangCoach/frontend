@@ -29,7 +29,7 @@ const Overview = () => {
             13
           </h1>
           <p className="text-sm lg:text-base red-hat text-black font-normal">
-            Total coachs
+            Total coaches
           </p>
         </div>
       </div>

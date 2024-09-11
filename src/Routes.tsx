@@ -22,6 +22,8 @@ import StudentLiveClasses from "./pages/live-classes/student-classes";
 import VerifyEmailSuccess from "./pages/auth/VerifyEmailSuccess";
 import VerifyEmailError from "./pages/auth/VerifyEmailError";
 import ViewSingleCoach from "./pages/coach/view-single-coach";
+import PaymentError from "./pages/payment/payment-error";
+import PaymentSuccess from "./pages/payment/payment-success";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -69,6 +71,14 @@ const AppRoutes = () => {
         <Route
           path="/email-verification-error"
           element={<VerifyEmailError />}
+        />
+        <Route
+          path="/payment-success"
+          element={<PaymentSuccess />}
+        />
+        <Route
+          path="/payment-error"
+          element={<PaymentError />}
         />
 
         {/* Protected Routes */}

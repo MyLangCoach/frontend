@@ -20,6 +20,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { yearsArray } from "../../util/mockdata";
 import { ProfileViewIcon } from "../../assets";
+import ImageUpload from "../UploadFile/ImageUpload";
+import VideoUpload from "../UploadFile/VideoUpload";
 const uploadEndpoint =
   "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
@@ -53,6 +55,7 @@ const CoachProfile = () => {
     name: "",
     value: 0,
   });
+  const [videoType, setVideoType] = useState(0);
   const [languages, setLanguages] = useState<Language[]>([
     { language: "", proficiency: "" },
   ]);
@@ -91,7 +94,7 @@ const CoachProfile = () => {
         value: userData.qualifications?.[0]?.year || 0,
       });
       setLanguages(userData.languages?.length === 0  ? [{ language: "", proficiency: "" }] : userData?.languages);
-      setVideoUrl(userData.introVideo || "");
+      // setVideoUrl(userData.introVideo || "");
       setProf({ name: userData.profileImage || "" });
       setSessionType({name:userData?.costPerSession?.sessionType, value:userData?.costPerSession?.sessionType})
     }
@@ -417,7 +420,7 @@ const CoachProfile = () => {
         {/* start of inout */}
 
         <div className="w-full mt-4 flex flex-col gap-3">
-          {socialMedia.map((social: string, index: number) => (
+          {socialMedia?.map((social: string, index: number) => (
             <UrlInput
               placeholder="www.facebook.com"
               value={social}
@@ -439,7 +442,7 @@ const CoachProfile = () => {
         </div>
         {/* end */}
         {/* start of an input */}
-        {languages.map((lang, index) => (
+        {languages?.map((lang, index) => (
           <div
             key={index}
             className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4"
@@ -482,7 +485,7 @@ const CoachProfile = () => {
         </div>
         {/* end */}
         {/* start of an input */}
-        {qualifications.map((qual, index) => (
+        {qualifications?.map((qual, index) => (
           <div
             key={index}
             className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4"
@@ -555,18 +558,16 @@ const CoachProfile = () => {
               ]}
             />
           </div>
-                <div>
-                  <Input
-                    value={sessionPrice}
-                    setValue={setSessionPrice}
-                    label="Price"
-                    height="h-[36px]"
-                    type="number"
-                  />
-                </div>
-          <div className="items-center flex gap-4 ">
-          
+          <div>
+            <Input
+              value={sessionPrice}
+              setValue={setSessionPrice}
+              label="Price"
+              height="h-[36px]"
+              type="number"
+            />
           </div>
+          <div className="items-center flex gap-4 "></div>
         </div>
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 items-end">
           <div>
@@ -623,15 +624,47 @@ const CoachProfile = () => {
         </div>
         {/* end */}
         {/* start of inout */}
-        <div className="w-full mt-4">
-          <UrlInput
-            placeholder="www.facebook.com"
-            value={videoUrl}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setVideoUrl(e.target.value)
-            }
-            label="Video URL"
-          />
+        <div className="w-full mt-4 flex flex-col">
+          <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">
+            <div
+              className={`${
+                videoType === 0
+                  ? "flex items-center h-full bg-white justify-center text-sm inter font-medium text-foreground  cursor-pointer"
+                  : "flex items-center justify-center text-foreground text-sm inter cursor-pointer "
+              }`}
+              onClick={() => setVideoType(0)}
+            >
+              Use Url
+            </div>
+            <div
+              onClick={() => setVideoType(1)}
+              className={`${
+                videoType === 1
+                  ? "flex items-center h-full bg-white justify-center text-sm inter font-medium text-foreground  cursor-pointer"
+                  : "flex items-center justify-center text-foreground text-sm inter cursor-pointer "
+              }`}
+            >
+              Upload
+            </div>
+          </div>
+          <div className="w-full mt-6">
+            {videoType === 0 && (
+              <UrlInput
+                placeholder="www.facebook.com"
+                value={videoUrl}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setVideoUrl(e.target.value)
+                }
+                label="Video URL"
+              />
+            )}
+            {
+              videoType === 1 && ( 
+
+                <VideoUpload imageUrl={videoUrl} setImageUrl={setVideoUrl} />
+              )
+}
+          </div>
         </div>
         {/* end of input */}
         <div className="flex gap-3 items-center mt-8">

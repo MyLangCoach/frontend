@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getSimplifiedError } from "../../util";
 import { APIService } from "../../util/APIService";
 import { url } from "../../util/endpoints";
-import { SingleBankDetail } from "../../util/types";
+
 export interface AuthState {
   loading: boolean;
   fetchLoading: boolean;
