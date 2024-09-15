@@ -1,9 +1,9 @@
-import React from 'react'
-import { BlueCalenderIcon, BlueTimeIcon } from '../../assets';
-import { formatDateTime, openInNewTab } from '../../util';
-import { Button } from '../Button';
+import React from "react";
+import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
+import { formatDateTime, openInNewTab } from "../../util";
+import { Button } from "../Button";
 
-const CoachSessionCard = ({item,index} : {item:any, index:number}) => {
+const CoachSessionCard = ({ item, index }: { item: any; index: number }) => {
   return (
     <div
       className="flex flex-col gap-2 border-border border  rounded-[4px]"
@@ -20,7 +20,7 @@ const CoachSessionCard = ({item,index} : {item:any, index:number}) => {
       <div className="w-full flex flex-col lg:px-6 pb-6">
         <div className="w-full mt-3 flex flex-wrap gap-6 items-center">
           <span className="flex items-center gap-[10px] w-2/12 min-w-fit ">
-            <p className="text-muted text-sm dm-sans min-w-fit">Student Name</p>
+            <p className="text-muted text-sm dm-sans min-w-fit"> Name</p>
             <p className="text-sm dm-sans font-bold text-muted min-w-fit ">
               {item?.student.firstName ?? ""} {item?.student?.lastName ?? ""}
             </p>
@@ -32,7 +32,7 @@ const CoachSessionCard = ({item,index} : {item:any, index:number}) => {
             </p>
           </span>
           <span className="flex items-center gap-[10px]  w-2/12 min-w-fit">
-            <p className="text-muted text-sm dm-sans">Book type</p>
+            <p className="text-muted text-sm dm-sans">Type</p>
             <p className="text-sm dm-sans font-bold text-muted">Session</p>
           </span>
           <span className="flex items-center gap-[10px]  min-w-fit ">
@@ -57,12 +57,12 @@ const CoachSessionCard = ({item,index} : {item:any, index:number}) => {
           </div>
         ) : (
           <div className="w mt-7">
-            <Button name="waiting for payment" />
+            <Button name="Waiting for payment" />
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 
-export default CoachSessionCard
+export default CoachSessionCard;

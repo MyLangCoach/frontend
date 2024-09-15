@@ -1,7 +1,4 @@
-import {
-    BlueCalenderIcon,
-    BlueTimeIcon
-} from "../../assets";
+import { BlueCalenderIcon, BlueTimeIcon } from "../../assets";
 import { formatDateTime } from "../../util";
 
 const CoachSentRescheduleCard = ({
@@ -11,7 +8,6 @@ const CoachSentRescheduleCard = ({
   item: any;
   index: number;
 }) => {
-  
   return (
     <>
       <div
@@ -48,19 +44,17 @@ const CoachSentRescheduleCard = ({
 
           <div className=" mt-7  border-t border-t-border pt-4 px-6 ">
             {/* <Button name="Join Session" /> */}
-         
+
             {item?.status === "PENDING" && (
               <div className="flex items-center gap-[16px]">
                 <p className="text-base dm-sans font-medium text-muted">
-                Waiting for response
+                  Waiting for response
                 </p>
               </div>
             )}
           </div>
         </div>
       </div>
-
-    
     </>
   );
 };

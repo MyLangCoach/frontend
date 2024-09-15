@@ -1,10 +1,22 @@
-
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { DollarIcon, BlueCalenderIcon, BlueTimeIcon, BlueStopWatch, BlueVideoIcon, PaddedArrow, CancelX } from "../../assets";
-import { restoreDefault, bookNextSession, rescheduleOffering, getAllBookedOfferingCoach } from "../../features/offeringslice";
+import {
+  DollarIcon,
+  BlueCalenderIcon,
+  BlueTimeIcon,
+  BlueStopWatch,
+  BlueVideoIcon,
+  PaddedArrow,
+  CancelX,
+} from "../../assets";
+import {
+  restoreDefault,
+  bookNextSession,
+  rescheduleOffering,
+  getAllBookedOfferingCoach,
+} from "../../features/offeringslice";
 import { payForOffering } from "../../features/paymentslice";
 import { formatDateTime } from "../../util";
 import { Button, ActionBtn } from "../Button";
@@ -109,15 +121,13 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
         toast.success("Offering rescheduled");
         setOpenReschedule(false);
         dispatch(getAllBookedOfferingCoach());
-      }
-      else {
+      } else {
         setLoading(false);
       }
     } else {
       toast.error("All Field   must be provided");
     }
   };
-
 
   return (
     <>
@@ -146,7 +156,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               </p>
             </div>
             <span className="flex items-center gap-[10px] min-w-max ">
-              <p className="text-muted text-sm dm-sans">Book type</p>
+              <p className="text-muted text-sm dm-sans">Type</p>
               <p className="text-sm dm-sans font-bold text-muted">Offering</p>
             </span>
             <span className="flex items-center gap-[10px] min-w-max ">
@@ -209,8 +219,9 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               item?.isFree === false && <Button name="Processing..." />}
             {!item?.meetingLink &&
               !item?.paymentConfirmed &&
-              item?.isFree === false && item?.offeringType !== "LIVE_GROUP" && (
-                <Button name="Waiting Payment"  />
+              item?.isFree === false &&
+              item?.offeringType !== "LIVE_GROUP" && (
+                <Button name="Waiting Payment" />
               )}
 
             {/* <Button name="Join Session" /> */}
@@ -292,9 +303,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               <CancelX />
             </button>
           </div>
-          <h1 className="text-xl font-bold red-hat mb-4 ">
-            Reschedule Call
-          </h1>
+          <h1 className="text-xl font-bold red-hat mb-4 ">Reschedule Call</h1>
           <div className="mb-4">
             <Input
               label={"Add A Session Note"}

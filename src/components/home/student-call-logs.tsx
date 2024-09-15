@@ -1,56 +1,69 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ActionBtn, Button } from "../Button";
 import { Link, useNavigate } from "react-router-dom";
 import CreateNewServiceModal from "../live-classes/create-new-service-modal";
-import { useAppDispatch,useAppSelector } from "../../app/hooks";
-import { bookNextSession, getAllOfferingBookingStudent, getAllReschedules, getAllSessionBookingStudent, rescheduleOffering, restoreDefault as restore } from "../../features/offeringslice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  bookNextSession,
+  getAllOfferingBookingStudent,
+  getAllReschedules,
+  getAllSessionBookingStudent,
+  rescheduleOffering,
+  restoreDefault as restore,
+} from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
-import { BlueCalenderIcon, BlueStopWatch, BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, PaddedArrow, StopWatch } from "../../assets";
-import { payForOffering, payForSession, restoreDefault } from "../../features/paymentslice";
+import {
+  BlueCalenderIcon,
+  BlueStopWatch,
+  BlueTimeIcon,
+  BlueVideoIcon,
+  CancelX,
+  DollarIcon,
+  PaddedArrow,
+  StopWatch,
+} from "../../assets";
+import {
+  payForOffering,
+  payForSession,
+  restoreDefault,
+} from "../../features/paymentslice";
 import toast from "react-hot-toast";
 
-import { DateTimeInput,Input } from "../Input";
+import { DateTimeInput, Input } from "../Input";
 import ReUseModal from "../modal/Modal";
 import CoachReschedules from "../Reschedules/coach-reschedule";
 const StudentCallLogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-    const offering = useAppSelector(state => state.offerings);
-    useEffect(() => {
-      dispatch(getAllOfferingBookingStudent());
-         dispatch(getAllReschedules());
-     
-    }, [])
+  const offering = useAppSelector((state) => state.offerings);
+  useEffect(() => {
+    dispatch(getAllOfferingBookingStudent());
+    dispatch(getAllReschedules());
+  }, []);
   useEffect(() => {
     if (offering?.nextSessionBookingSuccess) {
       toast.success("Next Session Booked Successfully");
-       dispatch(getAllOfferingBookingStudent());
+      dispatch(getAllOfferingBookingStudent());
     }
-      if (offering.rescheduleSuccess) {
-        dispatch(restoreDefault());
-        toast.success("Offering rescheduled");
-       
-      }
-  }, [offering?.nextSessionBookingSuccess, offering?.rescheduleSuccess])
-  
+    if (offering.rescheduleSuccess) {
+      dispatch(restoreDefault());
+      toast.success("Offering rescheduled");
+    }
+  }, [offering?.nextSessionBookingSuccess, offering?.rescheduleSuccess]);
+
   const allOfferings = offering?.allBookedOfferingsStudent;
-
-
-
-  
 
   const [current, setCurrent] = useState(0);
   const [open, setOpen] = useState<boolean>(false);
 
-    
-    if (offering.fetchLoading) {
-        return (
-            <div className="w-full">
-                        <LoadingComponent />
-            </div>
-        )
-    }
+  if (offering.fetchLoading) {
+    return (
+      <div className="w-full">
+        <LoadingComponent />
+      </div>
+    );
+  }
   return (
     <div className="w-full flex flex-col mt-6">
       {/* tabs session */}
@@ -147,42 +160,40 @@ const StudentCallLogs = () => {
 
 export default StudentCallLogs;
 
-export const SingleRow = ({ item, index }: { item: any, index: number }) => {
-   const dispatch = useAppDispatch();
-   const payment = useAppSelector((state) => state.payment);
+export const SingleRow = ({ item, index }: { item: any; index: number }) => {
+  const dispatch = useAppDispatch();
+  const payment = useAppSelector((state) => state.payment);
   const offering = useAppSelector((state) => state.offerings);
-     const [openReschedule, setOpenReschedule] = useState(false);
+  const [openReschedule, setOpenReschedule] = useState(false);
   const [date, setDate] = useState<string>("");
-      const [note, setNote] = useState("");
-      const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
-      const [activeReschule, setActiveReschedule] = useState<boolean>(false);
-   const handlePayment = () => {
-     const data = {
-       seriesId: item?.seriesId,
-       paymentMethod: "TRANSFER",
-     };
-     console.log({ data });
-     dispatch(payForOffering(data));
-   };
+  const [note, setNote] = useState("");
+  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
+  const [activeReschule, setActiveReschedule] = useState<boolean>(false);
+  const handlePayment = () => {
+    const data = {
+      seriesId: item?.seriesId,
+      paymentMethod: "TRANSFER",
+    };
+    console.log({ data });
+    dispatch(payForOffering(data));
+  };
 
-   useEffect(() => {
-     if (
-       payment?.offeringPaymentSuccess &&
-       payment?.offeringPaymentResp?.authorization_url
-     ) {
-       window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
-       setTimeout(() => {
-         dispatch(restoreDefault());
-       }, 3000);
-     }
-     if (offering?.nextSessionBookingSuccess) {
-       setOpenMonthly(false);
-     
-       dispatch(restoreDefault());
-           
-     }
-   }, [payment?.offeringPaymentSuccess,offering?.nextSessionBookingSuccess]);
+  useEffect(() => {
+    if (
+      payment?.offeringPaymentSuccess &&
+      payment?.offeringPaymentResp?.authorization_url
+    ) {
+      window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
+      setTimeout(() => {
+        dispatch(restoreDefault());
+      }, 3000);
+    }
+    if (offering?.nextSessionBookingSuccess) {
+      setOpenMonthly(false);
 
+      dispatch(restoreDefault());
+    }
+  }, [payment?.offeringPaymentSuccess, offering?.nextSessionBookingSuccess]);
 
   // Update a specific date-time value
   const updateDateTime = (index: number, newDateTime: string) => {
@@ -190,50 +201,45 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
     updatedDateTimes[index] = newDateTime;
     setLiveDateTimes(updatedDateTimes);
   };
-    const handleBookNextSession = () => {
-     
-        if (note) {
-          const sentdata = {
-            id: item?.seriesId,
-            data: {
-              note: note,
-              bookTimes: liveDateTimes,
-            },
-          };
+  const handleBookNextSession = () => {
+    if (note) {
+      const sentdata = {
+        id: item?.seriesId,
+        data: {
+          note: note,
+          bookTimes: liveDateTimes,
+        },
+      };
 
-          dispatch(bookNextSession(sentdata));
-        } else {
-          toast.error("Note  must be provided");
-        }
-  }
-
-    const [active, setActive] = useState(false);
-    const verifyItems = (time: string) => {
-      return time.split("")?.length > 2;
+      dispatch(bookNextSession(sentdata));
+    } else {
+      toast.error("Note  must be provided");
+    }
   };
-    const [openMonthly, setOpenMonthly] = useState(false);
-       useEffect(() => {
-         const isFilled = liveDateTimes?.some(verifyItems);
 
-         if (isFilled && note) {
-           setActive(true);
-         } else {
-           setActive(false);
-         }
-         if (note && date) {
-           setActiveReschedule(true);
-         }
+  const [active, setActive] = useState(false);
+  const verifyItems = (time: string) => {
+    return time.split("")?.length > 2;
+  };
+  const [openMonthly, setOpenMonthly] = useState(false);
+  useEffect(() => {
+    const isFilled = liveDateTimes?.some(verifyItems);
 
-       }, [note, liveDateTimes,date]);
+    if (isFilled && note) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+    if (note && date) {
+      setActiveReschedule(true);
+    }
+  }, [note, liveDateTimes, date]);
   const handleCloseMonthly = () => {
     setTimeout(() => {
-    
       setOpenMonthly(false);
     }, 50);
-  }
+  };
 
-
-  
   const handleReschedule = () => {
     if (activeReschule) {
       const sentdata = {
@@ -251,14 +257,9 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
   };
   useEffect(() => {
     if (offering.rescheduleSuccess) {
-     
       setOpenReschedule(false);
     }
-  }, [offering?.rescheduleSuccess])
-  
-
-  
-
+  }, [offering?.rescheduleSuccess]);
 
   return (
     <>
@@ -287,7 +288,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
               </p>
             </div>
             <span className="flex items-center gap-[10px] ">
-              <p className="text-muted text-sm dm-sans">Book type</p>
+              <p className="text-muted text-sm dm-sans">Type</p>
               <p className="text-sm dm-sans font-bold text-muted">Offering</p>
             </span>
             <span className="flex items-center gap-[10px] ">
@@ -349,7 +350,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
               item?.paymentConfirmed &&
               item?.isFree === false && <Button name="Processing..." />}
             {!item?.meetingLink &&
-              !item?.paymentConfirmed  &&
+              !item?.paymentConfirmed &&
               item?.isFree === false && (
                 <Button name="Make Payment" onClick={handlePayment} />
               )}
@@ -359,7 +360,10 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
               <ActionBtn name="View details" />
             </span>
             {item?.offeringType !== "LIVE_GROUP" && (
-              <ActionBtn name="Reschedule call" onClick={() => setOpenReschedule(true)} />
+              <ActionBtn
+                name="Reschedule call"
+                onClick={() => setOpenReschedule(true)}
+              />
             )}
             <span></span>
             {item?.nextSession && (
@@ -431,7 +435,7 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
             </button>
           </div>
           <h1 className="text-xl font-bold red-hat mb-4 ">
-            Reschedule this call 
+            Reschedule this call
           </h1>
           <div className="mb-4">
             <Input
@@ -462,5 +466,5 @@ export const SingleRow = ({ item, index }: { item: any, index: number }) => {
         </div>
       </ReUseModal>
     </>
-  ); 
-}
+  );
+};
