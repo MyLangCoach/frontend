@@ -116,7 +116,7 @@ const TransactionsTable = () => {
                       className={`text-foreground capitalize font-normal text-sm truncate inter ${
                         item?.status === "pending"
                           ? "px-[6px] py-[2px] bg-[#FEEDD0]"
-                          : "px-[6px] py-[2px] bg-[#D0FEE0]"
+                          : "px-[6px] py-[2px] bg-[#E6F3DE] text-[#65D520]"
                       }`}
                     >
                       {item?.status}
@@ -128,8 +128,15 @@ const TransactionsTable = () => {
                     </p>
                   </td>
                   <td className="flex items-center w-1/6 ">
-                    <p className=" text-[#EB5757] font-normal text-sm truncate inter ">
-                      {item?.type}
+                    <p
+                      className={`${
+                        item?.type === "CHARGE"
+                          ? "text-[#EB5757] "
+                          : "text-[#65D520]"
+                      }  font-normal text-sm truncate inter `}
+                    >
+                      {item?.type === "TRANSFER" && "CREDIT"}
+                      {item?.type === "CHARGE" && "DEBIT"}
                     </p>
                   </td>
                   <td className="w-1/6 flex items-center">
