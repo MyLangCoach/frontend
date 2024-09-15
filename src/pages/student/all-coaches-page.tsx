@@ -9,11 +9,11 @@ import SingleCoachCard from '../../components/coaches-component/single-coach-car
 const AllCoaches = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector(state => state.auth);
-  
+  console.log(auth?.userData)
 
   useEffect(() => {
     dispatch(getAllCoaches());
-    // dispatch(getAllStudent());
+
 
   }, []);
 

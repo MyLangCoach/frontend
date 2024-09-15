@@ -271,7 +271,7 @@ export const getAllCoaches = createAsyncThunk(
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(
-        `${url.allUser}/coach`,
+        `${url.coachByLang}`,
 
         {
           headers: {

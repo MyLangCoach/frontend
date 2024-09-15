@@ -6,7 +6,7 @@ export const baseUrl = "https://mylangcoach-api.onrender.com/api/v1";
 export const url = {
   login: "/auth/signin",
   register: "/auth/signup",
-  resendVerification:"/auth/resend-verification-email",
+  resendVerification: "/auth/resend-verification-email",
   socialRegister: "/auth/social-register",
   socialLogin: "/auth/social-login",
   logout: "/auth/logout",
@@ -15,7 +15,7 @@ export const url = {
   getOfferings: "/offerings/all",
   userProfile: "/users/profile",
   allUser: "/users/all",
-  user:"/users",
+  user: "/users",
   sessionBookings: "/bookings/session",
   offeringBookings: "/bookings/offering",
   saveCard: "/payments/save-card",
@@ -28,6 +28,6 @@ export const url = {
   reschedule: "/reschedules/booking",
   allReschedules: "/reschedules/my-pendings",
   respondToReschedule: "/reschedules",
-  availability:"/bookings/availability"
-  
+  availability: "/bookings/availability",
+  coachByLang: "/users/coaches/by-lang",
 };

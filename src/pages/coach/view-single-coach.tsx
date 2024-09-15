@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import LoadingComponent from "../../components/Loaders/skeleton-loading";
 import { ClassDetails } from "../../util/types";
 import OfferingCard from "../../components/coaches-component/offering-card";
+import SingleVideoCard from "../../components/coaches-component/single-video-coach";
 
 const ViewSingleCoachPage = () => {
   const dispatch = useAppDispatch();
@@ -40,8 +41,9 @@ const ViewSingleCoachPage = () => {
 
   const allOfferings: ClassDetails[] = offering?.singleCoachOffering;
 
-  const coachDetail = auth?.singleUserProfile?.[0];
-  const recentOfferings: ClassDetails[] = auth?.singleUserProfile?.[1];
+  const coachDetail = auth?.singleUserProfile;
+  console.log(coachDetail)
+  const recentOfferings: ClassDetails[] = auth?.singleUserProfile?.offerings?.slice(0,1); 
 
   if (auth?.fetchLoading || offering?.fetchLoading) {
     return (
@@ -53,10 +55,10 @@ const ViewSingleCoachPage = () => {
     );
   }
   return (
-    <div className="w-full flex flex-col relative">
+    <div className="w-full flex flex-col relative overflow-x-hidden">
       {/* start of banner side */}
       <div
-        className="w-full h-[400px] flow-hide blur-sm relative "
+        className="w-full h-[400px] flow-hide blur-md relative "
         style={{
           background: `url(${coachDetail?.profileImage ?? banner})`,
           backgroundSize: "cover",
@@ -191,6 +193,10 @@ const ViewSingleCoachPage = () => {
 
           {/* offering  */}
           <div className="w-1/3 flex flex-col">
+            <div className="flex mt-6 w-full">
+
+            <SingleVideoCard item={coachDetail} onClick={() => setIsOffering(true)} />
+            </div>
             {!isOffering && (
               <div className="flex flex-col mt-4">
                 <h1 className="text-xl font-bold red-hat mb-4 ">

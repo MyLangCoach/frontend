@@ -5,14 +5,15 @@ import { NotificationIcon, StudentLogoIcon } from '../../assets';
 import TopStudents from '../../components/students/top-student';
 import StudentList from '../../components/students/student-list-table';
 import ProperTeachingTools from '../../components/students/proper-teaching-tool';
+import { useAppSelector } from '../../app/hooks';
 const CoachStudent = () => {
+  const auth = useAppSelector((state) => state.auth);
+  console.log(auth?.allMyStudent);
   return (
     <DashboardLayout current={5}>
       <div className="w-full flex flex-col">
         <div className="w-full flex items-center justify-between lg:mt-6">
-          <p className="text-lg font-bold lg:text-2xl ">
-            Students
-          </p>
+          <p className="text-lg font-bold lg:text-2xl ">Students</p>
           <span className="">
             <NotificationIcon />
           </span>
@@ -21,14 +22,14 @@ const CoachStudent = () => {
           {/* start of a pack */}
           <div className="w-full bg-primaryyellow pattern-bg flex items-center p-6 rounded-[6px] gap-4">
             <span>
-             <StudentLogoIcon />
+              <StudentLogoIcon />
             </span>
             <div className="flex flex-col gap-1">
               <h1 className="text-black red-had font-bold text-lg lg:text-2xl">
-                13
+                {auth?.allMyStudent?.length}
               </h1>
               <p className="text-sm lg:text-base red-hat text-black font-normal">
-                Total Classes
+                Total Students
               </p>
             </div>
           </div>
@@ -36,7 +37,7 @@ const CoachStudent = () => {
         </div>
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-                  <div className="w-full 2xl:w-10/12 ">
+          <div className="w-full 2xl:w-10/12 ">
             <StudentList />
             {/* <CallLogs />
             <GuideTour /> */}

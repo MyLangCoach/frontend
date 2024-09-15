@@ -26,7 +26,7 @@ const StudentBookingTable = () => {
   const bookings = offering?.allBookingsSessionStudent;
 
   
-
+console.log(bookings)
 
   if (offering?.fetchLoading) {
     return (
@@ -147,7 +147,7 @@ const SingleRow = ({ item, index }: { item: any; index: number }) => {
           />
         </span>
         <div className="flex flex-col gap-[10px]">
-          <h1 className="text-foreground font-normal text-sm truncate inter capitalize">
+          <h1 className="text-foreground font-normal text-sm truncate inter capitalize max-w-[200px] ">
             {item?.note}
           </h1>
           <p className=" rounded-[4px] px-[6px] bg-lemonGreen text-xs inter text-foreground py-[2px] w-fit ">
@@ -155,12 +155,12 @@ const SingleRow = ({ item, index }: { item: any; index: number }) => {
           </p>
         </div>
       </td>
-      <td className="w-full flex items-center">
+      <td className="w-full flex items-center justify-center">
         <p className="text-foreground font-normal text-sm truncate inter">
           {item?.paymentConfirmed && item?.transactionReference && "Paid"}
           {item?.isFree === true && "Free"}
           {item?.paymentConfirmed === false &&
-            item?.transactionReference === null &&
+             
             "Not Paid"}
         </p>
       </td>
@@ -183,7 +183,7 @@ const SingleRow = ({ item, index }: { item: any; index: number }) => {
         </p>
       </td>
       <td className="w-full flex items-center justify-center">
-        {item?.meetingLink && item?.transactionReference && (
+        {item?.meetingLink && item?.paymentConfirmed && (
           <Link
             to={item?.meetingLink}
             className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
@@ -191,12 +191,19 @@ const SingleRow = ({ item, index }: { item: any; index: number }) => {
             Join Call
           </Link>
         )}
-        {!item?.meetingLink && item?.transactionReference && (
-          <Button name="Processing..." />
-        )}
+        {!item?.meetingLink &&
+          !item?.paymentConfirmed &&
+          item?.transactionReference && (
+            <Button name="Retry Payment" onClick={handlePayment} />
+          )}
+        {!item?.meetingLink &&
+          item?.transactionReference &&
+          item?.paymentConfirmed &&
+          item?.status !== "ENDED" && <Button name="Processing..." />}
         {!item?.meetingLink && !item?.transactionReference && (
           <Button name="Make Payment" onClick={handlePayment} />
         )}
+        {item?.status === "ENDED" && <Button name="ENDED" />}
       </td>
     </tr>
   );

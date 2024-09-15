@@ -11,7 +11,7 @@ interface ImageUploadProps {
 const VideoUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+  console.log(imageUrl)
   useEffect(() => {
     if (image) {
       handleImageUpload();
@@ -24,7 +24,7 @@ const VideoUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
       const selectedImage = e.target.files[0];
       if (selectedImage.size > 20 * 1048576) {
         // 1MB in bytes
-        toast.error("File size exceeds 1MB. Please upload a smaller file.");
+        toast.error("File size exceeds 20MB. Please upload a smaller file.");
       } else {
         setImage(selectedImage);
       }
@@ -50,36 +50,51 @@ const VideoUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 
       setLoading(false);
     } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("Error uploading image. Please try again.");
+      console.error("Error uploading video:", error);
+      toast.error("Error uploading video. Please try again.");
       setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full h-[80px] border border-dashed border-border flex items-center justify-center rounded-md ">
+      <div className="relative w-full h-[250px] border border-dashed border-border flex items-center justify-center rounded-md ">
         {imageUrl ? (
-          <img
+          <video
             src={imageUrl}
-            alt="Uploaded"
             className="w-full h-full object-cover"
+            
+            controls
+            
           />
         ) : (
           <div className="flex flex-col items-center justify-center ">
             <Button name="Upload" />
             <span className="text-[#94A3B8] mt-2 inter text-xs">
-              Drag and drop image, 1mb max.
+              Drag and drop video, 20mb max.
             </span>
           </div>
         )}
-        <input
-          type="file"
-          accept="video/*"
-          className="absolute w-full h-full opacity-0 cursor-pointer inset-0"
-          onChange={handleImageChange}
-        />
+        {!imageUrl && (
+          <input
+            type="file"
+            accept="video/*"
+            className="absolute w-full h-full opacity-0 cursor-pointer inset-0"
+            onChange={handleImageChange}
+          />
+        )}
       </div>
+      {imageUrl && (
+        <div className="relative flex items-start justify-start w-full mt-4">
+          <Button name="Upload Another" />
+          <input
+            type="file"
+            accept="video/*"
+            className="absolute w-full h-full opacity-0 cursor-pointer inset-0"
+            onChange={handleImageChange}
+          />
+        </div>
+      )}
       {loading && <p className="mt-2 text-blue-500">Uploading...</p>}
     </div>
   );

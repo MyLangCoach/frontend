@@ -22,6 +22,7 @@ import { yearsArray } from "../../util/mockdata";
 import { ProfileViewIcon } from "../../assets";
 import ImageUpload from "../UploadFile/ImageUpload";
 import VideoUpload from "../UploadFile/VideoUpload";
+import { TiDelete } from "react-icons/ti";
 const uploadEndpoint =
   "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const CoachProfile = () => {
@@ -37,7 +38,9 @@ const CoachProfile = () => {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [profileUrl, setProfileUrl] = useState<string>("");
-
+  const [languagesInterest, setLanguagesInterest] = useState<string[]>([]);
+  const [newLanguage, setNewLanguage] = useState<string>("");
+  const [showInput, setShowInput] = useState<boolean>(false);
   const [country, setCountry] = useState<any>("");
   const [desc, setDesc] = useState<string>("");
   const [bio, setBio] = useState<string>("");
@@ -59,15 +62,32 @@ const CoachProfile = () => {
   const [languages, setLanguages] = useState<Language[]>([
     { language: "", proficiency: "" },
   ]);
+
   const [cost, setCost] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [prof, setProf] = useState<{ name: string }>({ name: "" });
   const [available, setAvailable] = useState("available");
+  const handleAddLanguage = () => {
+    if (newLanguage && !languagesInterest.includes(newLanguage.toLowerCase())) {
+      setLanguagesInterest([...languagesInterest, newLanguage.toLowerCase()]);
+      setNewLanguage("");
+      setShowInput(false);
+    }
+  };
+
+  const handleDeleteLanguage = (languageToDelete: string) => {
+    setLanguagesInterest(languagesInterest.filter((language) => language !== languageToDelete));
+  };
     const [sessionType, setSessionType] = useState<{ name: string; value: number }>({
       name: "",
       value: 0,
     });
+    const [sessionTypeSecond, setSessionTypeSecond] = useState<{ name: string; value: number }>({
+      name: "",
+      value: 0,
+    });
   const [sessionPrice, setSessionPrice] = useState<number>(0);
+  const [sessionPriceSecond, setSessionPriceSecond] = useState<number>(0);
 
   const [qualifications, setQualifications] = useState<Qualification[]>([
     { name: "", issuing_org: "", year: 0 },
@@ -82,9 +102,11 @@ const CoachProfile = () => {
       setCountry(userData.country || "");
       setDesc(userData.description || "");
       setBio(userData?.bio || "");
+      setVideoUrl(userData?.introVideo || "");
       setUserName(userData?.username || "");
       setSocialMedia(userData.socials?.length === 0 ? [" "] : userData?.socials);
-      setSessionPrice(userData?.costPerSession?.amount);
+      setSessionPrice(userData?.costPerSession?.[0]?.amount);
+      setSessionPriceSecond(userData?.costPerSession?.[1]?.amount);
       setQualifications(
         userData.qualifications?.length === 0  ? [{ name: "", issuing_org: "", year: 0 }] : userData?.qualifications
       ); // assuming single qualification
@@ -93,10 +115,22 @@ const CoachProfile = () => {
         name: userData.qualifications?.[0]?.name || "",
         value: userData.qualifications?.[0]?.year || 0,
       });
-      setLanguages(userData.languages?.length === 0  ? [{ language: "", proficiency: "" }] : userData?.languages);
+      setLanguages(
+        userData.languages?.length === 0
+          ? [{ language: "", proficiency: "" }]
+          : userData?.languages
+      );
+      setLanguagesInterest(userData?.languageInterests || [])
       // setVideoUrl(userData.introVideo || "");
       setProf({ name: userData.profileImage || "" });
-      setSessionType({name:userData?.costPerSession?.sessionType, value:userData?.costPerSession?.sessionType})
+      setSessionType({
+        name: userData?.costPerSession?.[0]?.sessionType,
+        value: userData?.costPerSession?.[0]?.sessionType,
+      });
+      setSessionTypeSecond({
+        name: userData?.costPerSession?.[1]?.sessionType,
+        value: userData?.costPerSession?.[1]?.sessionType,
+      });
     }
   }, [userData]);
 
@@ -112,6 +146,7 @@ const CoachProfile = () => {
     setSocialMedia(updatedSocialMedia);
   };
   const addLanguage = () => {
+  
     setLanguages([...languages, { language: "", proficiency: "" }]);
   };
 
@@ -155,12 +190,23 @@ const CoachProfile = () => {
       languages: languages,
       qualifications: qualifications,
       introVideo: videoUrl,
-      costPerSession: {
-        sessionType: sessionType?.value ?? userData?.costPerSession?.sessionType ,
-        amount: Number(sessionPrice),
-      
-        currency:"NGN"
-      },
+      languageInterests:languagesInterest,
+      costPerSession: [
+        {
+          sessionType:
+            sessionType?.value ?? userData?.costPerSession?.[0]?.sessionType,
+          amount: Number(sessionPrice),
+
+          currency: "NGN",
+        },
+        {
+          sessionType:
+            sessionTypeSecond?.value ?? userData?.costPerSession?.[1]?.sessionType,
+          amount: Number(sessionPriceSecond),
+
+          currency: "NGN",
+        },
+      ],
     };
 
     // Dispatch the action to update the user profile
@@ -269,7 +315,7 @@ const CoachProfile = () => {
         e.target.onerror = null; // Prevent looping
         e.target.src = dp;
       };
-
+console.log(userData)
 
   if (user?.fetchLoading) {
     return (
@@ -479,6 +525,50 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
+            Language Interests
+          </h1>
+          <CapsuleBtn name="Add language" onClick={() => setShowInput(true)} />
+        </div>
+        {/* end */}
+        <div className="w-full flex gap-4 flex-wrap items-center mt-3">
+          {languagesInterest?.map((language, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center px-4 py-2 h-[34px] border border-[#0E79FF]  gap-4 rounded-[48px]  font-medium text-xs dm-sans text-black capitalize "
+            >
+              {language}
+              <button
+                onClick={() => handleDeleteLanguage(language)}
+                className="   rounded"
+              >
+                <TiDelete className="text-red-500 text-xl" />
+              </button>
+            </div>
+          ))}
+        </div>
+        {showInput && (
+          <div className=" mt-6 w-full flex flex-col lg:flex-row lg:w-1/2 gap-4 lg:items-center">
+            <Input
+              type="text"
+              value={newLanguage}
+              // onChange={(e) => setNewLanguage(e.target.value)}
+              label=""
+              setValue={setNewLanguage}
+              height="h-9"
+              placeholder="Enter a language"
+              // className="border border-gray-300 px-2 py-1 rounded w-full max-h-[34px]"
+            />
+            <button
+              onClick={handleAddLanguage}
+              className="bg-black text-white px-4 flex items-center rounded hover:bg-green-700   focus:outline-none outline-none h-[36px] min-w-max"
+            >
+              Add Now
+            </button>
+          </div>
+        )}
+        {/* start */}
+        <div className="flex justify-between items-center mt-8">
+          <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Professional Qualification
           </h1>
           <CapsuleBtn name="Add Qualification" onClick={addQualification} />
@@ -532,10 +622,7 @@ const CoachProfile = () => {
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Hourly rate <span className="font-[300] ">(Maximum two)</span>
           </h1>
-          <CapsuleBtn
-            name="Add Offering"
-            onClick={() => console.log("first")}
-          />
+        
         </div>
         {/* end */}
         {/* start of an input */}
@@ -545,16 +632,16 @@ const CoachProfile = () => {
               selected={sessionType}
               setSelected={setSessionType}
               label={"Duration"}
-              name={userData?.costPerSession?.sessionType || 0}
+              name={userData?.costPerSession?.[0]?.sessionType || 0}
               data={[
                 {
                   name: "30",
                   value: 30,
                 },
-                {
-                  name: "60",
-                  value: 60,
-                },
+                // {
+                //   name: "60",
+                //   value: 60,
+                // },
               ]}
             />
           </div>
@@ -572,15 +659,15 @@ const CoachProfile = () => {
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 items-end">
           <div>
             <PrimarySelect
-              selected={sessionType}
-              setSelected={setSessionType}
+              selected={sessionTypeSecond}
+              setSelected={setSessionTypeSecond}
               label={"Duration"}
-              name={userData?.costPerSession?.sessionType || 0}
+              name={userData?.costPerSession?.[1]?.sessionType || 0}
               data={[
-                {
-                  name: "30",
-                  value: 30,
-                },
+                // {
+                //   name: "30",
+                //   value: 30,
+                // },
                 {
                   name: "60",
                   value: 60,
@@ -590,8 +677,8 @@ const CoachProfile = () => {
           </div>
           <div>
             <Input
-              value={sessionPrice}
-              setValue={setSessionPrice}
+              value={sessionPriceSecond}
+              setValue={setSessionPriceSecond}
               label="Price"
               height="h-[36px]"
               type="number"
@@ -617,15 +704,20 @@ const CoachProfile = () => {
         </div>
         {/* end of an input */}
         {/* start */}
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex flex-col start mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Intro video
           </h1>
+          <p className="text-muted text ">
+            Hint: Your intro video should be 30 seconds, use a good background
+            in a well lit environment for a quality presentation that attracts
+            more bookings.
+          </p>
         </div>
         {/* end */}
         {/* start of inout */}
-        <div className="w-full mt-4 flex flex-col">
-          <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">
+        <div className="w-full mt-0 flex flex-col">
+          {/* <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">
             <div
               className={`${
                 videoType === 0
@@ -646,9 +738,9 @@ const CoachProfile = () => {
             >
               Upload
             </div>
-          </div>
-          <div className="w-full mt-6">
-            {videoType === 0 && (
+          </div> */}
+          <div className="w-full mt-3">
+            {/* {videoType === 0 && (
               <UrlInput
                 placeholder="www.facebook.com"
                 value={videoUrl}
@@ -657,13 +749,9 @@ const CoachProfile = () => {
                 }
                 label="Video URL"
               />
-            )}
-            {
-              videoType === 1 && ( 
+            )} */}
 
-                <VideoUpload imageUrl={videoUrl} setImageUrl={setVideoUrl} />
-              )
-}
+            <VideoUpload imageUrl={videoUrl} setImageUrl={setVideoUrl} />
           </div>
         </div>
         {/* end of input */}

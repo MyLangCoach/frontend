@@ -4,7 +4,7 @@ import { CancelIcon, CancelX, Plus, PlusCircle,  } from '../../assets';
 import filterIcon from "../../assets/png/caret-sort.png";
 import { OfferingsDummy } from '../../util/mockdata';
 import CreateNewServiceModal from './create-new-service-modal';
-import { bookCoachOffering, getAllBookedOfferingCoach, getAllOfferings } from '../../features/offeringslice';
+import { bookCoachOffering, getAllBookedOfferingCoach, getAllCreatedOfferingCoach, getAllOfferings } from '../../features/offeringslice';
 import LoadingComponent from '../Loaders/skeleton-loading';
 import { formatDateTime } from '../../util';
 import ViewOfferingModal from '../modal/view-offering-modal';
@@ -17,10 +17,10 @@ const OfferingsTable = () => {
   const offerings = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getAllBookedOfferingCoach())
+    dispatch(getAllCreatedOfferingCoach())
   }, [])
   
-  const allOfferings = offerings?.allBookedOfferingCoach;
+  const allOfferings = offerings?.allCreatedOfferingsCoach?.offerings;
   console.log(allOfferings);
 
   const [open, setOpen] = useState(false);

@@ -16,21 +16,24 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
   const selectedLanguage = languages?.[0]
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-
+console.log(item)
   return (
-    <div className="w-full flex flex-col carding-shadow lg:w-[257px] bg-white rounded-[8px]" key={id}>
+    <div
+      className="w-full flex flex-col carding-shadow lg:w-[257px] bg-white rounded-[8px]"
+      key={id}
+    >
       <img
         src={item?.profileImage ?? pic}
         alt=""
         className="lg:w-full  h-[200px] rounded-t-[8px] object-cover cursor-pointer"
-onClick={() => navigate(`/view-coach/${id}`)}
+        onClick={() => navigate(`/view-coach/${id}`)}
       />
       <div className="w-full px-4 py-3 flex flex-col">
         <div className="flex gap-3 items-center">
           <h1 className="text-base lg:text-xl font-bold red-hat capitalize truncate">
             {firstName} {lastName}
           </h1>
-          <img src={ar} alt="ar" />
+       
           <span>
             <VerifyIcon />
           </span>
@@ -44,10 +47,10 @@ onClick={() => navigate(`/view-coach/${id}`)}
               <span>
                 <StopWatch />
               </span>
-              {costPerSession?.sessionType ?? "0"} -min
+              {costPerSession?.[0]?.sessionType ?? "0"} -min
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              #{costPerSession?.amount ?? "0"}
+              #{costPerSession?.[0]?.amount ?? "0"}
             </p>
           </div>
           <div className="w-1/2 flex-grow flex flex-col">
@@ -55,10 +58,10 @@ onClick={() => navigate(`/view-coach/${id}`)}
               <span>
                 <StopWatch />
               </span>
-              60-min
+              {costPerSession?.[1]?.sessionType ?? "0"} -min
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              ₦64,000
+              #{costPerSession?.[1]?.amount ?? "0"}
             </p>
           </div>
         </div>
@@ -67,7 +70,9 @@ onClick={() => navigate(`/view-coach/${id}`)}
             <span>
               <CapIcon />
             </span>
-            <p className="text-muted  text-sm">English</p>
+            <p className="text-muted  text-sm capitalize">
+              {item?.coachLanguage?.[0]?.language}
+            </p>
           </div>
           <div className="gap-4 flex items-center ">
             <div className="flex items-center gap-[6px]">
@@ -92,7 +97,11 @@ onClick={() => navigate(`/view-coach/${id}`)}
             </p>
           </div>
           <div className="w-full">
-            <Button name="Book a lesson" className="min-w-full"  onClick={() => setOpen(true)} />
+            <Button
+              name="Book a lesson"
+              className="min-w-full"
+              onClick={() => setOpen(true)}
+            />
           </div>
         </div>
       </div>
@@ -101,7 +110,7 @@ onClick={() => navigate(`/view-coach/${id}`)}
         setOpen={setOpen}
         width="sm:max-w-[630px] sm:w-full"
       >
-        <Calendar  item={item} setOpen={setOpen} />
+        <Calendar item={item} setOpen={setOpen} />
       </ReUseModal>
     </div>
   );

@@ -10,6 +10,7 @@ import moment from "moment-timezone";
 import { Input } from "../Input";
 import {
   createFirstBookingWithCoach,
+  getAvailability,
   restoreDefault,
 } from "../../features/offeringslice";
 import toast from "react-hot-toast";
@@ -37,14 +38,18 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
     firstName,
     lastName,
   } = item;
+ 
   const selectedLanguage = languages?.[0];
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
   const [pickedTime, setPickedTime] = useState<string>("");
   const [pickedDay, setPickedDay] = useState<string>("");
+  const [sessionId, setSessionId] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
   const [currentWeek, setCurrentWeek] = useState(moment().tz("Africa/Lagos")); // Set the timezone to WAT
+    const [isAvailable, setIsAvailable] = useState(false);
   const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
   const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
   const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
@@ -82,12 +87,43 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   };
 
   useEffect(() => {
-    if (note && selectedTime) {
+    if (note && selectedTime && isAvailable) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [note, selectedTime]);
+  }, [note, selectedTime,isAvailable]);
+
+  useEffect(() => {
+    const id = costPerSession?.find((item: any) => item?.sessionType === duration);
+    
+    setSessionId(id?.id)
+  }, [duration])
+  const handleChecKAvailability = async () => {
+    setLoading(true);
+    const data = {
+      id: id,
+      date: selectedTime,
+    };
+    const { payload } = await dispatch(getAvailability(data));
+    if (payload?.status === "success") {
+      toast.success(" Coach is Available");
+       setIsAvailable(true);
+      setLoading(false);
+    } else {
+      // toast.error("Selected time is  Not Available, kindly pick another time");
+      setLoading(false);
+  
+    }
+  };
+  useEffect(() => {
+    if (selectedTime) {
+      
+      handleChecKAvailability();
+    }
+  }, [selectedTime])
+  
+
 
   const handleTimeClick = (day: moment.Moment, time: moment.Moment) => {
     const selectedDateTime = day
@@ -105,19 +141,19 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
     setPickedDay(day.tz("Africa/Lagos").format());
     setPickedDate(selectedDateTime);
     const payload = { note, bookTime };
-    console.log(payload);
+   
   };
 
   const handleBook = () => {
     if (active) {
       const sentdata = {
-        coachId: id,
+        coachId: sessionId,
         data: {
           note: note,
           bookTime: selectedTime,
         },
       };
-      console.log(sentdata);
+    
       dispatch(createFirstBookingWithCoach(sentdata));
     } else {
       toast.error("Note and time must be provided");
@@ -131,6 +167,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
       setOpen(false);
     }
   }, [offering?.createBookingSessionSuccess]);
+
 
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
@@ -156,7 +193,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
                 {" "}
                 {firstName} {lastName}
               </p>
-              <img src={ar} alt="ar" />
+            
               <span>
                 <VerifyIcon />
               </span>

@@ -13,7 +13,7 @@ const StudentList = () => {
 useEffect(() => {
   dispatch(getAllMyStudent());
 }, [])
-console.log(auth?.allMyStudent)
+
   if (auth?.fetchLoading) {
     return (
       <div>

@@ -29,6 +29,7 @@ export interface OfferingsState {
   rescheduleSuccess: boolean;
   allBookedOfferingCoach: any;
   allReschedules: any;
+  allCreatedOfferingsCoach: any;
   
 }
 
@@ -58,6 +59,7 @@ const initialState: OfferingsState = {
   rescheduleSuccess: false,
   allBookedOfferingCoach: [],
   allReschedules: [],
+  allCreatedOfferingsCoach:[]
   
 };
 
@@ -275,6 +277,17 @@ export const offeringsSlice = createSlice({
      
       })
       .addCase(getAllReschedules.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(getAllCreatedOfferingCoach.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getAllCreatedOfferingCoach.fulfilled, (state, { payload }) => {
+          state.fetchLoading = false;
+          state.allCreatedOfferingsCoach = payload?.data;
+     
+      })
+      .addCase(getAllCreatedOfferingCoach.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
       .addCase(respondToReschedule.pending, (state) => {
@@ -669,6 +682,24 @@ export const getAllBookedOfferingCoach = createAsyncThunk(
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.offeringBookings}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getAllCreatedOfferingCoach = createAsyncThunk(
+  "getAllCreatedOfferingCoach",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.offerings}/all`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },

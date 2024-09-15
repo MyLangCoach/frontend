@@ -13,12 +13,12 @@ type SocialMediaType = "instagram.com" | "www.facebook.com"; // Define the type 
 
 
 
- export interface CostPerSession {
+ export interface CostPerSession  {
   amount: number;
   currency: string;
   sessionType: number;
-}
-
+}[]
+ 
  export interface CoachDetails {
   id: number;
   email: string;
@@ -41,7 +41,7 @@ type SocialMediaType = "instagram.com" | "www.facebook.com"; // Define the type 
   status: string;
   qualifications: Qualification[];
   introVideo: string;
-  costPerSession: CostPerSession;
+  costPerSession:  CostPerSession | any ;
   createdAt: string;
   updatedAt: string;
 }
@@ -60,6 +60,7 @@ export   interface UserProfileData {
   introVideo: string;
   username?: string;
   languageInterests?: string[] | any;
+  CoachLanguage?: any;
   costPerSession?: any;
   id?: string;
 }
