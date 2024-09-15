@@ -115,7 +115,7 @@ const ViewSingleCoachPage = () => {
                   <div className="flex items-center gap-[6px] ">
                     <span className="bg-muted w-[5px] h-[5px] rounded-full"></span>
                     <p className="text-muted  text-sm">
-                      {allOfferings?.length} Lessons
+                      {allOfferings?.length} Classes
                     </p>
                   </div>
                 </div>

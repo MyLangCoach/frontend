@@ -194,14 +194,14 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
           <span className="flex items-center gap-2">
             <YellowCap />
             <p className="text-muted dm-sans ">
-              {item?.seriesCount}  {`Class${item?.seriesCount > 1 ? "es":""}`} Offered
+              {item?.seriesCount}  {`Class`} Series
             </p>
           </span>
           <span className="flex items-center gap-2">
             <YellowCalender />
             <p className="text-muted dm-sans ">
               {item?.type === "LIVE_GROUP" && "LIVE GROUP"}
-              {item?.type === "ONE_MONTHLY" && "ONE MONTHLY"}
+              {item?.type === "ONE_MONTHLY" && " MONTHLY"}
               {item?.type === "ONE_TIME" && "ONE TIME"}
             </p>
           </span>
@@ -222,7 +222,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
               <BlueTimeIcon />
             </span>
             <p className="text-muted font-medium dm-sams">
-              {item?.duration ?? "45 mins"}
+              {item?.duration ?? "30 mins"} mins
             </p>
           </div>
           <div className="flex gap-3 items-center ">

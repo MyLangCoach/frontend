@@ -77,14 +77,14 @@ console.log(item)
           <div className="gap-4 flex items-center ">
             <div className="flex items-center gap-[6px]">
               <span>
-                <UsersIcon />
+                <UsersIcon />4
               </span>
               <p className="text-muted  text-sm">20 Student</p>
             </div>
 
             <div className="flex items-center gap-[6px] ">
               <span className="bg-muted w-[5px] h-[5px] rounded-full"></span>
-              <p className="text-muted  text-sm">32 Lessons</p>
+              <p className="text-muted  text-sm">32 Classes</p>
             </div>
           </div>
           <div className="w-full gap-3 items-center flex ">

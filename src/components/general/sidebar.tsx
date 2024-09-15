@@ -146,7 +146,7 @@ const Sidebar = ({ current }: { current: number }) => {
       <div className="px-4 mt-4 xl:px-8 border-t-[#e4e4e7] h-[90px] flex items-center border-t border-b border-b-[#e4e4e7] ">
         <div className="flex item-center gap-2">
           <span>
-            <img src={sampPic} alt="sample" className="w-8 h-8 rounded-[4px]" />
+            <img src={  user?.userData?.profileImage ??  sampPic} alt="sample" className="w-8 h-8 rounded-[4px]" />
           </span>
           <div className="flex flex-col">
             <h1 className="inter font-medium text-[#17191C] text-sm capitalize ">
