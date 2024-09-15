@@ -172,7 +172,7 @@ const CallLogs = () => {
                     group class or private class to get started
                   </p>
                   <Button
-                    name="Connect new live class"
+                    name="Create new  class"
                     className="mt-5 mx-auto"
                     onClick={() => setOpen(true)}
                   />
@@ -185,7 +185,7 @@ const CallLogs = () => {
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any upcoming calls.
               </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
+              <Button name="Create new class" className="mt-5 mx-auto" />
             </div>
           )}
           {currentOffering === 2 && (
@@ -193,7 +193,7 @@ const CallLogs = () => {
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any past calls.
               </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
+              <Button name="Create new  class" className="mt-5 mx-auto" />
             </div>
           )}
           {currentOffering === 3 && <CoachReschedules />}
@@ -218,7 +218,7 @@ const CallLogs = () => {
                     group class or private class to get started
                   </p>
                   <Button
-                    name="Connect new live class"
+                    name="create new  class"
                     className="mt-5 mx-auto"
                     onClick={() => setOpen(true)}
                   />
@@ -231,7 +231,7 @@ const CallLogs = () => {
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any upcoming calls.
               </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
+              <Button name="create new  class" className="mt-5 mx-auto" />
             </div>
           )}
           {currentSession === 2 && (
@@ -239,7 +239,7 @@ const CallLogs = () => {
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                 You do not have any past calls.
               </p>
-              <Button name="Connect new live class" className="mt-5 mx-auto" />
+              <Button name="create new  class" className="mt-5 mx-auto" />
             </div>
           )}
           {currentSession === 3 && <CoachReschedules />}

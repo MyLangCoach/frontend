@@ -44,12 +44,12 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
   return (
     <div className="w-full flex flex-col">
       <h1 className="text-black text-base lg:text-xl font-bold red-hat">
-        Live Class Information
+         Class Information
       </h1>
       <div className="w-full flex flex-col mt-4">
         <div className="w-full">
           <Input
-            label={"Live class name"}
+            label={" Class name"}
             height="h-9"
             value={title}
             setValue={setTitle}
@@ -95,7 +95,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
               label="Class Duration"
               data={[
                 { name: "30 mins", value: 30 },
-                { name: "1 hour", value: 60 },
+                { name: "60 mins", value: 60 },
               ]}
               name="Select"
             />

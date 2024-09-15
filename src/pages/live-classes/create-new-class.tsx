@@ -12,8 +12,8 @@ const CreateClass = () => {
             <img src={backArrow} alt="" />
           </span>
           <p className="text-sm inter text-[#828282] ">
-                      Live classes/ <span className=" font-medium text-[#050505] text-sm">
-                          Create new live classes
+                      Offering/ <span className=" font-medium text-[#050505] text-sm">
+                          Create new offering
                       </span>
                       
                   </p>

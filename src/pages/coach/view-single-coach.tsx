@@ -87,7 +87,7 @@ const ViewSingleCoachPage = () => {
                 <h1 className="text-[28px] font-bold red-hat uppercase">
                   {coachDetail?.firstName} {coachDetail?.lastName}
                 </h1>
-                <img src={ar} alt="ar" />
+           
                 <span>
                   <VerifyIcon />
                 </span>
@@ -100,7 +100,7 @@ const ViewSingleCoachPage = () => {
                   <span>
                     <CapIcon />
                   </span>
-                  <p className="text-muted  text-sm">
+                  <p className="text-muted  text-sm capitalize">
                     {coachDetail?.languages?.[0]?.language}
                   </p>
                 </div>
@@ -125,7 +125,7 @@ const ViewSingleCoachPage = () => {
                   </span>
                   <div className="text-muted  text-sm flex items-center gap-2">
                     {coachDetail?.languages?.slice(0, 2)?.map((lang: any) => (
-                      <p className="text-muted text-sm">
+                      <p className="text-muted text-sm capitalize">
                         {lang?.language} {`(${lang.proficiency})`}{" "}
                       </p>
                     ))}

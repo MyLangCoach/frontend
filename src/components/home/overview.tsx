@@ -1,7 +1,18 @@
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import classIcon from "../../assets/icons/class.svg";
 import expenseIcon from "../../assets/icons/expense.svg";
 import coachIcon from "../../assets/icons/tutors.svg";
+import { getDashboardStarts } from "../../features/auth/authSlice";
 const Overview = () => {
+  const user = useAppSelector((state) => state.auth);
+  const userRole = user?.userData?.role;
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getDashboardStarts());
+  }, [])
+  
+  console.log(user?.dashboardStats)
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-8 lg:gap-4 gap-4 px-4 lg:px-0 ">
       {/* start of a pack */}
@@ -11,7 +22,7 @@ const Overview = () => {
         </span>
         <div className="flex flex-col gap-1">
           <h1 className="text-white red-had font-bold text-lg lg:text-2xl">
-            13
+            {user?.dashboardStats?.totalClasses}
           </h1>
           <p className="text-sm lg:text-base red-hat text-white font-normal">
             Total Classes
@@ -26,10 +37,10 @@ const Overview = () => {
         </span>
         <div className="flex flex-col gap-1">
           <h1 className="text-black red-had font-bold text-lg lg:text-2xl">
-            13
+            {user?.dashboardStats?.totalMinutes}
           </h1>
           <p className="text-sm lg:text-base red-hat text-black font-normal">
-            Total coaches
+            Total minutes
           </p>
         </div>
       </div>

@@ -16,7 +16,7 @@ export interface AuthState {
   allStudents: any;
   redirectUrl: string;
   singleUserProfile: any;
- 
+  dashboardStats: any;
 }
 
 const initialState: AuthState = {
@@ -31,7 +31,8 @@ const initialState: AuthState = {
   allMyStudent: [],
   updateProfileSuccess: false,
   redirectUrl: "",
-  singleUserProfile: []
+  singleUserProfile: [],
+  dashboardStats:{},
 
 };
 
@@ -164,6 +165,16 @@ export const authSlice = createSlice({
       .addCase(getSingleUserDetail.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
+      .addCase(getDashboardStarts.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(getDashboardStarts.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+        state.dashboardStats = payload;
+      })
+      .addCase(getDashboardStarts.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
       
       ;
   },
@@ -233,6 +244,24 @@ export const getUserProfile = createAsyncThunk(
     const { auth }: any = getState();
     try {
       const { data } = await APIService.get(`${url.userProfile}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const getDashboardStarts = createAsyncThunk(
+  "getDashboardStats",
+  async (_, { rejectWithValue, getState }) => {
+    const { auth }: any = getState();
+    try {
+      const { data } = await APIService.get(`${url.stats}`, {
         headers: {
           Authorization: `Bearer ${auth?.token}`,
         },

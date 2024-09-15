@@ -30,4 +30,5 @@ export const url = {
   respondToReschedule: "/reschedules",
   availability: "/bookings/availability",
   coachByLang: "/users/coaches/by-lang",
+  stats: "/users/my/dashboardstats",
 };

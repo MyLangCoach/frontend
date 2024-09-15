@@ -118,7 +118,7 @@ const CreateClassHome = () => {
           {/* text side */}
           <div className="flex flex-col">
             <p className="text-sm lg:text-base font-semibold red-hat text-black">
-              Live class information
+               Class information
             </p>
 
             <p className="text-xs lg:text-sm  red-hat text-black">

@@ -28,7 +28,7 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
           </div>
           <div className="w-full lg:w-11/12 mx-auto flex flex-col">
             <h2 className="lg:text-[19px] text-base red-hat font-bold text-black lg:leading-[23px]">
-              Create a New Service
+              Create a New Offering
             </h2>
             <p className="mt-6 red-hat lg:text-base text-sm text-black">
               Create a new 1:1 call service, choose between a one off call or a
@@ -49,10 +49,10 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
                   <img src={call} alt="call" />
                 </span>
                 <h1 className="text-foreground inter font-semibold lg:text-lg text-base ">
-                  1:1 Session
+                  1:1 Class
                 </h1>
                 <p className="text-sm text-muted inter">
-                  One time one to one class with your student, perfect for
+                  One time one-on-one class with your student, perfect for
                   initial consultations.
                 </p>
               </div>
@@ -73,7 +73,7 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
                   1:1 Monthly
                 </h1>
                 <p className="text-sm text-muted inter">
-                  One to one call with your student, perfect for monthly
+                  One-on-one call with your student, perfect for monthly
                   engagements.
                 </p>
               </div>
@@ -91,11 +91,11 @@ const CreateNewServiceModal = ({ open, setOpen }: NewServiceProps) => {
                   <img src={bundle} alt="call" />
                 </span>
                 <h1 className="text-foreground inter font-semibold lg:text-lg text-base ">
-                  Life group class
+                  Live group class
                 </h1>
                 <p className="text-sm text-muted inter">
-                  Limited or Unlimited live group classes with students, perfect
-                  for running sessions and masterclass.
+                  Limited or unlimited live group classes with students, perfect
+                  for running sessions and masterclasses.
                 </p>
               </div>
               {/* end */}
