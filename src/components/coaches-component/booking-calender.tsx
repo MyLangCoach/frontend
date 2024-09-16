@@ -14,6 +14,7 @@ import {
   restoreDefault,
 } from "../../features/offeringslice";
 import toast from "react-hot-toast";
+import { payForSession, restoreDefault as restorer } from "../../features/paymentslice";
 
 interface CalendarProps {
   // note: string;
@@ -47,12 +48,14 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   const [pickedDay, setPickedDay] = useState<string>("");
   const [sessionId, setSessionId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [bookingId, setBookingId] = useState<string>("");
   const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
   const [currentWeek, setCurrentWeek] = useState(moment().tz("Africa/Lagos")); // Set the timezone to WAT
     const [isAvailable, setIsAvailable] = useState(false);
   const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
   const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
   const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
+
   const daysOfWeek = Array.from({ length: 7 }, (_, i) =>
     startOfCurrentWeek.clone().add(i, "days")
   );
@@ -116,10 +119,13 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   
     }
   };
+
+  
   useEffect(() => {
     if (selectedTime) {
       
       handleChecKAvailability();
+     
     }
   }, [selectedTime])
   
@@ -144,7 +150,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
    
   };
 
-  const handleBook = () => {
+  const handleBook = async() => {
     if (active) {
       const sentdata = {
         coachId: sessionId,
@@ -154,19 +160,52 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
         },
       };
     
-      dispatch(createFirstBookingWithCoach(sentdata));
+      const { payload } = await dispatch(createFirstBookingWithCoach(sentdata)); 
+      if (payload) { 
+        toast.success("Booking Successful");
+        
+        dispatch(restoreDefault());
+        handlePayment(payload?.data?.id);
+        setOpen(false);
+      }
     } else {
       toast.error("Note and time must be provided");
     }
   };
 
-  useEffect(() => {
-    if (offering.createBookingSessionSuccess) {
-      toast.success("You have successfully booked a session with the coach");
-      dispatch(restoreDefault());
-      setOpen(false);
+  // useEffect(() => {
+  //   if (offering.createBookingSessionSuccess) {
+  //     toast.success("You have successfully booked a session with the coach");
+  //     dispatch(restoreDefault());
+  //     setOpen(false);
+  //   }
+  // }, [offering?.createBookingSessionSuccess]);
+ const payment = useAppSelector((state) => state.payment);
+
+  const handlePayment = async (bookingId: any) => {
+   console.log("first",bookingId)
+   const data = {
+     bookingId: bookingId,
+     paymentMethod: "TRANSFER",
+   };
+   console.log({ data });
+    const { payload } = await dispatch(payForSession(data)); 
+    if (payload?.status === "success") {
+window.open(payload?.data?.authorization_url, "_blank");
     }
-  }, [offering?.createBookingSessionSuccess]);
+ };
+
+//  useEffect(() => {
+//    if (
+//      payment?.sessionPaymentSuccess &&
+//      payment?.sessionPaymentResp?.authorization_url
+//    ) {
+//      window.open(payment?.sessionPaymentResp?.authorization_url, "_blank");
+    
+//        dispatch(restorer());
+  
+//    }
+//  }, [payment?.sessionPaymentSuccess]);
 
 
   return (

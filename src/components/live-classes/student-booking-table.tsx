@@ -183,7 +183,7 @@ const SingleRow = ({ item, index }: { item: any; index: number }) => {
         </p>
       </td>
       <td className="w-full flex items-center justify-center">
-        {item?.meetingLink && item?.paymentConfirmed && (
+        {item?.meetingLink && item?.paymentConfirmed && item?.status !== "ENDED" && (
           <Link
             to={item?.meetingLink}
             className="items-center hover:bg-[#0E79FF] transition duration-500  bg-black rounded-[4px] text-white px-3 w-fit h-[32px] text-xs dm-sans flex  justify-center"
