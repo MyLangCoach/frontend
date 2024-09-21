@@ -426,6 +426,7 @@ console.log(userData)
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
             value={bio}
+            maxLength={250}
             onChange={(e) => setBio(e.target.value)}
           ></textarea>
         </div>
@@ -440,6 +441,7 @@ console.log(userData)
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
             value={desc}
+            maxLength={250}
             onChange={(e) => setDesc(e.target.value)}
           ></textarea>
         </div>
@@ -622,7 +624,6 @@ console.log(userData)
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
             Hourly rate <span className="font-[300] ">(Maximum two)</span>
           </h1>
-        
         </div>
         {/* end */}
         {/* start of an input */}

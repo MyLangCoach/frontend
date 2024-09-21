@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { AddIcon, LeftArrow, RightArrow } from "../../assets";
+import { AddIcon, EmptyEvent, LeftArrow, RightArrow } from "../../assets";
 import { getAllCreatedOfferingCoach } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { currentMonth, formatDateTime } from "../../util";
@@ -46,10 +46,23 @@ const UpcomingEvents = () => {
           </span>
         </div>
         <div className="w-full flex flex-col gap-3 py-3 px-3 rounded-[4px] bg-[#F7F7F8] ">
-          <p className="lg:text-xl text-base font-bold red-hat text-[#333] ">
+          {/* <p className="lg:text-xl text-base font-bold red-hat text-[#333] ">
             Today
-          </p>
-
+          </p> */}
+          {filteredOfferings?.length === 0 && (
+            <div className="w-full h-[136px] flex flex-col items-center justify-center">
+              <span>
+                <EmptyEvent />
+              </span>
+              <p className="text-center mt-3 text-sm red-hat font-semibold">
+                No upcoming events!
+              </p>
+              <p className="text-center mt-3 text-xs red-hat text-[#838384] lg:max-w-[218px]">
+                Sorry you don’t have any upcoming events yet. they will pile up
+                here
+              </p>
+            </div>
+          )}
           {/* start of a sechdule */}
           {filteredOfferings?.slice(0, 3)?.map((item: any, index: number) => (
             <div className="flex items-center justify-between" key={index}>

@@ -22,6 +22,7 @@ import {
   DollarIcon,
   PaddedArrow,
   StopWatch,
+  WaterGlass,
 } from "../../assets";
 import {
   payForOffering,
@@ -267,15 +268,28 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
         className="flex flex-col gap-2 border-border border  rounded-[4px]"
         key={index}
       >
-        <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
-          <p className="red-hat text-foreground font-bold text-[23px]">
-            {item.offeringTitle}
-          </p>
-          <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
-            {item?.offeringType === "ONE_TIME" && "1:1 class"}
-            {item?.offeringType === "ONE_MONTHLY" && "1:1 Monthly"}
-            {item?.offeringType === "LIVE_GROUP" && "Live Group"}
-          </span>
+        <div className="flex items-center justify-between border-b border-b-border">
+          <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3   ">
+            <p className="red-hat text-foreground font-bold text-[23px]">
+              {item.offeringTitle}
+            </p>
+            <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+              {item?.offeringType === "ONE_TIME" && "1:1 class"}
+              {item?.offeringType === "ONE_MONTHLY" && "1:1 Monthly"}
+              {item?.offeringType === "LIVE_GROUP" && "Live Group"}
+            </span>
+          </div>
+          {item?.offeringType === "ONE_MONTHLY" && (
+            <div className="flex items-center min-w-max gap-2 pr-6">
+              <span className="">
+                <WaterGlass />
+              </span>
+              <p className="dm-sans text-muted font-medium text-sm">
+                {Number(item?.sessionCount - item?.bookedSessions)} sessions
+                left
+              </p>
+            </div>
+          )}
         </div>
         <div className="w-full flex flex-col lg:px-6 pb-6">
           <div className="w-full mt-3 flex wrap gap-6 items-center">

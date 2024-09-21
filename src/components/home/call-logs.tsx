@@ -20,17 +20,55 @@ const CallLogs = () => {
   }, []);
   const bookings = offering?.allBookingsSessionCoach;
   const offeringsList = offering?.allBookedOfferingCoach;
-  console.log({offeringsList})
+  console.log({ bookings })
 
-    const [currentSession, setCurrentSession] = useState(0);
-    const [currentOffering, setCurrentOffering] = useState(0);
+  const [currentSession, setCurrentSession] = useState(0);
+  const [currentOffering, setCurrentOffering] = useState(0);
   const [present, setPresent] = useState(0);
 
+  const currentTime = new Date(); // current user's date and time
 
+  const [pastAppointmentsBooking, setPastAppointmentsBooking] = useState([]);
+  const [upcomingAppointmentsBooking, setUpcomingAppointmentsBooking] = useState([]);
+
+  // Iterate over the appointments array
+
+  
   const [open, setOpen] = useState<boolean>(false);
   
- 
+  useEffect(() => {
+    if (bookings) {
+      const currentTime = new Date();
+      const past: any = [];
+      const upcoming: any = [];
 
+      bookings.forEach((item: any) => {
+        const startDateTime = new Date(item.startDateTime);
+        const endDateTime = new Date(item.endDateTime);
+
+        if (endDateTime < currentTime) {
+          past.push(item); // Add to past appointments
+        } else if (startDateTime >= currentTime) {
+          upcoming.push(item); // Add to upcoming appointments
+        }
+      });
+
+      // Sort upcoming appointments by startDateTime in ascending order (closest first)
+      upcoming.sort((a: any, b: any) => {
+        return (
+          new Date(a.startDateTime).getTime() -
+          new Date(b.startDateTime).getTime()
+        );
+      });
+
+      // Update state
+      setPastAppointmentsBooking(past);
+      setUpcomingAppointmentsBooking(upcoming);
+    }
+  }, [bookings]);
+
+  console.log({pastAppointmentsBooking})
+  console.log({upcomingAppointmentsBooking})
 
     if (offering.fetchLoading) {
       return (
@@ -227,19 +265,41 @@ const CallLogs = () => {
             </div>
           )}
           {currentSession === 1 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any upcoming calls.
-              </p>
-              <Button name="create new  class" className="mt-5 mx-auto" />
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {upcomingAppointmentsBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4">
+                  {upcomingAppointmentsBooking?.map(
+                    (item: any, index: number) => (
+                      <CoachSessionCard item={item} index={index} />
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any upcoming calls.
+                  </p>
+                  <Button name="create new  class" className="mt-5 mx-auto" />
+                </div>
+              )}
             </div>
           )}
           {currentSession === 2 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any past calls.
-              </p>
-              <Button name="create new  class" className="mt-5 mx-auto" />
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {pastAppointmentsBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4">
+                  {pastAppointmentsBooking?.map((item: any, index: number) => (
+                    <CoachSessionCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any past calls.
+                  </p>
+                  <Button name="create new  class" className="mt-5 mx-auto" />
+                </div>
+              )}
             </div>
           )}
           {currentSession === 3 && <CoachReschedules />}

@@ -7,28 +7,66 @@ import {
  
 } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
-import { getAllSavedCards, saveMyCard } from "../../features/paymentslice";
+
 const AccountSettings = () => {
   const dispatch = useAppDispatch();
-  const auth = useAppSelector((state) => state.auth);
+  const user = useAppSelector((state) => state.auth);
+  const email = user?.userData?.email;
   const payment = useAppSelector((state) => state.payment);
-  const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  useEffect(() => {
-    dispatch(getAllSavedCards());
-  }, []);
 
-  useEffect(() => {
-    if (payment?.saveCardSuccess) {
-      dispatch(restoreDefault());
-      const openNewTab = () => {
-        const url = payment?.saveCardData?.authorization_url; // Replace with the URL you want to open
-        window.open(url, "_blank", "noopener,noreferrer");
-      };
-      openNewTab();
-    }
-  }, [payment.saveCardData]);
+ const [errors, setErrors] = useState<string[]>([]);
+ const [matchError, setMatchError] = useState("");
+
+ const validatePassword = (password: string) => {
+   const validationErrors: string[] = [];
+
+   if (password.length < 8) {
+     validationErrors.push("Password must be at least 8 characters long.");
+   }
+   if (!/[a-z]/.test(password)) {
+     validationErrors.push(
+       "Password must contain at least one lowercase letter."
+     );
+   }
+   if (!/[A-Z]/.test(password)) {
+     validationErrors.push(
+       "Password must contain at least one uppercase letter."
+     );
+   }
+   if (!/[0-9]/.test(password)) {
+     validationErrors.push("Password must contain at least one number.");
+   }
+   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+     validationErrors.push(
+       "Password must contain at least one special character."
+     );
+   }
+
+   return validationErrors;
+ };
+
+ const handlePasswordChange = (newPassword: string) => {
+   setPassword(newPassword);
+
+   const validationErrors = validatePassword(newPassword);
+   setErrors(validationErrors);
+ };
+
+ const handleConfirmPasswordChange = (newConfirmPassword: string) => {
+   setConfirm(newConfirmPassword);
+
+   // Check if passwords match
+   if (newConfirmPassword !== password) {
+     setMatchError("Passwords do not match.");
+   } else {
+     setMatchError("");
+   }
+ };
+
+
 
   if (payment?.fetchLoading) {
     return (
@@ -44,20 +82,10 @@ const AccountSettings = () => {
         <p className="mt-2 text-base red-hat">
           Used to sign in, for email receipts and product updates.
         </p>
-        <div className="mt-4">
-          <Input
-            value={email}
-            setValue={setEmail}
-            label="Your email"
-            placeholder="your@email.com"
-            height="h-9"
-          />
+        <div className=" px-3 py-[15px] flex items-center border border-[#E0E0E0] h-9 mt-2">
+          {email}
         </div>
-        <div className="mt-6">
-          <button className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  ">
-            Save Changes
-          </button>
-        </div>
+
         <div className="flex flex-col mt-10">
           <h1 className="red-hat lg:text-[19px] font-semibold">Password</h1>
           <p className="mt-2 text-base red-hat">
@@ -67,14 +95,23 @@ const AccountSettings = () => {
           <div className="mt-4 flex flex-col">
             <Password
               value={password}
-              setValue={setPassword}
+              setValue={handlePasswordChange}
               label="Password"
             />
+            {errors.length > 0 && (
+              <ul style={{ color: "red" }}>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            )}
             <Password
               value={confirm}
-              setValue={setConfirm}
+              setValue={handleConfirmPasswordChange}
               label="Confirm Password"
+              className="mt-4"
             />
+            {matchError && <p style={{ color: "red" }}>{matchError}</p>}
           </div>
           <div className="mt-6">
             <button className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  ">
@@ -82,49 +119,14 @@ const AccountSettings = () => {
             </button>
           </div>
 
-          <h1 className="red-hat lg:text-[19px] font-semibold mt-6">Cards</h1>
-          {payment?.allSavedCard?.length > 0 && (
-            <div className="flex flex-col">
-              {payment?.allSavedCard?.map((item: any, index: number) => {
-                return (
-                  <div
-                    className="flex flex-col gap-2 border-border border p-2 rounded-lg"
-                    key={index}
-                  >
-                    <div className="flex items-center gap-2">
-                      <p className="red-hat text-sm  text-muted">Bank:</p>
-                      <p>{item.bank}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="red-hat text-sm  text-muted">Brand:</p>
-                      <p className="capitalize">{item.brand}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="red-hat text-sm  text-muted">Exp year:</p>
-                      <p className="capitalize">{item.exp_year}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="red-hat text-sm  text-muted">Exp Month:</p>
-                      <p className="capitalize">{item.exp_month}</p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <p className="red-hat text-sm  text-muted"> Last four:</p>
-                      <p className="capitalize">{item?.last4}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <button
               className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  "
               onClick={() => dispatch(saveMyCard(""))}
             >
               {payment?.loading ? "Loading..." : "Save New Card"}
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

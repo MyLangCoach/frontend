@@ -84,7 +84,9 @@ const Login = () => {
                 setValue={setPassword}
                 label="Password"
               />
-        
+              <p className="text-xs font-medium text-muted cursor-pointer " onClick={() => navigate("/forgot-password")}>
+                Forgot password?
+              </p>
               <div className="w-full  flex items-center justify-end mt-4">
                 <button className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] " onClick={handleLogin}>
                   {

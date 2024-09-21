@@ -141,7 +141,7 @@ const TransactionsTable = () => {
                   </td>
                   <td className="w-1/6 flex items-center">
                     <p className=" text-foreground font-normal text-sm truncate inter ">
-                     # {item?.amount}
+                      ₦ {item?.amount}
                     </p>
                   </td>
                 </tr>

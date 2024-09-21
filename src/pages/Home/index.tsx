@@ -12,18 +12,18 @@ import StudentCallLogs from "../../components/home/student-call-logs";
 import toast from "react-hot-toast";
 const Home = () => {
   const user = useAppSelector((state) => state.auth);
+  const userRole = user?.userData?.role;
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.token?.length === 0) {
       navigate("/login")
     }
   }, [])
-    const userRole = user?.userData?.role;
    useEffect(() => {
      if (userRole === "STUDENT" && user?.redirectUrl) {
        navigate(user?.redirectUrl);
      }
-     if ( userRole === "COACH" && user?.userData?.costPerSession === null ) {
+     if ( userRole === "COACH" && user?.userData?.costPerSession?.length  === 0 ) {
        toast.success("Please complete your profile");
        navigate("/profile")
      }
@@ -46,18 +46,20 @@ const Home = () => {
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
           <div className="w-full lg:w-2/3">
-            {userRole === "STUDENT"
-             ? (<StudentCallLogs />) : (<CallLogs />)
-            }
-        
+            {userRole === "STUDENT" ? <StudentCallLogs /> : <CallLogs />}
+            {userRole === "COACH" && (
+
             <GuideTour />
+             )}
           </div>
           {/* end of the left side */}
           {/* right side */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-6">
-            <UpcomingEvents />
-            <TopCoaches />
-          </div>
+          {userRole === "COACH" && (
+            <div className="w-full lg:w-1/3 flex flex-col gap-6">
+              <UpcomingEvents />
+              <TopCoaches />
+            </div>
+          )}
         </div>
       </div>
     </DashboardLayout>

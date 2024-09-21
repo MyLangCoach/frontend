@@ -24,11 +24,15 @@ import VerifyEmailError from "./pages/auth/VerifyEmailError";
 import ViewSingleCoach from "./pages/coach/view-single-coach";
 import PaymentError from "./pages/payment/payment-error";
 import PaymentSuccess from "./pages/payment/payment-success";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/register" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         {/* <Route path="/" element={<Home />} /> */}

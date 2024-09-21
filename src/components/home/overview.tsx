@@ -37,7 +37,7 @@ const Overview = () => {
         </span>
         <div className="flex flex-col gap-1">
           <h1 className="text-black red-had font-bold text-lg lg:text-2xl">
-            {user?.dashboardStats?.totalMinutes}
+            {user?.dashboardStats?.totalMinutes ?? 0}
           </h1>
           <p className="text-sm lg:text-base red-hat text-black font-normal">
             Total minutes
@@ -52,7 +52,7 @@ const Overview = () => {
         </span>
         <div className="flex flex-col gap-1">
           <h1 className="text-white red-had font-bold text-lg lg:text-2xl">
-            # {user?.userData?.earnings}
+            ₦ {user?.userData?.earnings}
           </h1>
           <p className="text-sm lg:text-base red-hat text-white font-normal">
             Total {user?.userData?.role === "COACH" ? "Payout" : "Expenditure"}

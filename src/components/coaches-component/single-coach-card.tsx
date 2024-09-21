@@ -74,7 +74,7 @@ console.log(item)
               {item?.coachLanguage?.[0]?.language}
             </p>
           </div>
-          <div className="gap-4 flex items-center ">
+          {/* <div className="gap-4 flex items-center ">
             <div className="flex items-center gap-[6px]">
               <span>
                 <UsersIcon />4
@@ -86,8 +86,8 @@ console.log(item)
               <span className="bg-muted w-[5px] h-[5px] rounded-full"></span>
               <p className="text-muted  text-sm">32 Classes</p>
             </div>
-          </div>
-          <div className="w-full gap-3 items-center flex ">
+          </div> */}
+          {/* <div className="w-full gap-3 items-center flex ">
             <span>
               <LanguageIcon />
             </span>
@@ -95,7 +95,7 @@ console.log(item)
               {selectedLanguage?.language ?? "Nil"}
               {`  (${selectedLanguage?.proficiency ?? ""})`}
             </p>
-          </div>
+          </div> */}
           <div className="w-full">
             <Button
               name="Book a lesson"

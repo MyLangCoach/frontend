@@ -293,6 +293,7 @@ const uploadFile = () => {
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
+            maxLength={250}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
           ></textarea>
@@ -307,6 +308,7 @@ const uploadFile = () => {
             id=""
             className="min-h-20 rounded-[4px] px-3 py-[15px] flex items-center border border-[#E0E0E0] outline-none placeholder:text-black placeholder:text-opacity-50 bg-transparent focus:bg-transparent placeholder:text-sm text-black text-sm "
             placeholder="type message here"
+            maxLength={250}
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           ></textarea>

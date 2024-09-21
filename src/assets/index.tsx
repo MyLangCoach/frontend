@@ -1,7 +1,63 @@
 
-
-
-
+export const WaterGlass = () => {
+  return (
+    <svg
+      width="12"
+      height="18"
+      viewBox="0 0 12 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0.75 16.5H11.25M0.75 1.5H11.25M9.75 16.5V13.371C9.74992 12.9732 9.59182 12.5917 9.3105 12.3105L6 9M6 9L2.6895 12.3105C2.40818 12.5917 2.25008 12.9732 2.25 13.371V16.5M6 9L2.6895 5.6895C2.40818 5.40826 2.25008 5.02679 2.25 4.629V1.5M6 9L9.3105 5.6895C9.59182 5.40826 9.74992 5.02679 9.75 4.629V1.5"
+        stroke="#EB5757"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const EmptyStudent = () => {
+  return (
+    <svg
+      width="41"
+      height="40"
+      viewBox="0 0 41 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="0.5" width="40" height="40" rx="20" fill="#DCECFF" />
+      <path
+        d="M30.5 18V24M30.5 18L20.5 13L10.5 18L20.5 23L30.5 18ZM14.5 20V25C17.5 28 23.5 28 26.5 25V20"
+        stroke="#0E79FF"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+export const EmptyEvent = () => {
+  return (
+    <svg
+      width="41"
+      height="40"
+      viewBox="0 0 41 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="0.5" width="40" height="40" rx="20" fill="#DCECFF" />
+      <path
+        d="M13.5 11L10.5 14M30.5 14L27.5 11M14.88 26.7L12.5 29M26.14 26.67L28.5 29M17.5 21L19.5 23L23.5 19M28.5 21C28.5 25.4183 24.9183 29 20.5 29C16.0817 29 12.5 25.4183 12.5 21C12.5 16.5817 16.0817 13 20.5 13C24.9183 13 28.5 16.5817 28.5 21Z"
+        stroke="#0E79FF"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
 export const ProfileViewIcon = () => {
   return (
     <svg
