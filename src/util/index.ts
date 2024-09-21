@@ -477,3 +477,21 @@ export function convertDateFormatInput(inputDate: any) {
 
   return outputDate;
 }
+
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export const currentMonth = months[new Date().getMonth()];

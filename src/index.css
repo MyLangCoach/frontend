@@ -50,6 +50,11 @@
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
+.flow-hide::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+}
 .flow-hide-x-1 {
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
@@ -65,11 +70,6 @@
   width: 0;
   height: 0;
   cursor: pointer;
-}
-.flow-hide::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
 }
 .hide-scroll{
     scrollbar-width: none !important; /* Firefox */

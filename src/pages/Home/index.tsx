@@ -28,7 +28,7 @@ const Home = () => {
        navigate("/profile")
      }
    }, [user?.redirectUrl, navigate]);
-  console.log(user?.userData)
+
   
   return (
     <DashboardLayout current={1}>

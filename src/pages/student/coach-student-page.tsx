@@ -1,14 +1,16 @@
-import React from 'react'
-import DashboardLayout from '../../layouts/DashboardLayout'
+import DashboardLayout from '../../layouts/DashboardLayout';
 import { NotificationIcon, StudentLogoIcon } from '../../assets';
 
-import TopStudents from '../../components/students/top-student';
 import StudentList from '../../components/students/student-list-table';
 import ProperTeachingTools from '../../components/students/proper-teaching-tool';
 import { useAppSelector } from '../../app/hooks';
 const CoachStudent = () => {
-  const auth = useAppSelector((state) => state.auth);
-  console.log(auth?.allMyStudent);
+ 
+   
+    const auth = useAppSelector((state) => state.auth);
+
+  
+  
   return (
     <DashboardLayout current={5}>
       <div className="w-full flex flex-col">
