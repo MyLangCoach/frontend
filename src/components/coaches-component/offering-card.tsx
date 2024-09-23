@@ -1,33 +1,43 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ClassDetails } from '../../util/types';
+import { useCallback, useEffect, useState } from "react";
+import { ClassDetails } from "../../util/types";
 import pic from "../../assets/png/face-woman.png";
-import { BlueTimeIcon, BlueVideoIcon, CancelX, DollarIcon, YellowCalender, YellowCap } from '../../assets';
-import ReUseModal from '../modal/Modal';
-import OfferingCalendar from './offering-booking';
+import {
+  BlueTimeIcon,
+  BlueVideoIcon,
+  CancelX,
+  DollarIcon,
+  YellowCalender,
+  YellowCap,
+} from "../../assets";
+import ReUseModal from "../modal/Modal";
+import OfferingCalendar from "./offering-booking";
 import { DateTimeInput, Input } from "../Input";
-import { store } from '../../app/store';
-import toast from 'react-hot-toast';
-import { resetRedirect, saveRedirectUrl } from '../../features/auth/authSlice';
-import { bookCoachOffering, getAvailability, restoreDefault } from '../../features/offeringslice';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../Button';
-const OfferingCard = ({ item }:{item:ClassDetails}) => {
-     const authenticated = store.getState().auth?.token;
+import { store } from "../../app/store";
+import toast from "react-hot-toast";
+import { resetRedirect, saveRedirectUrl } from "../../features/auth/authSlice";
+import {
+  bookCoachOffering,
+  getAvailability,
+  restoreDefault,
+} from "../../features/offeringslice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "../Button";
+import { payForOffering } from "../../features/paymentslice";
+const OfferingCard = ({ item }: { item: ClassDetails }) => {
+  const authenticated = store.getState().auth?.token;
   const userPic = pic;
-    const handleError = (e:any) => {
-      e.target.onerror = null; // Prevent looping
-      e.target.src = pic;
+  const handleError = (e: any) => {
+    e.target.onerror = null; // Prevent looping
+    e.target.src = pic;
   };
-    const urlId = useParams();
+  const urlId = useParams();
   const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-   const offering = useAppSelector((state) => state.offerings);
+  const navigate = useNavigate();
+  const offering = useAppSelector((state) => state.offerings);
   const auth = useAppSelector((state) => state.auth);
   const [loading, setLoading] = useState<boolean>(false);
 
-
-  
   const [open, setOpen] = useState<boolean>(false);
 
   const [openLive, setOpenLive] = useState(false);
@@ -35,9 +45,8 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
-  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([""]
-  );
-  
+  const [liveDateTimes, setLiveDateTimes] = useState<string[]>([""]);
+
   const handleBookLiveClass = () => {
     if (authenticated) {
       if (note) {
@@ -60,25 +69,46 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
     }
   };
   const [active, setActive] = useState(false);
-  const verifyItems = (time:string) => {
-   return time.split("")?.length > 2
-  }
+  const verifyItems = (time: string) => {
+    return time.split("")?.length > 2;
+  };
 
-  
-  const handleBookMonthly = () => {
+  const handlePayment = async (seriesId: any) => {
     
+    const data = {
+      seriesId: seriesId,
+      paymentMethod: "TRANSFER",
+    };
    
+    const { payload } = await dispatch(payForOffering(data));
+    if (payload?.status === "success") {
+      window.open(payload?.data?.authorization_url, "_blank");
+      setTimeout(() => {
+         navigate("/student/live-classes");
+      }, 3000);
+    }
+  };
+  const handleBookMonthly = async () => {
     if (authenticated) {
       if (active) {
         const sentdata = {
           id: item?.id,
           data: {
             note: note,
-            bookTimes: liveDateTimes?.filter((item:string) => item?.length > 0),
+            bookTimes: liveDateTimes?.filter(
+              (item: string) => item?.length > 0
+            ),
           },
         };
 
-        dispatch(bookCoachOffering(sentdata));
+        const { payload } = await dispatch(bookCoachOffering(sentdata));
+        if (payload?.status === "success") {
+          toast.success(
+            "You have successfully booked this coach offering with the coach"
+          );
+             handlePayment(payload?.data?.[0]?.seriesId);
+
+        }
       } else {
         toast.error("All Field   must be provided");
       }
@@ -93,52 +123,43 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
       setOpenLive(false);
       setOpenMonthly(false);
     }, 50);
-  }
-    useEffect(() => {
-      if (offering.bookCoachOfferingSuccess) {
-        toast.success(
-          "You have successfully booked this coach offering with the coach"
-        );
-        dispatch(restoreDefault());
-        dispatch(resetRedirect());
-        navigate("/student/live-classes");
-        setOpenLive(false);
-        setOpenMonthly(false);
-        setOpen(false);
-      }
-    }, [offering?.bookCoachOfferingSuccess]);
+  };
+  useEffect(() => {
+    if (offering.bookCoachOfferingSuccess) {
+    
+      dispatch(restoreDefault());
+      dispatch(resetRedirect());
   
-  console.log(liveDateTimes) 
-    const id = useParams();
-    const userId = id.id;
+      setOpenLive(false);
+      setOpenMonthly(false);
+      setOpen(false);
+    }
+  }, [offering?.bookCoachOfferingSuccess]);
+
+  const id = useParams();
+  const userId = id.id;
   const handleChecKAvailability = async () => {
     setLoading(true);
     const data = {
       id: id.id,
-      date:liveDateTimes[0],
-    }
+      date: liveDateTimes[0],
+    };
     const { payload } = await dispatch(getAvailability(data));
-    if (payload?.status === "success") { 
+    if (payload?.status === "success") {
       setMessage("Available");
       setIsAvailable(true);
       setLoading(false);
-    }
-    else {
+    } else {
       setMessage("Not Available");
       setLoading(false);
       setIsAvailable(false);
     }
-
-  }
+  };
   useEffect(() => {
     if (liveDateTimes?.[0]?.length) {
-
       handleChecKAvailability();
     }
-
-  }, [liveDateTimes])
-  
-  console.log(liveDateTimes?.[0]?.length)
+  }, [liveDateTimes]);
 
   // Update a specific date-time value
   const updateDateTime = (index: number, newDateTime: string) => {
@@ -146,16 +167,16 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
     updatedDateTimes[index] = newDateTime;
     setLiveDateTimes(updatedDateTimes);
   };
-    useEffect(() => {
-      const isFilled = liveDateTimes?.some(verifyItems);
-     
-      if (isFilled && note) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
-    }, [note, liveDateTimes]);
-  
+  useEffect(() => {
+    const isFilled = liveDateTimes?.some(verifyItems);
+
+    if (isFilled && note) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [note, liveDateTimes]);
+
   return (
     <div
       className="w-full flex flex-col offering-shadow rounded-md cursor-pointer"
@@ -164,10 +185,8 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
         if (item?.type === "ONE_TIME") {
           setOpen(true);
         }
-        if (item?.type === "ONE_MONTHLY" && item?.seriesCount === 1) {
-          setOpen(true);
-        }
-        if (item?.type === "ONE_MONTHLY" && item?.seriesCount > 1) {
+        
+        if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
           setOpenMonthly(true);
         }
         if (item?.type === "LIVE_GROUP") {
@@ -194,7 +213,7 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
           <span className="flex items-center gap-2">
             <YellowCap />
             <p className="text-muted dm-sans ">
-              {item?.seriesCount}  {`Class`} Series
+              {item?.seriesCount} {`Class`} Series
             </p>
           </span>
           <span className="flex items-center gap-2">
@@ -305,28 +324,16 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
               />
             ))}
           </div>
-          {
-            isAvailable && loading === false && (
-<p className='text-muted text-sm mt-4'>
-              You can book this class
-            </p>
-            )
-}
-          {
-            !isAvailable && loading === false && message && (
-<p className=' text-sm mt-4 text-red-700'>
-              Not Available
-            </p>
-            )
-}
-          {
-            !isAvailable && loading  && (
-<p className=' text-sm mt-4 text-muted'>
-              Loading ...
-            </p>
-            )
-}
-         
+          {isAvailable && loading === false && (
+            <p className="text-muted text-sm mt-4">Coach is Available</p>
+          )}
+          {!isAvailable && loading === false && message && (
+            <p className=" text-sm mt-4 text-red-700">Not Available</p>
+          )}
+          {!isAvailable && loading && (
+            <p className=" text-sm mt-4 text-muted">Loading ...</p>
+          )}
+
           <div className="w-full mt-6">
             <Button
               name={offering?.loading ? "Loading..." : "Book Now"}
@@ -342,6 +349,6 @@ const OfferingCard = ({ item }:{item:ClassDetails}) => {
       </ReUseModal>
     </div>
   );
-}
+};
 
-export default OfferingCard
+export default OfferingCard;

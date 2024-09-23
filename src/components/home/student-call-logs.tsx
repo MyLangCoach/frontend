@@ -8,6 +8,7 @@ import {
   getAllOfferingBookingStudent,
   getAllReschedules,
   getAllSessionBookingStudent,
+  getAvailability,
   rescheduleOffering,
   restoreDefault as restore,
 } from "../../features/offeringslice";
@@ -170,6 +171,9 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
   const [note, setNote] = useState("");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
   const [activeReschule, setActiveReschedule] = useState<boolean>(false);
+    const [message, setMessage] = useState("");
+    const [isAvailable, setIsAvailable] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
   const handlePayment = () => {
     const data = {
       seriesId: item?.seriesId,
@@ -203,7 +207,8 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
     setLiveDateTimes(updatedDateTimes);
   };
   const handleBookNextSession = () => {
-    if (note) {
+
+    if (note && isAvailable) {
       const sentdata = {
         id: item?.seriesId,
         data: {
@@ -217,7 +222,24 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
       toast.error("Note  must be provided");
     }
   };
-
+  const handleChecKAvailability = async () => {
+    setLoading(true);
+    const data = {
+      id: item?.coachId,
+      date: liveDateTimes[0],
+    };
+    const { payload } = await dispatch(getAvailability(data));
+    if (payload?.status === "success") {
+      setMessage("Coach  is available");
+      setIsAvailable(true);
+      setLoading(false);
+    } else {
+      setMessage("Coach is not available at this time");
+      setLoading(false);
+      setIsAvailable(false);
+    }
+  };
+  
   const [active, setActive] = useState(false);
   const verifyItems = (time: string) => {
     return time.split("")?.length > 2;
@@ -225,8 +247,10 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
   const [openMonthly, setOpenMonthly] = useState(false);
   useEffect(() => {
     const isFilled = liveDateTimes?.some(verifyItems);
-
-    if (isFilled && note) {
+    if (isFilled) {
+      handleChecKAvailability();
+    }
+    if (isFilled && note ) {
       setActive(true);
     } else {
       setActive(false);
@@ -400,7 +424,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
             </button>
           </div>
           <h1 className="text-xl font-bold red-hat mb-4 ">
-            Monthly Series Booking
+            Next Session Booking
           </h1>
           <div className="mb-4">
             <Input
@@ -425,6 +449,15 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
               />
             ))}
           </div>
+          {isAvailable && loading === false && (
+            <p className="text-muted text-sm mt-4">Coach is Available</p>
+          )}
+          {!isAvailable && loading === false && message && (
+            <p className=" text-sm mt-4 text-red-700">Not Available</p>
+          )}
+          {!isAvailable && loading && (
+            <p className=" text-sm mt-4 text-muted">Loading ...</p>
+          )}
           <div className="w-full mt-6">
             <Button
               name={offering?.loading ? "Loading..." : "Book Now"}

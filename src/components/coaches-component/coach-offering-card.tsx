@@ -33,7 +33,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
   const [note, setNote] = useState("");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
   const [activeReschule, setActiveReschedule] = useState<boolean>(false);
-  const handlePayment = () => {
+  const handlePayment = async () => {
     const data = {
       seriesId: item?.seriesId,
       paymentMethod: "TRANSFER",
@@ -43,15 +43,15 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
   };
 
   useEffect(() => {
-    if (
-      payment?.offeringPaymentSuccess &&
-      payment?.offeringPaymentResp?.authorization_url
-    ) {
-      window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
-      setTimeout(() => {
-        dispatch(restoreDefault());
-      }, 3000);
-    }
+    // if (
+    //   payment?.offeringPaymentSuccess &&
+    //   payment?.offeringPaymentResp?.authorization_url
+    // ) {
+    //   window.open(payment?.offeringPaymentResp?.authorization_url, "_blank");
+    //   setTimeout(() => {
+    //     dispatch(restoreDefault());
+    //   }, 3000);
+    // }
     if (offering?.nextSessionBookingSuccess) {
       setOpenMonthly(false);
 

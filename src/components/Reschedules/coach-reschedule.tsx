@@ -10,8 +10,8 @@ const CoachReschedules = () => {
     const dispatch = useAppDispatch();
     const sentRequest = offering?.allReschedules?.initiatedRequests;
     const receivedRequest = offering?.allReschedules?.receivedRequests;
-    const [selected, setSelected] = useState({name:"Sent", value:0});
-console.log(receivedRequest)
+    const [selected, setSelected] = useState({name:"Received", value:1});
+
   
   return (
     <div className="w-full flex flex-col bg-white px-4 mt-6 rounded-md ">

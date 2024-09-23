@@ -45,12 +45,9 @@ const Home = () => {
         <Overview />
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-          <div className="w-full lg:w-2/3">
+          <div className={`w-full  ${userRole === "COACH" ? "lg:w-2/3" :"lg:w-full"} `}>
             {userRole === "STUDENT" ? <StudentCallLogs /> : <CallLogs />}
-            {userRole === "COACH" && (
-
-            <GuideTour />
-             )}
+            {userRole === "COACH" && <GuideTour />}
           </div>
           {/* end of the left side */}
           {/* right side */}

@@ -11,11 +11,13 @@ import { Input } from "../Input";
 import {
     bookCoachOffering,
   createFirstBookingWithCoach,
+  getAvailability,
   restoreDefault,
 } from "../../features/offeringslice";
 import toast from "react-hot-toast";
 import { resetRedirect, saveRedirectUrl } from "../../features/auth/authSlice";
 import { store } from "../../app/store";
+import { payForOffering } from "../../features/paymentslice";
 
 interface OfferingCalendarProps {
   // note: string;
@@ -42,6 +44,9 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState("");
+    const [isAvailable, setIsAvailable] = useState(false);
   const [pickedTime, setPickedTime] = useState<string>("");
   const [pickedDay, setPickedDay] = useState<string>("");
   const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
@@ -83,12 +88,12 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
   };
 
   useEffect(() => {
-    if (note && selectedTime) {
+    if (note && selectedTime && isAvailable) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [note, selectedTime]);
+  }, [note, selectedTime, isAvailable]);
 
   const handleTimeClick = (day: moment.Moment, time: moment.Moment) => {
     const selectedDateTime = day
@@ -105,11 +110,47 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
     setPickedTime(time.tz("Africa/Lagos").format());
     setPickedDay(day.tz("Africa/Lagos").format());
     setPickedDate(selectedDateTime);
-    const payload = { note, bookTime };
+  
   
   };
+  const handleChecKAvailability = async () => {
+    setLoading(true);
+    const data = {
+      id: urlId.id,
+      date: selectedTime,
+    };
+    const { payload } = await dispatch(getAvailability(data));
+    if (payload?.status === "success") {
+      toast.success(" Coach is Available");
+      setIsAvailable(true);
+      setLoading(false);
+    } else {
+      toast.error("Coach is Not Available");
+      setLoading(false);
+      setIsAvailable(false);
+    }
+  };
+    const handlePayment = async (seriesId: any) => {
+     
+      const data = {
+        seriesId: seriesId,
+        paymentMethod: "TRANSFER",
+      };
 
-  const handleBook = () => {
+      const { payload } = await dispatch(payForOffering(data));
+      if (payload?.status === "success") {
+        window.open(payload?.data?.authorization_url, "_blank");
+        setTimeout(() => {
+          navigate("/student/live-classes");
+        }, 3000);
+      }
+    };
+   useEffect(() => {
+     if (selectedTime) {
+       handleChecKAvailability();
+     }
+   }, [selectedTime]);
+  const handleBook = async () => {
     if (authenticated) {
 
       if (active) {
@@ -117,11 +158,22 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
           id: id,
           data: {
           note: note,
-          bookTimes: [ selectedTime],
+          bookTimes: [selectedTime],
         },
       };
    
-      dispatch(bookCoachOffering(sentdata));
+        const { payload } = await dispatch(bookCoachOffering(sentdata)); 
+          if (payload?.status === "success") {
+            toast.success(
+              "You have successfully booked this coach offering with the coach"
+            );
+
+            handlePayment(payload?.data?.[0]?.seriesId);
+             dispatch(restoreDefault());
+             dispatch(resetRedirect());
+
+             setOpen(false);
+          }
     } else {
       toast.error("Note and time must be provided");
     }
@@ -132,15 +184,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
     }
   };
 
-  useEffect(() => {
-    if (offering.bookCoachOfferingSuccess) {
-      toast.success("You have successfully booked this coach offering with the coach");
-      dispatch(restoreDefault());
-      dispatch(resetRedirect());
-      navigate("/")
-      setOpen(false);
-    }
-  }, [offering?.bookCoachOfferingSuccess]);
+ 
 
   const handleClose = () => {
     setTimeout(() => {
@@ -278,3 +322,5 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
 };
 
 export default OfferingCalendar;
+
+
