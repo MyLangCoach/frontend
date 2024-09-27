@@ -12,7 +12,7 @@ const ResetPassword = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
   const [name, setName] = useState("");
-  const [isSuccess, setIsSuccess] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
