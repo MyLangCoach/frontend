@@ -6,11 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   bookNextSession,
   getAllOfferingBookingStudent,
-  getAllReschedules,
-  getAllSessionBookingStudent,
-  getAvailability,
-  rescheduleOffering,
-  restoreDefault as restore,
+  getAllReschedules, getAvailability,
+  rescheduleOffering
 } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
@@ -21,14 +18,10 @@ import {
   BlueVideoIcon,
   CancelX,
   DollarIcon,
-  PaddedArrow,
-  StopWatch,
-  WaterGlass,
+  PaddedArrow, WaterGlass
 } from "../../assets";
 import {
-  payForOffering,
-  payForSession,
-  restoreDefault,
+  payForOffering, restoreDefault
 } from "../../features/paymentslice";
 import toast from "react-hot-toast";
 
@@ -54,10 +47,44 @@ const StudentCallLogs = () => {
     }
   }, [offering?.nextSessionBookingSuccess, offering?.rescheduleSuccess]);
 
-  const allOfferings = offering?.allBookedOfferingsStudent;
-
+  const [pastOfferingBooking, setPastOfferingBooking] = useState([]);
+  const [upcomingOfferingBooking, setUpcomingOfferingBooking] = useState([]);
   const [current, setCurrent] = useState(0);
-  const [open, setOpen] = useState<boolean>(false);
+
+  const allOfferings = offering?.allBookedOfferingsStudent;
+  useEffect(() => {
+    
+    if (allOfferings) {
+      const currentTime = new Date();
+      const past: any = [];
+      const upcoming: any = [];
+
+      allOfferings?.forEach((item: any) => {
+        const startDateTime = new Date(item.startDateTime);
+        const endDateTime = new Date(item.endDateTime);
+
+        if (endDateTime < currentTime) {
+          past.push(item); // Add to past appointments
+        } else if (startDateTime >= currentTime) {
+          upcoming.push(item); // Add to upcoming appointments
+        }
+      });
+
+      // Sort upcoming appointments by startDateTime in ascending order (closest first)
+      upcoming?.sort((a: any, b: any) => {
+        return (
+          new Date(a.startDateTime).getTime() -
+          new Date(b.startDateTime).getTime()
+        );
+      });
+
+      // Update state
+      setPastOfferingBooking(past);
+      setUpcomingOfferingBooking(upcoming);
+    }
+  }, [ allOfferings]);
+
+
 
   if (offering.fetchLoading) {
     return (
@@ -140,22 +167,52 @@ const StudentCallLogs = () => {
       )}
       {current === 1 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any upcoming calls.
-          </p>
-          <Button name="Connect new live class" className="mt-5 mx-auto" />
+          {upcomingOfferingBooking.length > 0 ? (
+            <div className="w-full flex flex-col px-4 py-4 gap-5">
+              {upcomingOfferingBooking?.map((item: any, index: number) => (
+                <SingleRow item={item} index={index} key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any upcoming classes at the moment, You can
+                proceed to book a coaching session or offerings to continue
+              </p>
+              <Button
+                name="Book a Coach Session"
+                className="mt-5 mx-auto"
+                onClick={() => navigate("/coaches")}
+              />
+            </div>
+          )}
         </div>
       )}
       {current === 2 && (
         <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-            You do not have any past calls.
-          </p>
-          <Button name="Connect new live class" className="mt-5 mx-auto" />
+          {pastOfferingBooking.length > 0 ? (
+            <div className="w-full flex flex-col px-4 py-4 gap-5">
+              {pastOfferingBooking?.map((item: any, index: number) => (
+                <SingleRow item={item} index={index} key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                You do not have any past classes at the moment, You can proceed to
+                book a coaching session or offerings to continue
+              </p>
+              <Button
+                name="Book a Coach Session"
+                className="mt-5 mx-auto"
+                onClick={() => navigate("/coaches")}
+              />
+            </div>
+          )}
         </div>
       )}
       {current === 3 && <CoachReschedules />}
-      <CreateNewServiceModal open={open} setOpen={setOpen} />
+   
     </div>
   );
 };

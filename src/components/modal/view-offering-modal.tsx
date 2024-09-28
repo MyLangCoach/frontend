@@ -23,9 +23,9 @@ const ViewOfferingModal = ({ open, setOpen, item, index }: viewProps) => {
             setOpen(false);
         }, 100);
   }
-    
+ 
   return (
-    <div className='w-fit' key={index}>
+    <div className="w-fit" key={index}>
       <ReUseModal
         open={open}
         setOpen={setOpen}
@@ -33,10 +33,7 @@ const ViewOfferingModal = ({ open, setOpen, item, index }: viewProps) => {
       >
         <div className="w-full flex flex-col ">
           <div className="flex justify-end p-3 w-full">
-                      <div
-                          className=" cursor-pointer "
-                          onClick={handleClose}
-            >
+            <div className=" cursor-pointer " onClick={handleClose}>
               <CancelIcon />
             </div>
           </div>
@@ -52,82 +49,108 @@ const ViewOfferingModal = ({ open, setOpen, item, index }: viewProps) => {
             <h1 className="red-hat font-bold mt-6 lg:text-3xl ">
               {details?.title}
             </h1>
-            <p className="text-muted mt-6">{details?.description}</p>
+            <p className=" mt-6">{details?.description}</p>
             <div className="w-full mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Class Type</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold  ">
+                  Class Type
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.type}
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Number of Attendees</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Number of Attendees
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.numOfAttendees ?? 1}
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Class Date</p>
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Class Date
+                </p>
                 <div className="flex flex-col gap-3">
-                  {details?.liveDateTimes?.map((time: string) => (
-                    <p className="lg:text-base text-sm mt-2 capitalize">
-                      {" "}
-                      {formatDateTime(time)?.date}{" "}
-                    </p>
-                  ))}
+                  {details?.liveDateTimes?.map(
+                    (item: any, index: number) => (
+                      <p
+                        className="text-muted text-base sm:text-lg  inter mt-2"
+                        key={index}
+                      >
+                        {`${formatDateTime(item).date}, ${
+                          formatDateTime(item)?.time
+                        }`}
+                      </p>
+                    )
+                  )}
                 </div>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Attendance Type</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Attendance Type
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.attendantType ?? "-"}
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Duration</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Duration
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.duration ?? "-"}
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Pricing</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Pricing
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.isFree ? "FREE" : "PAID"}
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Cost</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
-                  <span>{details?.cost?.currency}</span>
+                <p className=" text-sm lg:text-lg inter font-semibold ">Cost</p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
+                  <span>₦</span>
                   <span>{details?.cost?.amount}</span>
                 </p>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Redirect Url</p>
-                <a className="lg:text-lg font-semibold text-base  mt-2 capitalize  cursor-pointer" href={details?.redirectLink} target='_blank'>
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Redirect Url
+                </p>
+                <a
+                  className="lg:text-lg  text-muted text-sm   mt-2 capitalize  cursor-pointer"
+                  href={details?.redirectLink}
+                  target="_blank"
+                >
                   {details?.redirectLink ?? "-"}
                 </a>
               </div>
               {/* end */}
               {/* start  */}
               <div className="flex flex-col">
-                <p className="text-muted text-sm">Number of Registered Attendees</p>
-                <p className="lg:text-lg font-semibold text-base mt-2 capitalize">
+                <p className=" text-sm lg:text-lg inter font-semibold ">
+                  Number of Registered Attendees
+                </p>
+                <p className="lg:text-lg  text-muted text-sm  mt-2 capitalize">
                   {details?.registeredAttendeesCount ?? "-"}
                 </p>
               </div>

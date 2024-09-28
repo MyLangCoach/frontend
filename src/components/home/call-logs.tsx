@@ -20,7 +20,7 @@ const CallLogs = () => {
   }, []);
   const bookings = offering?.allBookingsSessionCoach;
   const offeringsList = offering?.allBookedOfferingCoach;
-  console.log({ bookings })
+
 
   const [currentSession, setCurrentSession] = useState(0);
   const [currentOffering, setCurrentOffering] = useState(0);
@@ -30,6 +30,8 @@ const CallLogs = () => {
 
   const [pastAppointmentsBooking, setPastAppointmentsBooking] = useState([]);
   const [upcomingAppointmentsBooking, setUpcomingAppointmentsBooking] = useState([]);
+  const [pastOfferingBooking, setPastOfferingBooking] = useState([]);
+  const [upcomingOfferingBooking, setUpcomingOfferingBooking] = useState([]);
 
   // Iterate over the appointments array
 
@@ -65,10 +67,38 @@ const CallLogs = () => {
       setPastAppointmentsBooking(past);
       setUpcomingAppointmentsBooking(upcoming);
     }
-  }, [bookings]);
+    if (offeringsList) {
+      const currentTime = new Date();
+      const past: any = [];
+      const upcoming: any = [];
 
-  console.log({pastAppointmentsBooking})
-  console.log({upcomingAppointmentsBooking})
+      offeringsList.forEach((item: any) => {
+        const startDateTime = new Date(item.startDateTime);
+        const endDateTime = new Date(item.endDateTime);
+
+        if (endDateTime < currentTime) {
+          past.push(item); // Add to past appointments
+        } else if (startDateTime >= currentTime) {
+          upcoming.push(item); // Add to upcoming appointments
+        }
+      });
+
+      // Sort upcoming appointments by startDateTime in ascending order (closest first)
+      upcoming.sort((a: any, b: any) => {
+        return (
+          new Date(a.startDateTime).getTime() -
+          new Date(b.startDateTime).getTime()
+        );
+      });
+
+      // Update state
+      setPastOfferingBooking(past);
+      setUpcomingOfferingBooking(upcoming);
+    }
+
+  }, [bookings,offeringsList]);
+
+
 
     if (offering.fetchLoading) {
       return (
@@ -220,18 +250,47 @@ const CallLogs = () => {
           )}
           {currentOffering === 1 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any upcoming calls.
-              </p>
-              <Button name="Create new class" className="mt-5 mx-auto" />
+              {upcomingOfferingBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                  {upcomingOfferingBooking?.map((item: any, index: number) => (
+                    <CoachOfferingCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col ">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
+                    You do not have any Upcoming classes at the moment
+                  </p>
+                  <Button
+                    name="Create new  class"
+                    className="mt-5 mx-auto"
+                    onClick={() => setOpen(true)}
+                  />
+                </div>
+              )}
             </div>
           )}
           {currentOffering === 2 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any past calls.
-              </p>
-              <Button name="Create new  class" className="mt-5 mx-auto" />
+              {pastOfferingBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                  {pastOfferingBooking?.map((item: any, index: number) => (
+                    <CoachOfferingCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col ">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
+                    You do not have any classes at the moment, Create a new
+                    group class or private class to get started
+                  </p>
+                  <Button
+                    name="Create new  class"
+                    className="mt-5 mx-auto"
+                    onClick={() => setOpen(true)}
+                  />
+                </div>
+              )}
             </div>
           )}
           {currentOffering === 3 && <CoachReschedules />}
@@ -279,7 +338,7 @@ const CallLogs = () => {
                   <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                     You do not have any upcoming calls.
                   </p>
-                  <Button name="create new  class" className="mt-5 mx-auto" />
+                 
                 </div>
               )}
             </div>

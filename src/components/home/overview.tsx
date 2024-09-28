@@ -43,7 +43,7 @@ const Overview = () => {
             Total minutes
           </p>
         </div>
-      </div>
+    </div>
       {/* end of a session */}
       {/* start of a pack */}
       <div className="w-full bg-black pattern-bg flex items-center p-6 rounded-[6px] gap-4">

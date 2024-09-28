@@ -16,7 +16,7 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
   const selectedLanguage = languages?.[0]
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-console.log(item)
+
   return (
     <div
       className="w-full flex flex-col carding-shadow lg:w-[257px] bg-white rounded-[8px]"
@@ -33,7 +33,7 @@ console.log(item)
           <h1 className="text-base lg:text-xl font-bold red-hat capitalize truncate">
             {firstName} {lastName}
           </h1>
-       
+
           <span>
             <VerifyIcon />
           </span>
@@ -50,7 +50,7 @@ console.log(item)
               {costPerSession?.[0]?.sessionType ?? "0"} -min
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              #{costPerSession?.[0]?.amount ?? "0"}
+              ₦{costPerSession?.[0]?.amount ?? "0"}
             </p>
           </div>
           <div className="w-1/2 flex-grow flex flex-col">
@@ -61,7 +61,7 @@ console.log(item)
               {costPerSession?.[1]?.sessionType ?? "0"} -min
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              #{costPerSession?.[1]?.amount ?? "0"}
+              ₦{costPerSession?.[1]?.amount ?? "0"}
             </p>
           </div>
         </div>

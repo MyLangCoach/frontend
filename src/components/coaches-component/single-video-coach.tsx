@@ -38,39 +38,38 @@ const SingleVideoCard: React.FC<SingleCardProps> = ({ item, onClick }: any) => {
         className="lg:w-full  h-[200px] rounded-t-[8px] object-cover cursor-pointer"
       />
       <div className="w-full px-4 py-3 flex flex-col">
-       
-       
         <div className=" py-2 flex items-center w-full gap-4 ">
           <div className="w-1/2 flex-grow flex flex-col">
             <p className="text-black text-base  red-hat gap-2 flex items-center ">
-            
               {costPerSession?.[0]?.sessionType ?? "0"} -min trial
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              #{costPerSession?.[0]?.amount ?? "0"}
+              ₦{costPerSession?.[0]?.amount ?? "0"}
             </p>
           </div>
           <div className="w-1/2 flex-grow flex flex-col">
             <p className="text-black text-base  red-hat gap-2 flex items-center ">
-            
               {costPerSession?.[1]?.sessionType ?? "0"} -min trial
             </p>
             <p className="text-black red-hat font-bold lg:text-xl text-base mt-1">
-              #{costPerSession?.[1]?.amount ?? "0"}
+              ₦{costPerSession?.[1]?.amount ?? "0"}
             </p>
           </div>
         </div>
         <div className="w-full mt-4 flex flex-col gap-3">
-        
-       
           <div className="w-full flex flex-col gap-4">
             <Button
               name="Book a lesson"
               className="min-w-full"
               onClick={() => setOpen(true)}
-                      />
+            />
           </div>
-                      <OutlineBtn onClick={onClick} name="View Offerings" className="min-w-full " height="h-9" />
+          <OutlineBtn
+            onClick={onClick}
+            name="View Offerings"
+            className="min-w-full "
+            height="h-9"
+          />
         </div>
       </div>
       <ReUseModal
