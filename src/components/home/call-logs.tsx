@@ -226,9 +226,9 @@ const CallLogs = () => {
       {present === 0 && (
         <div className="w-full">
           {currentOffering === 0 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col gap-4 rounded-md">
               {offeringsList.length > 0 ? (
-                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                <div className="w-full flex flex-col px-4 py-4   ">
                   {offeringsList?.map((item: any, index: number) => (
                     <CoachOfferingCard item={item} index={index} />
                   ))}
@@ -249,7 +249,7 @@ const CallLogs = () => {
             </div>
           )}
           {currentOffering === 1 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md gap-4">
               {upcomingOfferingBooking.length > 0 ? (
                 <div className="w-full flex flex-col px-4 py-4 gap-4">
                   {upcomingOfferingBooking?.map((item: any, index: number) => (
@@ -271,7 +271,7 @@ const CallLogs = () => {
             </div>
           )}
           {currentOffering === 2 && (
-            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md ">
               {pastOfferingBooking.length > 0 ? (
                 <div className="w-full flex flex-col px-4 py-4 gap-4">
                   {pastOfferingBooking?.map((item: any, index: number) => (
@@ -303,7 +303,7 @@ const CallLogs = () => {
           {currentSession === 0 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
               {bookings.length > 0 ? (
-                <div className="w-full flex flex-col px-4 py-4">
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
                   {bookings?.map((item: any, index: number) => (
                     <CoachSessionCard item={item} index={index} />
                   ))}
@@ -326,7 +326,7 @@ const CallLogs = () => {
           {currentSession === 1 && (
             <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
               {upcomingAppointmentsBooking.length > 0 ? (
-                <div className="w-full flex flex-col px-4 py-4">
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
                   {upcomingAppointmentsBooking?.map(
                     (item: any, index: number) => (
                       <CoachSessionCard item={item} index={index} />

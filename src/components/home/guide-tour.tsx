@@ -8,7 +8,7 @@ const GuideTour = () => {
   return (
     <>
       {open && (
-        <div className="w-full bg-white rounded-md min-h-[225px] h-fit  flex flex-col mt-4">
+        <div className="w-full bg-white rounded-md min-h-[225px] h-fit   flex-col mt-4 hidden lg:flex">
           <div className="w-full flex items-center px-4 justify-between pt-5">
             <h1 className="lg:text-3xl text-lg font-bold red-hat ">
               Take a Guided Tour

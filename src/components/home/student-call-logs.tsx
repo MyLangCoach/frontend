@@ -348,8 +348,8 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
         className="flex flex-col gap-2 border-border border  rounded-[4px]"
         key={index}
       >
-        <div className="flex items-center lg:flex-row flex-col justify-between border-b border-b-border">
-          <div className="w-full min-h-[76px] flex lg:px-6 lg:items-center gap-3 px-4 lg:flex-row flex-col   ">
+        <div className="flex items-start lg:items-center lg:flex-row  justify-between border-b border-b-border p-4">
+          <div className="w-full min-h-[76px] flex lg:px-6 lg:items-center gap-3 px-4 lg:flex-row flex-col    ">
             <p className="red-hat text-foreground font-bold text-base lg:text-[23px]">
               {item.offeringTitle}
             </p>
@@ -371,9 +371,9 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
             </div>
           )}
         </div>
-        <div className="w-full flex flex-col lg:px-6 pb-6">
-          <div className="w-full mt-3 flex wrap gap-6 items-center">
-            <div className="flex items-center gap-[10px] ">
+        <div className="w-full flex flex-col lg:px-6 pb-6 p-4">
+          <div className="w-full mt-3 flex flex-wrap gap-6 items-center">
+            <div className="flex items-center gap-[10px] min-w-max ">
               <span>
                 <DollarIcon />
               </span>
@@ -381,36 +381,36 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
                 {item?.isFree ? "FREE" : item?.cost?.amount}
               </p>
             </div>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <p className="text-muted text-sm dm-sans">Type</p>
               <p className="text-sm dm-sans font-bold text-muted">Offering</p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueCalenderIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 {formatDateTime(item?.startDateTime)?.date}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueTimeIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 {formatDateTime(item?.startDateTime)?.time}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueStopWatch />
               <p className="text-sm dm-sans font-medium text-muted">
                 {item?.duration === 30 ? "30 MINS" : "60 MINS"}
               </p>
             </span>
-            <span className="flex items-center gap-[10px] ">
+            <span className="flex items-center gap-[10px] min-w-max ">
               <BlueVideoIcon />
               <p className="text-sm dm-sans font-medium text-muted">
                 Video Call
               </p>
             </span>
           </div>
-          <div className=" mt-7 flex items-center gap-[10px] ">
+          <div className=" mt-7 flex items-center gap-[10px]   flex-wrap">
             {item?.meetingLink &&
               item?.paymentConfirmed &&
               item?.isFree === false && (
@@ -450,16 +450,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
               )}
 
             {/* <Button name="Join Session" /> */}
-            <span>
-              <ActionBtn name="View details" />
-            </span>
-            {item?.offeringType !== "LIVE_GROUP" && (
-              <ActionBtn
-                name="Reschedule call"
-                onClick={() => setOpenReschedule(true)}
-              />
-            )}
-            <span></span>
+         
             {item?.nextSession && (
               <span className="flex items-center gap-[10px]">
                 <ActionBtn
@@ -469,6 +460,13 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
                 <PaddedArrow />
               </span>
             )}
+            {item?.offeringType !== "LIVE_GROUP" && (
+              <ActionBtn
+                name="Reschedule call"
+                onClick={() => setOpenReschedule(true)}
+              />
+            )}
+            <span></span>
           </div>
         </div>
       </div>

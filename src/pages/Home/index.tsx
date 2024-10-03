@@ -61,7 +61,7 @@ const Home = () => {
           {/* end of the left side */}
           {/* right side */}
           {userRole === "COACH" && (
-            <div className="w-full lg:w-1/3 flex flex-col gap-6">
+            <div className="w-full lg:w-1/3 flex flex-col gap-6 px-4 lg:px-0">
               <UpcomingEvents />
               <TopCoaches />
             </div>

@@ -132,20 +132,20 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
   return (
     <>
       <div
-        className="flex flex-col gap-2 border-border border  rounded-[4px]"
+        className="flex flex-col gap-2 border-border border   rounded-[4px]"
         key={index}
       >
-        <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3 border-b border-b-border  ">
-          <p className="red-hat text-foreground font-bold text-[23px]">
+        <div className="w-full min-h-[76px] flex lg:px-6 lg:items-center gap-3 border-b p-4  lg:py-0 border-b-border flex-col lg:flex-row ">
+          <p className="red-hat  text-foreground font-bold text-[23px]">
             {item.offeringTitle}
           </p>
-          <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+          <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white w-fit">
             {item?.offeringType === "ONE_TIME" && "1:1 class"}
             {item?.offeringType === "ONE_MONTHLY" && "1:1 Monthly"}
             {item?.offeringType === "LIVE_GROUP" && "Live Group"}
           </span>
         </div>
-        <div className="w-full flex flex-col lg:px-6 pb-6">
+        <div className="w-full flex flex-col p-4 lg:px-6 pb-6">
           <div className="w-full mt-3 flex-wrap flex  gap-6 items-center">
             <div className="flex items-center gap-[10px] min-w-max ">
               <span>
@@ -184,7 +184,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               </p>
             </span>
           </div>
-          <div className=" mt-7 flex items-center gap-[10px] ">
+          <div className=" mt-7 flex items-center gap-[10px] flex-wrap ">
             {item?.meetingLink &&
               item?.paymentConfirmed &&
               item?.isFree === false && (
@@ -225,9 +225,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               )}
 
             {/* <Button name="Join Session" /> */}
-            <span>
-              <ActionBtn name="View details" />
-            </span>
+         
             {item?.offeringType !== "LIVE_GROUP" && (
               <ActionBtn
                 name="Reschedule call"
