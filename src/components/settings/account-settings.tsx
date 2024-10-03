@@ -3,17 +3,22 @@ import { Input, Password } from "../Input";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
 
+  clearState,
   restoreDefault,
+  updatePassword,
  
 } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AccountSettings = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth);
   const email = user?.userData?.email;
   const payment = useAppSelector((state) => state.payment);
-
+  const navigate = useNavigate();
+  const [oldPassword, setOldPassword] = useState(""); 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
@@ -66,7 +71,20 @@ const AccountSettings = () => {
    }
  };
 
-
+ const handleUpdatePassword = async () => {
+   if (oldPassword && password) {
+     const { payload } = await dispatch(
+       updatePassword({ newPassword: password, oldPassword: oldPassword })
+     );
+     if (payload?.status === "success") {
+       toast.success("Password Updated successfully");
+       dispatch(clearState());
+       navigate("/login")
+     }
+   } else {
+     toast.error("All fields are required ");
+   }
+ };
 
   if (payment?.fetchLoading) {
     return (
@@ -92,11 +110,16 @@ const AccountSettings = () => {
             Confirm your current password before setting a new one. 8 characters
             minimum
           </p>
-          <div className="mt-4 flex flex-col">
+          <div className="mt-4 flex flex-col gap-4">
+            <Password
+              value={oldPassword}
+              setValue={setOldPassword}
+              label=" Old Password"
+            />
             <Password
               value={password}
               setValue={handlePasswordChange}
-              label="Password"
+              label="New Password"
             />
             {errors.length > 0 && (
               <ul style={{ color: "red" }}>
@@ -108,13 +131,13 @@ const AccountSettings = () => {
             <Password
               value={confirm}
               setValue={handleConfirmPasswordChange}
-              label="Confirm Password"
-              className="mt-4"
+              label="Confirm New Password"
+              className=""
             />
             {matchError && <p style={{ color: "red" }}>{matchError}</p>}
           </div>
           <div className="mt-6">
-            <button className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  ">
+            <button className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] " onClick={handleUpdatePassword}>
               Save Changes
             </button>
           </div>

@@ -96,11 +96,11 @@ const StudentCallLogs = () => {
   return (
     <div className="w-full flex flex-col mt-6">
       {/* tabs session */}
-      <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
+      <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0 flex-wrap">
         <div
           className={
             current === 0
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
               : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
           }
           onClick={() => setCurrent(0)}
@@ -110,8 +110,8 @@ const StudentCallLogs = () => {
         <div
           className={
             current === 1
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              : "text-muted px-4 flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
           }
           onClick={() => setCurrent(1)}
         >
@@ -120,8 +120,8 @@ const StudentCallLogs = () => {
         <div
           className={
             current === 2
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              : "text-muted px-4 flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
           }
           onClick={() => setCurrent(2)}
         >
@@ -130,7 +130,7 @@ const StudentCallLogs = () => {
         <div
           className={
             current === 3
-              ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
               : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
           }
           onClick={() => setCurrent(3)}
@@ -199,8 +199,8 @@ const StudentCallLogs = () => {
           ) : (
             <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any past classes at the moment, You can proceed to
-                book a coaching session or offerings to continue
+                You do not have any past classes at the moment, You can proceed
+                to book a coaching session or offerings to continue
               </p>
               <Button
                 name="Book a Coach Session"
@@ -212,7 +212,6 @@ const StudentCallLogs = () => {
         </div>
       )}
       {current === 3 && <CoachReschedules />}
-   
     </div>
   );
 };
@@ -349,12 +348,12 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
         className="flex flex-col gap-2 border-border border  rounded-[4px]"
         key={index}
       >
-        <div className="flex items-center justify-between border-b border-b-border">
-          <div className="w-full min-h-[76px] flex lg:px-6 items-center gap-3   ">
-            <p className="red-hat text-foreground font-bold text-[23px]">
+        <div className="flex items-center lg:flex-row flex-col justify-between border-b border-b-border">
+          <div className="w-full min-h-[76px] flex lg:px-6 lg:items-center gap-3 px-4 lg:flex-row flex-col   ">
+            <p className="red-hat text-foreground font-bold text-base lg:text-[23px]">
               {item.offeringTitle}
             </p>
-            <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white">
+            <span className="bg-[#FABC4E] px-[6px] h-7 flex items-center rounded-[4px] text-white w-fit lg:w-auto">
               {item?.offeringType === "ONE_TIME" && "1:1 class"}
               {item?.offeringType === "ONE_MONTHLY" && "1:1 Monthly"}
               {item?.offeringType === "LIVE_GROUP" && "Live Group"}

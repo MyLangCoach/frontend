@@ -2,7 +2,7 @@ import { useState } from "react";
 import HeadNav from "../components/general/headnav";
 import Sidebar from "../components/general/sidebar";
 import { MenuIcon } from "../assets";
-import moblogo from "../assets/png/mob-logo.png"
+import moblogo from "../assets/icons/lang-logo.svg"
 import SlideSidebar from "../components/SideOverlay/SlideSideBar";
 interface dashboard {
   children?: any;

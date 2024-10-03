@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { HomeIcon, MicIcon, CatIcon, MessageIcon, StudentIcon, ProfileIcon, RecieptIcon, SettingsIcon } from "../../assets";
 
 import sampPic from "../../assets/png/samp-pic.png";
-import mobLogo from "../../assets/png/mob-logo.png";
+import mobLogo from "../../assets/icons/lang-logo.svg";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { clearState } from "../../features/offeringslice";
 const styles = {
@@ -82,7 +82,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         className={
                           current === 2 ? styles.active : styles.inActive
                         }
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/student/live-classes")}
                       >
                         <MicIcon />
                         <p className="text-black text-sm font-medium inter">

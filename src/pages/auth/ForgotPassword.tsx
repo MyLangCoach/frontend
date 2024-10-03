@@ -4,7 +4,7 @@ import signPic from "../../assets/png/sign-pic.png";
 import { Input } from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { loginUser } from "../../features/auth/authSlice";
+import { forgotPassword, loginUser } from "../../features/auth/authSlice";
 import toast from "react-hot-toast";
 import resetPic from "../../assets/icons/reset-success.svg"
 const ForgotPassword = () => {
@@ -16,21 +16,22 @@ const ForgotPassword = () => {
     
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+ 
 
-  const handleLogin = () => {
-    if (email && password) {
-      dispatch(loginUser({ email, password }));
+  const handleForgotPassword = async () => {
+    if (email) {
+
+      const { payload } = await dispatch(forgotPassword({ email }));
+      if (payload?.status === "success") {
+        setIsSuccess(true);
+
+      }
     } else {
-      toast.error("All fields must be filled");
+      toast.error("Email  must be filled");
     }
   };
 
-  useEffect(() => {
-    if (auth?.token) {
-      navigate("/");
-    }
-  }, [auth?.userData]);
+ 
 
   return (
     <div className="w-full flex flex-col xl:flex-row ">
@@ -84,7 +85,7 @@ const ForgotPassword = () => {
                 <div className="w-full  flex items-center justify-end mt-4">
                   <button
                     className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] "
-                    onClick={handleLogin}
+                    onClick={handleForgotPassword}
                   >
                     {auth?.loading ? "Loading..." : "Continue"}
                   </button>

@@ -16,6 +16,7 @@ const PayoutOverview = () => {
       const dispatch = useAppDispatch();
   const payment = useAppSelector((state) => state.payment);
   const user = useAppSelector((state) => state.auth);
+    const userRole = user?.userData?.role;
   const navigate = useNavigate();
   const [selectedBank, setSelectedBank] = useState<any>({});
   const [open, setOpen] = useState<boolean>(false);
@@ -57,9 +58,7 @@ const PayoutOverview = () => {
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-8 lg:gap-4 gap-4 px-4 lg:px-0 ">
       {/* start of a pack */}
-   
-    
-    
+
       {/* end of a session */}
 
       {/* start of a pack */}
@@ -125,11 +124,13 @@ const PayoutOverview = () => {
                 />
               </span>
               <span>
-                <BigButton
-                  className="w-full min-w-full"
-                  name="Withdraw"
-                  onClick={handleWithdrawal}
-                />
+                {userRole === "COACH" && (
+                  <BigButton
+                    className="w-full min-w-full"
+                    name="Withdraw"
+                    onClick={handleWithdrawal}
+                  />
+                )}
               </span>
             </div>
           </div>

@@ -33,10 +33,15 @@ const Home = () => {
   return (
     <DashboardLayout current={1}>
       <div className="w-full flex flex-col">
-        <div className="w-full flex items-center justify-between lg:mt-6">
-          <p className="text-lg font-bold lg:text-2xl ">
-            {user?.userData?.firstName + " " + user?.userData?.lastName} ,
-            welcome back
+        <div className="w-full flex items-center justify-between lg:mt-6 px-4">
+          <p className="text-lg font-bold lg:text-2xl capitalize ">
+            Welcome  {" "}
+            <span className="capitalize">
+              {user?.userData?.firstName?.toLowerCase() +
+                " " +
+                user?.userData?.lastName?.toLowerCase()}{" "}
+              
+            </span>
           </p>
           <span className="">
             <NotificationIcon />
@@ -45,7 +50,11 @@ const Home = () => {
         <Overview />
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-          <div className={`w-full  ${userRole === "COACH" ? "lg:w-2/3" :"lg:w-full"} `}>
+          <div
+            className={`w-full  ${
+              userRole === "COACH" ? "lg:w-2/3" : "lg:w-full"
+            } `}
+          >
             {userRole === "STUDENT" ? <StudentCallLogs /> : <CallLogs />}
             {userRole === "COACH" && <GuideTour />}
           </div>

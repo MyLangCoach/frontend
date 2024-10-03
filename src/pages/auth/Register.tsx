@@ -22,7 +22,56 @@ const Register = () => {
   const [selected, setSelected] = useState<any>(null);
   const [success, setSuccess] = useState(false);
 
-   
+    const [errors, setErrors] = useState<string[]>([]);
+    const [matchError, setMatchError] = useState("");
+
+    const validatePassword = (password: string) => {
+      const validationErrors: string[] = [];
+
+      if (password.length < 8) {
+        validationErrors.push("Password must be at least 8 characters long.");
+      }
+      if (!/[a-z]/.test(password)) {
+        validationErrors.push(
+          "Password must contain at least one lowercase letter."
+        );
+      }
+      if (!/[A-Z]/.test(password)) {
+        validationErrors.push(
+          "Password must contain at least one uppercase letter."
+        );
+      }
+      if (!/[0-9]/.test(password)) {
+        validationErrors.push("Password must contain at least one number.");
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        validationErrors.push(
+          "Password must contain at least one special character."
+        );
+      }
+
+      return validationErrors;
+    };
+
+    const handlePasswordChange = (newPassword: string) => {
+      setPassword(newPassword);
+
+      const validationErrors = validatePassword(newPassword);
+      setErrors(validationErrors);
+    };
+
+    const handleConfirmPasswordChange = (newConfirmPassword: string) => {
+      setConfirm(newConfirmPassword);
+
+      // Check if passwords match
+      if (newConfirmPassword !== password) {
+        setMatchError("Passwords do not match.");
+      } else {
+        setMatchError("");
+      }
+    };
+
+
   const handleRegister = () => {
     if (firstName && email && password && lastName && selected) { 
 
@@ -79,22 +128,21 @@ const Register = () => {
             <button
               className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] mt-6  "
               onClick={() => navigate("/login")}
-            
             >
-             Proceed to Login
+              Proceed to Login
             </button>
           </div>
         ) : (
-            <div className="h-screen overflow-y-scroll w-full  flex justify-center">
-          <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-full ">
-            <div className="mt-10">
-              <img src={logo} alt="logo" className="w-[150px] h-auto" />
-            </div>
-            <div className="flex flex-col mt-12">
-              <h1 className="text-2xl font-extrabold text-black red-hat">
-                Create a new account
-              </h1>
-              {/* <button className="w-full h-[35px] mt-6 rounded-[50px] gap-[10px] py-[6px] pl-12 pr-6 flex items-center border border-[#E0E0E9] ">
+          <div className="h-screen overflow-y-scroll w-full  flex justify-center">
+            <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-full ">
+              <div className="mt-10">
+                <img src={logo} alt="logo" className="w-[150px] h-auto" />
+              </div>
+              <div className="flex flex-col mt-12">
+                <h1 className="text-2xl font-extrabold text-black red-hat">
+                  Create a new account
+                </h1>
+                {/* <button className="w-full h-[35px] mt-6 rounded-[50px] gap-[10px] py-[6px] pl-12 pr-6 flex items-center border border-[#E0E0E9] ">
                 <span>
                   <GoogleLogo />
                 </span>
@@ -102,86 +150,95 @@ const Register = () => {
                   Sign up with Google
                 </span>
               </button> */}
-              {/* <div className="flex items-center w-full gap-3 mt-6 ">
+                {/* <div className="flex items-center w-full gap-3 mt-6 ">
                 <hr className="flex flex-grow bg-[#cdcdcd] h-[0.5px] " />
                 <p className="dm-sans text-sm text-black">Or continue with</p>
                 <hr className="flex flex-grow bg-[#cdcdcd] h-[0.5px] " />
               </div> */}
-              <div className="flex flex-col mt-4 gap-y-4">
-                <Input
-                  value={firstName}
-                  setValue={setFirstName}
-                  label="First name"
-                />
-                <Input
-                  value={lastName}
-                  setValue={setLastName}
-                  label="Last name"
-                />
-                <Input
-                  value={email}
-                  setValue={setEmail}
-                  label="Your email"
-                  placeholder="your@email.com"
-                />
-                <Password
-                  value={password}
-                  setValue={setPassword}
-                  label="Password"
-                />
-                <Password
-                  value={confirm}
-                  setValue={setConfirm}
-                  label="Confirm Password"
-                />
-                <span className="h-20">
-                  <PrimarySelect
-                    selected={selected}
-                    setSelected={setSelected}
-                    label="Choose personality"
-                    data={[{ name: "Student" }, { name: "Coach" }]}
-                    name="Select "
+                <div className="flex flex-col mt-4 gap-y-4">
+                  <Input
+                    value={firstName}
+                    setValue={setFirstName}
+                    label="First name"
                   />
-                </span>
-                <div className="w-full flex items-center gap-4">
-                  <input
-                    type="checkbox"
-                    className="accent-black w-[18px] h-[18px]"
-                    id=""
+                  <Input
+                    value={lastName}
+                    setValue={setLastName}
+                    label="Last name"
                   />
-                  <p className="dm-sans font-medium text-xs text-[#707070]  ">
-                    I agree to{" "}
-                    <span className="font-bold text-black mx-1">Terms</span>
-                    and{" "}
-                    <span className="font-bold mx-1 text-black">
-                      conditions
-                    </span>
-                  </p>
-                </div>
-                <div className="w-full  flex items-center justify-end mt-4">
-                  <button
-                    className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  "
-                    onClick={handleRegister}
-                    disabled={auth?.loading}
-                  >
-                    {auth?.loading ? "Loading..." : "Sign up"}
-                  </button>
-                </div>
-                <div className="w-full flex items-center justify-center mb-20">
-                  <p className="text-sm text-black dm-sans">
-                    Already have an account?{" "}
-                    <span
-                      className=" cursor-pointer underline"
-                      onClick={() => navigate("/login")}
+                  <Input
+                    value={email}
+                    setValue={setEmail}
+                    label="Your email"
+                    placeholder="your@email.com"
+                  />
+                  <Password
+                    value={password}
+                    setValue={handlePasswordChange}
+                    label="Password"
+                  />
+                  {errors.length > 0 && (
+                    <ul style={{ color: "red" }}>
+                      {errors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <Password
+                    value={confirm}
+                    setValue={handleConfirmPasswordChange}
+                    label="Confirm Password"
+                    className="mt-4"
+                  />
+                  {matchError && <p style={{ color: "red" }}>{matchError}</p>}
+                  <span className="h-20">
+                    <PrimarySelect
+                      selected={selected}
+                      setSelected={setSelected}
+                      label="Choose personality"
+                      data={[{ name: "Student" }, { name: "Coach" }]}
+                      name="Select "
+                    />
+                  </span>
+                  <div className="w-full flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      className="accent-black w-[18px] h-[18px]"
+                      id=""
+                    />
+                    <p className="dm-sans font-medium text-xs text-[#707070]  ">
+                      I agree to{" "}
+                      <span className="font-bold text-black mx-1">Terms</span>
+                      and{" "}
+                      <span className="font-bold mx-1 text-black">
+                        conditions
+                      </span>
+                    </p>
+                  </div>
+                  <div className="w-full  flex items-center justify-end mt-4">
+                    <button
+                      className="bg-black h-[49px] w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px]  "
+                      onClick={handleRegister}
+                      disabled={auth?.loading}
                     >
-                      Login
-                    </span>
-                  </p>
+                      {auth?.loading ? "Loading..." : "Sign up"}
+                    </button>
+                  </div>
+                  <div className="w-full flex items-center justify-center mb-20">
+                    <p className="text-sm text-black dm-sans">
+                      Already have an account?{" "}
+                      <span
+                        className=" cursor-pointer underline"
+                        onClick={() => navigate("/login")}
+                      >
+                        Login
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-            </div>
-            </div>
+          </div>
         )}
       </div>
     </div>

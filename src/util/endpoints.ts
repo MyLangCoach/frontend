@@ -31,4 +31,7 @@ export const url = {
   availability: "/bookings/availability",
   coachByLang: "/users/coaches/by-lang",
   stats: "/users/my/dashboardstats",
+  forgotPassword:"/auth/forgot-password",
+  resetPassword: "/auth/reset-password",
+  updatePassword:"/auth/update-password"
 };

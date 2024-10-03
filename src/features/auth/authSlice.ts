@@ -175,6 +175,36 @@ export const authSlice = createSlice({
       .addCase(getDashboardStarts.rejected, (state, { payload }) => {
         state.fetchLoading = false;
       })
+      .addCase(forgotPassword.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+     
+      })
+      .addCase(forgotPassword.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+     
+      })
+      .addCase(resetPassword.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.fetchLoading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, { payload }) => {
+        state.fetchLoading = false;
+     
+      })
+      .addCase(updatePassword.rejected, (state, { payload }) => {
+        state.fetchLoading = false;
+      })
       
       ;
   },
@@ -185,6 +215,50 @@ export const registerUser = createAsyncThunk(
   async (payload: any, { rejectWithValue }) => {
     try {
       const { data } = await APIService.post(`${url.register}`, payload);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const forgotPassword = createAsyncThunk(
+  "forgotPassword",
+  async (payload: any, { rejectWithValue }) => {
+    try {
+      const { data } = await APIService.post(`${url.forgotPassword}`, payload);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const resetPassword = createAsyncThunk(
+  "resetPassword",
+  async (payload: any, { rejectWithValue }) => {
+    try {
+      const { data } = await APIService.post(`${url.resetPassword}`, payload);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        getSimplifiedError(error.response ? error : error)
+      );
+    }
+  }
+);
+export const updatePassword = createAsyncThunk(
+  "updatePassword",
+  async (payload: any, { rejectWithValue,getState }) => {
+       const { auth }: any = getState();
+    try {
+      const { data } = await APIService.put(`${url.updatePassword}`, payload, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
       return data;
     } catch (error: any) {
       return rejectWithValue(

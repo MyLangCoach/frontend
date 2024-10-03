@@ -8,6 +8,7 @@ const styles = {
   active: "flex h-[36px] items-center gap-2 px-4 py-2 bg-[#f4f4f5] rounded-[4px] mb-2  ",
   inActive: "flex h-[36px] items-center gap-2 px-4 py-2 mb-2 cursor-pointer",
 };
+
 const Sidebar = ({ current }: { current: number }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

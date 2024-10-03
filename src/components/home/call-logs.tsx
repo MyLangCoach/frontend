@@ -109,8 +109,8 @@ const CallLogs = () => {
     }
 
   return (
-    <div className="w-full flex flex-col mt-6">
-      <div className="w-full flex items-center mb-6 gap-3">
+    <div className="w-full flex flex-col mt-6 px-4 ">
+      <div className="w-full flex items-center mb-6 gap-4">
         <p
           className={`cursor-pointer red-hat text-base ${
             present === 0
@@ -134,11 +134,11 @@ const CallLogs = () => {
       </div>
       {/* tabs session */}
       {present === 0 && (
-        <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
+        <div className="w-full flex gap-4 items-center flex-wrap justify-between  lg:justify-start px-4 lg:px-0">
           <div
             className={
               currentOffering === 0
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium px-4 lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentOffering(0)}
@@ -148,7 +148,7 @@ const CallLogs = () => {
           <div
             className={
               currentOffering === 1
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentOffering(1)}
@@ -158,7 +158,7 @@ const CallLogs = () => {
           <div
             className={
               currentOffering === 2
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentOffering(2)}
@@ -168,7 +168,7 @@ const CallLogs = () => {
           <div
             className={
               currentOffering === 3
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentOffering(3)}
@@ -178,11 +178,11 @@ const CallLogs = () => {
         </div>
       )}
       {present === 1 && (
-        <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0">
+        <div className="w-full flex gap-4 items-center flex-wrap justify-between lg:justify-start px-4 lg:px-0">
           <div
             className={
               currentSession === 0
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentSession(0)}
@@ -192,7 +192,7 @@ const CallLogs = () => {
           <div
             className={
               currentSession === 1
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentSession(1)}
@@ -202,7 +202,7 @@ const CallLogs = () => {
           <div
             className={
               currentSession === 2
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentSession(2)}
@@ -212,7 +212,7 @@ const CallLogs = () => {
           <div
             className={
               currentSession === 3
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
             onClick={() => setCurrentSession(3)}
@@ -338,7 +338,6 @@ const CallLogs = () => {
                   <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
                     You do not have any upcoming calls.
                   </p>
-                 
                 </div>
               )}
             </div>
