@@ -146,7 +146,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                       </h1>
                       <div
                         className={
-                          current === 5 ? styles.active : styles.inActive
+                          current === 6 ? styles.active : styles.inActive
                         }
                         onClick={() => navigate("/")}
                       >
@@ -182,7 +182,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                       )}
                       <div
                         className={
-                          current === 5 ? styles.active : styles.inActive
+                          current === 8 ? styles.active : styles.inActive
                         }
                         onClick={() => navigate("/")}
                       >

@@ -12,7 +12,7 @@ const StudentLiveClasses = () => {
   return (
     <DashboardLayout current={2}>
       <div className="w-full flex flex-col">
-        <div className="w-full flex items-center justify-between lg:mt-6">
+        <div className="w-full flex items-center justify-between lg:mt-6 px-4">
           <p className="text-lg font-bold lg:text-2xl ">Live Classes</p>
           <span className="">
             <NotificationIcon />

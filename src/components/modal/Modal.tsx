@@ -48,7 +48,7 @@ export default function ReUseModal({ open, setOpen, children,width }: ModalProps
           >
             <div
               className={`relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${
-                width ? width : "sm:max-w-md sm:w-full"
+                width ? width : "sm:max-w-md sm:w-full w-full"
               }  sm:p-6 `}
             >
               {children}

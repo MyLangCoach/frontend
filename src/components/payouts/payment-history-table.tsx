@@ -32,9 +32,9 @@ const PaymentHistoryTable = () => {
 
         {/* end of new service */}
       </div>
-      <div className="w-full mt-5">
-        <table className="w-full border border-border rounded-[4px]">
-          <th className="w-full flex items-center h-[40px] border-b border-b-border px-2 gap-2 ">
+      <div className="w-full mt-5 flow-hide-x">
+        <table className="w-full border border-border rounded-[4px] table-fixed min-w-max">
+          <th className="w-full flex items-center gap-4 lg:gap-2 h-[40px] border-b border-b-border px-2  ">
             <td className="flex items-center gap-3 w-1/6 ">
               <input
                 type="checkbox"
@@ -57,9 +57,7 @@ const PaymentHistoryTable = () => {
               </span>
             </td>
             <td className=" flex items-center gap-3 w-1/6">
-              <p className="text-muted text-sm inter font-medium">
-                Payment Type
-              </p>
+              <p className="text-muted text-sm inter font-medium">Type</p>
               <span>
                 <img src={filterIcon} alt="filter" />
               </span>
@@ -76,9 +74,9 @@ const PaymentHistoryTable = () => {
               return (
                 <tr
                   key={index}
-                  className=" flex items-center gap-2 px-2 border-b-border border-b last:border-none min-h-[68px] "
+                  className=" flex items-center gap-4 lg:gap-2 px-2 border-b-border border-b last:border-none min-h-[68px] "
                 >
-                  <td className="w-1/6 flex items-center gap-3">
+                  <td className="w-2/6 flex items-center gap-3">
                     <span>
                       <input
                         type="checkbox"

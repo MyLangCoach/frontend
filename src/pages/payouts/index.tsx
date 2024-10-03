@@ -19,9 +19,10 @@ const Payouts = () => {
   return (
     <DashboardLayout current={7}>
       <div className="w-full flex flex-col">
-        <div className="w-full flex items-center justify-between lg:mt-6">
+        <div className="w-full flex items-center justify-between lg:mt-6 px-4 lg:px-0 mt-4 ">
           <p className="text-lg font-bold lg:text-2xl ">
-            Payouts
+            {userRole === "COACH" ? "Payouts" : "Expenditure"}
+            
           </p>
           <span className="">
             <NotificationIcon />
@@ -30,7 +31,7 @@ const Payouts = () => {
         {userRole === "COACH" && <BankCard />}
         <PayoutOverview />
         <div className="w-full flex flex-col lg:flex-row gap-5">
-         <PayoutTables />
+          <PayoutTables />
         </div>
       </div>
     </DashboardLayout>

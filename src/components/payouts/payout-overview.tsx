@@ -73,9 +73,11 @@ const PayoutOverview = () => {
         </div>
         <div className="flex items-center justify-between -mt-3">
           <p className="font-bold text-white lg:text-[23px] text-lg leading-[27px]font-bold"></p>
-          <span onClick={() => setOpen(true)}>
-            <img src={withdraw} alt="witdraw" />
-          </span>
+          {userRole === "COACH" && (
+            <span onClick={() => setOpen(true)}>
+              <img src={withdraw} alt="witdraw" />
+            </span>
+          )}
         </div>
       </div>
       {/* end of a session */}

@@ -53,8 +53,8 @@ console.log(bookings)
         {/* end of input */}
 
       </div>
-      <div className="w-full mt-5">
-        <table className="w-full border border-border rounded-[4px]">
+      <div className="w-full mt-5 flow-hide-x">
+        <table className="w-full border border-border rounded-[4px] table-fixed min-w-max">
           <th className="w-full grid grid-cols-5 h-[40px] border-b border-b-border px-2 ">
             <td className="flex items-center gap-3 w-full ">
               <input
