@@ -52,7 +52,7 @@ const Overview = () => {
         </span>
         <div className="flex flex-col gap-1">
           <h1 className="text-white red-had font-bold text-lg lg:text-2xl">
-            ₦ {user?.userData?.earnings}
+            ₦ {user?.userData?.role === "COACH" ? user?.userData?.earnings: user?.dashboardStats?.spents}
           </h1>
           <p className="text-sm lg:text-base red-hat text-white font-normal">
             Total {user?.userData?.role === "COACH" ? "Payout" : "Expenditure"}

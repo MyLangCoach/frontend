@@ -179,7 +179,7 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
 
   return (
     <div
-      className="w-full flex flex-col offering-shadow rounded-md cursor-pointer"
+      className="w-full flex flex-col offering-shadow rounded-md cursor-pointer max-w-[320px] "
       key={item?.id}
       onClick={() => {
         if (item?.type === "ONE_TIME") {

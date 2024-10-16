@@ -98,7 +98,7 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
           </div> */}
           <div className="w-full">
             <Button
-              name="Book a lesson"
+              name="Book a session"
               className="min-w-full"
               onClick={() => setOpen(true)}
             />

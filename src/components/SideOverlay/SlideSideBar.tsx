@@ -184,7 +184,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         className={
                           current === 8 ? styles.active : styles.inActive
                         }
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/settings")}
                       >
                         <SettingsIcon />
                         <p className="text-black text-sm font-medium inter">

@@ -61,6 +61,7 @@ export   interface UserProfileData {
   username?: string;
   languageInterests?: string[] | any;
   CoachLanguage?: any;
+  gender?:string,
   costPerSession?: any;
   id?: string;
 }

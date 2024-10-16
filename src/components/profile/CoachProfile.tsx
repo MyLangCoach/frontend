@@ -63,6 +63,7 @@ const CoachProfile = () => {
     { language: "", proficiency: "" },
   ]);
 
+  console.log(userData)
   const [cost, setCost] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [prof, setProf] = useState<{ name: string }>({ name: "" });
@@ -81,6 +82,10 @@ const CoachProfile = () => {
     const [sessionType, setSessionType] = useState<{ name: string; value: number }>({
       name: "",
       value: 0,
+    });
+    const [gender, setGender] = useState<{ name: string; value: string }>({
+      name: "",
+      value: "",
     });
     const [sessionTypeSecond, setSessionTypeSecond] = useState<{ name: string; value: number }>({
       name: "",
@@ -114,6 +119,10 @@ const CoachProfile = () => {
       setYear({
         name: userData.qualifications?.[0]?.name || "",
         value: userData.qualifications?.[0]?.year || 0,
+      });
+      setGender({
+        name: userData.gender || "",
+        value: userData.gender || "",
       });
       setLanguages(
         userData.languages?.length === 0
@@ -190,6 +199,7 @@ const CoachProfile = () => {
       languages: languages,
       qualifications: qualifications,
       introVideo: videoUrl,
+      gender:gender?.value,
       languageInterests:languagesInterest,
       costPerSession: [
         {
@@ -453,6 +463,22 @@ console.log(userData)
             setSelected={setCountry}
             label="Choose Country"
             data={Location}
+            name={country}
+          />
+        </span>
+        {/* end */}
+        {/* start  */}
+        <span className="mt-6">
+          <PrimarySelect
+            selected={gender}
+            setSelected={setGender}
+            label="Select Gender"
+            data={[
+              {name:"Male", value:"MALE"},
+              {name:"Female", value:"FEMALE"},
+              {name:"Others", value:"OTHERS"},
+             
+            ]}
             name={country}
           />
         </span>

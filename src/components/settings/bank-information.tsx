@@ -189,26 +189,21 @@ export default BankInformation
 
 const SingleBank = ({item}:{item:any}) => {
     return (
-      <div className="w-full border border-border p-3 flex items-baseline justify-between bankcard-shadow rounded-md">
+      <div className="w-full border border-border p-3 flex items-baseline justify-between bankcard-shadow rounded-md flex-col lg:flex-row">
         <div className="gap-3 flex items-center ">
           <span>
             <input type="radio" className="accent-primary w-5 h-5" />
           </span>
           <div className="flex flex-col">
-                    <p className="text-[#838384] red-hat">
-                        {item?.accountName}
-                    </p>
-                    <p className='font-semibold text-base'>
-                        {item?.bankName}
-                    </p>
-
+            <p className=" red-hat font-semibold">{item?.accountName}</p>
+            <p className=" text-[#838384] text-base">
+              {item?.bankName}
+            </p>
           </div>
-            </div>
-            <div className="flex">
-                <p className='text-muted font-semibold'>
-                    {item?.accountNumber}
-                </p>
-            </div>
+        </div>
+        <div className="flex">
+          <p className="text-muted font-semibold ml-7 lg:ml-0">{item?.accountNumber}</p>
+        </div>
       </div>
     );
 }

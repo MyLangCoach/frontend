@@ -14,7 +14,7 @@ const CoachStudent = () => {
   return (
     <DashboardLayout current={5}>
       <div className="w-full flex flex-col">
-        <div className="w-full flex items-center justify-between lg:mt-6">
+        <div className="w-full flex items-center justify-between lg:mt-6 px-4 mt-4">
           <p className="text-lg font-bold lg:text-2xl ">Students</p>
           <span className="">
             <NotificationIcon />

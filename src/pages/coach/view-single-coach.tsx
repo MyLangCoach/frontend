@@ -81,10 +81,10 @@ const ViewSingleCoachPage = () => {
       <ContainerLayout>
         <div className="w-full flex flex-col gap-6 xl:flex-row">
           {/* profile detail */}
-          <div className="w-2/3 flex flex-col">
+          <div className="w-full lg:w-2/3 flex flex-col">
             <div className="flex flex-col w-full">
               <div className="flex items-center mt-4 gap-3">
-                <h1 className="text-[28px] font-bold red-hat uppercase">
+                <h1 className="text-xl lg:text-[28px] font-bold red-hat uppercase">
                   {coachDetail?.firstName} {coachDetail?.lastName}
                 </h1>
            
@@ -133,8 +133,8 @@ const ViewSingleCoachPage = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full mt-8 flex gap-5">
-              <div className="w-3/12">
+            <div className="w-full mt-8 flex gap-5 lg:flex-row flex-col">
+              <div className="w-full flex flex-row lg:flex-col items-center lg:items-start gap-3 lg:w-3/12">
                 <h1
                   className={`text-xl  red-hat cursor-pointer ${
                     isOffering
@@ -146,7 +146,7 @@ const ViewSingleCoachPage = () => {
                   About
                 </h1>
                 <h1
-                  className={`text-base mt-3 cursor-pointer red-hat  ${
+                  className={`text-base  cursor-pointer red-hat  ${
                     isOffering
                       ? "text-black font-bold text-xl"
                       : "text-muted text-base"
@@ -161,16 +161,16 @@ const ViewSingleCoachPage = () => {
                   <h1 className="text-xl font-bold red-hat mb-6">
                     Coach Offerings
                   </h1>
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col lg:flex-row flex-wrap gap-8 w-full items-center ">
                     {allOfferings?.map((item, index) => (
-                      <div className="flex items-center " key={index}>
+                      <div className="flex items-center w-full " key={index}>
                         <OfferingCard item={item} key={index} />
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
-                <div className="w-9/12 flex flex-col">
+                <div className="w-full lg:w-9/12 flex flex-col">
                   <h1 className="text-xl font-bold red-hat">About the coach</h1>
 
                   <p className="text-base red-hat leading-[27px]">
@@ -192,7 +192,7 @@ const ViewSingleCoachPage = () => {
           {/* end of profile detail */}
 
           {/* offering  */}
-          <div className="w-1/3 flex flex-col">
+          <div className="w-full lg:w-1/3 flex flex-col">
             <div className="flex mt-6 w-full">
 
             <SingleVideoCard item={coachDetail} onClick={() => setIsOffering(true)} />

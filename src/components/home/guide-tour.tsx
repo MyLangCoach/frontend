@@ -13,9 +13,9 @@ const GuideTour = () => {
             <h1 className="lg:text-3xl text-lg font-bold red-hat ">
               Take a Guided Tour
             </h1>
-            <span onClick={() => setOpen(false)}>
+            {/* <span onClick={() => setOpen(false)}>
               <CancelIcon />
-            </span>
+            </span> */}
           </div>
           <div className="w-full px-4 pt-4 flex flex-col lg:flex-row lg:items-start lg:justify-between mt-3 ">
             <div className="flex flex-col w-full lg:w-1/2">

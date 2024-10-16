@@ -22,7 +22,7 @@ const BankCard = () => {
     
     
   return (
-    <div className="w-full items-center flex  lg:p-6 justify-between bg-white mt-6  rounded-md">
+    <div className="w-full items-center flex  lg:p-6 justify-between bg-white mt-6  rounded-md flex-col lg:flex-row p-4 gap-4">
       <div className="w-fit flex items-center gap-3">
         <span>
           <img src={bankLogo} alt="logo" className="w-12 h-auto" />
@@ -41,7 +41,8 @@ const BankCard = () => {
 
             <p className="red-hat">
               <span>{recentBank?.bankName}</span>
-              <span> - </span>
+              <span className='hidden md:flex'> - </span>
+              <br className='lg:hidden' />
               <span>{recentBank?.accountNumber}</span>
             </p>
           </div>
