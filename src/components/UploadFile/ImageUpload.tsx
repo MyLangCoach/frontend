@@ -63,7 +63,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full h-[80px] border border-dashed border-border flex items-center justify-center rounded-md ">
+      <div className="relative w-full h-[300px] border border-dashed border-border flex items-center justify-center rounded-md ">
         {imageUrl ? (
           <img
             src={imageUrl}

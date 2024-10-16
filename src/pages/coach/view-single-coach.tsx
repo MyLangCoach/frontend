@@ -42,7 +42,7 @@ const ViewSingleCoachPage = () => {
   const allOfferings: ClassDetails[] = offering?.singleCoachOffering;
 
   const coachDetail = auth?.singleUserProfile;
-  console.log(coachDetail)
+
   const recentOfferings: ClassDetails[] = auth?.singleUserProfile?.offerings?.slice(0,1); 
 
   if (auth?.fetchLoading || offering?.fetchLoading) {
@@ -157,13 +157,13 @@ const ViewSingleCoachPage = () => {
                 </h1>
               </div>
               {isOffering ? (
-                <div className="flex flex-col ">
+                <div className="flex flex-col w-full ">
                   <h1 className="text-xl font-bold red-hat mb-6">
                     Coach Offerings
                   </h1>
-                  <div className="flex flex-col lg:flex-row flex-wrap gap-8 w-full items-center ">
+                  <div className="w-full grid grid-cols-1 gap-8 lg:grid-cols-1   ">
                     {allOfferings?.map((item, index) => (
-                      <div className="flex items-center w-full " key={index}>
+                      <div className=" w-full  " key={index}>
                         <OfferingCard item={item} key={index} />
                       </div>
                     ))}
@@ -202,7 +202,7 @@ const ViewSingleCoachPage = () => {
                 <h1 className="text-xl font-bold red-hat mb-4 ">
                   Recent Offerings
                 </h1>
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-5 w-full">
                   {recentOfferings?.map((item, index) => (
                     <OfferingCard item={item} key={index} />
                   ))}

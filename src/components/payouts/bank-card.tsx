@@ -39,9 +39,9 @@ const BankCard = () => {
               {recentBank?.accountName}
             </p>
 
-            <p className="red-hat">
+            <p className="red-hat flex flex-col">
               <span>{recentBank?.bankName}</span>
-              <span className='hidden md:flex'> - </span>
+              {/* <span className='hidden md:flex'> - </span> */}
               <br className='lg:hidden' />
               <span>{recentBank?.accountNumber}</span>
             </p>

@@ -111,7 +111,7 @@ const Sidebar = ({ current }: { current: number }) => {
           {userRole === "STUDENT" ? (
             <div
               className={current === 7 ? styles.active : styles.inActive}
-              onClick={() => navigate("/payouts")}
+              onClick={() => navigate("/expenditure")}
             >
               <RecieptIcon />
               <p className="text-black text-sm font-medium inter">

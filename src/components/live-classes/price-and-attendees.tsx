@@ -18,7 +18,7 @@ const PriceAttendees = ({
   loading,
 }: any) => {
   const [free, setFree] = useState(true);
-  const [limited, setLimited] = useState(true);
+  const [limited, setLimited] = useState(false);
   const [price, setPrice] = useState<number>(0);
   const [population, setPopulation] = useState("");
   const [classType, setClassType] = useState({

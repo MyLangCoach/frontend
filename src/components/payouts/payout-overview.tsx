@@ -54,7 +54,7 @@ const PayoutOverview = () => {
     }
   }, [payment?.withdrawalSuccess])
   
-  
+ 
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-8 lg:gap-4 gap-4 px-4 lg:px-0 ">
       {/* start of a pack */}
@@ -65,7 +65,7 @@ const PayoutOverview = () => {
       <div className="w-full bg-black pattern-bg flex flex-col justify-between py-4 px-6 rounded-[6px]  ">
         <div className="flex items-center justify-between">
           <h1 className="text-white red-had font-bold text-lg lg:text-2xl">
-            ₦ {user?.userData?.earnings}
+            ₦ { userRole === "COACH" ? user?.userData?.earnings : user?.userData?.spents}
           </h1>
           <p className="text-sm lg:text-base red-hat text-white font-normal">
             {getCurrentFormattedDate()}

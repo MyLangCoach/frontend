@@ -41,7 +41,7 @@ const CreateClassHome = () => {
     const [costType, setCostType] = useState<"FREE" | "PAID" | any>("");
     const [cost, setCost] = useState<Cost>({ currency: "NGN", amount: 0 });
     const [attendantType, setAttendantType] = useState<"LIMITED" | "UNLIMITED">(
-      "LIMITED"
+      "UNLIMITED"
     );
   const [datetime, setDatetime] = useState<string>("");
 
