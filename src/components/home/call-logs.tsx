@@ -22,8 +22,8 @@ const CallLogs = () => {
   const offeringsList = offering?.allBookedOfferingCoach;
 
 
-  const [currentSession, setCurrentSession] = useState(0);
-  const [currentOffering, setCurrentOffering] = useState(0);
+  const [currentSession, setCurrentSession] = useState(1);
+  const [currentOffering, setCurrentOffering] = useState(1);
   const [present, setPresent] = useState(0);
 
   const currentTime = new Date(); // current user's date and time
@@ -137,16 +137,6 @@ const CallLogs = () => {
         <div className="w-full flex gap-4 items-center flex-wrap justify-between  lg:justify-start px-4 lg:px-0">
           <div
             className={
-              currentOffering === 0
-                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium px-4 lg:min-w-[152px]  cursor-pointer inter  "
-                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-            }
-            onClick={() => setCurrentOffering(0)}
-          >
-            All
-          </div>
-          <div
-            className={
               currentOffering === 1
                 ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
@@ -154,6 +144,16 @@ const CallLogs = () => {
             onClick={() => setCurrentOffering(1)}
           >
             Upcoming calls
+          </div>
+          <div
+            className={
+              currentOffering === 3
+                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(3)}
+          >
+            Reschedule
           </div>
           <div
             className={
@@ -167,28 +167,18 @@ const CallLogs = () => {
           </div>
           <div
             className={
-              currentOffering === 3
-                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+              currentOffering === 0
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium px-4 lg:min-w-[152px]  cursor-pointer inter  "
                 : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
             }
-            onClick={() => setCurrentOffering(3)}
+            onClick={() => setCurrentOffering(0)}
           >
-            Reschedule
+            All
           </div>
         </div>
       )}
       {present === 1 && (
         <div className="w-full flex gap-4 items-center flex-wrap justify-between lg:justify-start px-4 lg:px-0">
-          <div
-            className={
-              currentSession === 0
-                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-            }
-            onClick={() => setCurrentSession(0)}
-          >
-            All
-          </div>
           <div
             className={
               currentSession === 1
@@ -218,6 +208,16 @@ const CallLogs = () => {
             onClick={() => setCurrentSession(3)}
           >
             Reschedule
+          </div>
+          <div
+            className={
+              currentSession === 0
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(0)}
+          >
+            All
           </div>
         </div>
       )}

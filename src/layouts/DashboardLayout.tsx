@@ -25,7 +25,7 @@ const DashboardLayout = ({ children, current }: dashboard) => {
           {/* <HeadNav /> */}
           <div className="lg:hidden flex items-center w-full justify-between py-4 px-4 ">
             <span>
-              <img src={moblogo} alt="logo" />
+              <img src={moblogo} alt="logo" className="w-[100px] h-auto" />
             </span>
             <span onClick={() => setOpen(!open)}>
               <MenuIcon />

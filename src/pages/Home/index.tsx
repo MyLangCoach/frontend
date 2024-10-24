@@ -29,7 +29,7 @@ const Home = () => {
      }
    }, [user?.redirectUrl, navigate]);
 
-  
+  console.log(user?.userData)
   return (
     <DashboardLayout current={1}>
       <div className="w-full flex flex-col">

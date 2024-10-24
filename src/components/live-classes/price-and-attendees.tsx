@@ -112,9 +112,9 @@ const PriceAttendees = ({
           <span>
             <BigButton
               name={ "Continue"}
-              // loading={loading}
-
-              onClick={() => setCurrent(3)}
+              loading={loading}
+            altText='Loading'
+              onClick={handleCreate}
               
             />
           </span>

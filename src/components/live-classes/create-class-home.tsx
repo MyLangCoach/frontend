@@ -27,17 +27,18 @@ const CreateClassHome = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get("type"); 
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [current, setCurrent] = useState(1);
   const offering = useAppSelector(state => state.offerings);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [langTag, setLangTag] = useState<string>("");
     const [coverImageUrl, setCoverImageUrl] = useState<string>("");
   // const [type, setType] = useState<"ONE_TIME" | "RECURRING">("ONE_TIME");
   const [seriesCount, setSeriesCount] = useState({name:"Select", value:1})
-    const [duration, setDuration] = useState<number>(30);
+    const [duration, setDuration] = useState<number>(30); 
     const [costType, setCostType] = useState<"FREE" | "PAID" | any>("");
     const [cost, setCost] = useState<Cost>({ currency: "NGN", amount: 0 });
     const [attendantType, setAttendantType] = useState<"LIMITED" | "UNLIMITED">(
@@ -49,14 +50,15 @@ const CreateClassHome = () => {
   const [numOfAttendees, setNumOfAttendees] = useState<number>(1);
   const [redirectUrl, setRedirectUrl] = useState<string>("example.com");
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
+    setLoading(true);
     const data: OfferingData = {
       title: title,
       description: description,
       coverImageUrl: coverImageUrl,
       type: type,
       duration: Number(duration),
-      languageTag:"English",
+      languageTag:langTag,
       isFree: costType === "FREE" && cost?.amount === 0 ? true : false,
       cost: cost,
 
@@ -84,8 +86,11 @@ const CreateClassHome = () => {
 
     
   // console.log({data})
-    dispatch(createOffering(data))
-
+ const {payload}   = await dispatch(createOffering(data))
+    if (payload?.status === "success") {
+      setLoading(false);
+      console.log(payload);
+}
     
 
   }
@@ -107,7 +112,7 @@ const CreateClassHome = () => {
   
 
   return (
-    <div className="w-full flex   bg-white rounded-md lg:p-12 flex-col lg:flex-row">
+    <div className="w-full flex   bg-white rounded-md p-4 gap-8 lg:gap-2 lg:p-12 flex-col lg:flex-row">
       <div className="w-full lg:w-1/3 flex flex-col">
         {/* start of tab mode */}
         <div className="w-full flex items-start gap-5">
@@ -118,51 +123,58 @@ const CreateClassHome = () => {
           {/* text side */}
           <div className="flex flex-col">
             <p className="text-sm lg:text-base font-semibold red-hat text-black">
-               Class information
+              Class information
             </p>
 
             <p className="text-xs lg:text-sm  red-hat text-black">
-              Step Description
+              set basic informations
             </p>
             <p></p>
           </div>
         </div>
         {/* end of a single tab */}
         {/* start of a line */}
-        <div className="w-[2px] h-[41px] ml-4 mt-[-12px] bg-primary"></div>
+        {
+          type !== "ONE_MONTHLY" && (
+
+            <div className="w-[2px] h-[41px] ml-4 mt-[-12px] bg-primary"></div>
+          )
+        }
         {/* end of a line */}
         {/* start of tab mode */}
-        <div className="w-full flex items-start gap-5">
-          {/* number side */}
-          <span
-            className={` w-[32px] min-w-[32px] max-w-[32px] min-h-[32px] h-[32px] max-h-[32px] flex items-center justify-center rounded-full text-white red-hat ${
-              current >= 2 ? "bg-primary" : "bg-inactive"
-            }`}
-          >
-            2
-          </span>
-          {/* text side */}
-          <div className="flex flex-col">
-            <p className="text-sm lg:text-base font-semibold red-hat text-black">
-              Price and Attendees
-            </p>
+        {type !== "ONE_MONTHLY" && (
+          <div className="w-full flex items-start gap-5">
+            {/* number side */}
+            <span
+              className={` w-[32px] min-w-[32px] max-w-[32px] min-h-[32px] h-[32px] max-h-[32px] flex items-center justify-center rounded-full text-white red-hat ${
+                current >= 2 ? "bg-primary" : "bg-inactive"
+              }`}
+            >
+              2
+            </span>
+            {/* text side */}
+            <div className="flex flex-col">
+              <p className="text-sm lg:text-base font-semibold red-hat text-black">
+                Price and Attendees
+              </p>
 
-            <p className="text-xs lg:text-sm  red-hat text-black">
-              Step Description
-            </p>
-            <p></p>
+              <p className="text-xs lg:text-sm  red-hat text-black">
+                Set prices
+              </p>
+              <p></p>
+            </div>
           </div>
-        </div>
+        )}
         {/* end of a single tab */}
         {/* start of a line */}
-        <div
+        {/* <div
           className={`w-[2px] h-[41px] ml-4 mt-[-12px] ${
             current >= 2 ? "bg-primary" : "bg-inactive"
           }`}
-        ></div>
+        ></div> */}
         {/* end of a line */}
         {/* start of tab mode */}
-        <div className="w-full flex items-start gap-5">
+        {/* <div className="w-full flex items-start gap-5">
         
           <span
             className={` w-[32px] min-w-[32px] max-w-[32px] min-h-[32px] h-[32px] max-h-[32px] flex items-center justify-center rounded-full text-white red-hat ${
@@ -182,12 +194,12 @@ const CreateClassHome = () => {
             </p>
             <p></p>
           </div>
-        </div>
+        </div> */}
         {/* end of a single tab */}
 
         {/* end of tab mode */}
       </div>
-      <div className="w-full lg:w-2/3">
+      <div className="w-full lg:w-2/3 ">
         {current === 1 && (
           <LiveClassInformation
             setCurrent={setCurrent}
@@ -209,6 +221,10 @@ const CreateClassHome = () => {
             setCost={setCost}
             setLiveDateTimes={setLiveDateTimes}
             liveDateTimes={liveDateTimes}
+            langTag={langTag}
+            setLangTag={setLangTag} 
+            handleCreate={handleCreate}
+            loading={loading}
           />
         )}
         {current === 2 && (
@@ -223,10 +239,10 @@ const CreateClassHome = () => {
             setCostType={setCostType}
             type={type}
             handleCreate={handleCreate}
-            loading={offering?.loading}
+            loading={loading}
           />
         )}
-        {current === 3 && (
+        {/* {current === 3 && (
           <LocationSettings
             setCurrent={setCurrent}
             handleCreate={handleCreate}
@@ -234,7 +250,7 @@ const CreateClassHome = () => {
             redirectUrl={redirectUrl}
             setRedirectUrl={setRedirectUrl}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

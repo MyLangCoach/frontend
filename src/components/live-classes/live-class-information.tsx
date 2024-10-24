@@ -5,7 +5,7 @@ import PrimarySelect from '../Selects/PrimarySelect';
 import { OutlineBtn, BigButton, CapsuleBtn } from '../Button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ImageUpload from '../UploadFile/ImageUpload';
-const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type, seriesCount,setSeriesCount, cost, setCost, liveDateTimes,setLiveDateTimes, setCostType }: any) => {
+const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type, seriesCount,setSeriesCount, cost, setCost, liveDateTimes,setLiveDateTimes, setCostType, handleCreate, langTag, setLangTag, loading }: any) => {
   const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -42,9 +42,9 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
     };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col ">
       <h1 className="text-black text-base lg:text-xl font-bold red-hat">
-         Class Information
+        Class Information
       </h1>
       <div className="w-full flex flex-col mt-4">
         <div className="w-full">
@@ -70,6 +70,14 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
           ></textarea>
         </div>
         {/* end */}
+        <div className="w-full mt-6">
+          <Input
+            label={"Language Tag"}
+            height="h-9"
+            value={langTag}
+            setValue={setLangTag}
+          />
+        </div>
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
@@ -102,73 +110,26 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
             />
           </div>
         )}
-        {_type === "ONE_MONTHLY" && (
-          <div className="flex flex-col">
-            {/* <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">
-              <div
-                className={`${
-                  classType === 0
-                    ? "flex items-center h-full bg-white justify-center text-sm inter font-medium text-foreground  cursor-pointer"
-                    : "flex items-center justify-center text-foreground text-sm inter cursor-pointer "
-                }`}
-              >
-                Single class
-              </div>
-              <div
-                className={`${
-                  classType === 1
-                    ? "flex items-center h-full bg-white justify-center text-sm inter font-medium text-foreground  cursor-pointer"
-                    : "flex items-center justify-center text-foreground text-sm inter cursor-pointer "
-                }`}
-              >
-                Class series
-              </div>
-            </div> */}
-            {/* end of class tab */}
-            <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-4 gap-4 ">
-              <div>
-                <PrimarySelect
-                  selected={seriesCount}
-                  setSelected={setSeriesCount}
-                  label="Classes per month"
-                  data={[
-                    { name: "single class", value: 1 },
-                    { name: "4 classes", value: 4 },
-                    { name: "8 classes", value: 8 },
-                    { name: "12 classes", value: 12 },
-                  ]}
-                  name="Select"
-                />
-              </div>
-              <div>
-                <PrimarySelect
-                  selected={time}
-                  setSelected={setTime}
-                  label="Duration"
-                  data={[
-                    { name: "30 mins", value: 30 },
-                    { name: "1 hour", value: 60 },
-                  ]}
-                  name="Select"
-                />
-              </div>
-              <div>
-                <Input
-                  label={"Cost"}
-                  height="h-9"
-                  value={price}
-                  setValue={setPrice}
-                  type="number"
-                />
-              </div>
-            </div>
+        {_type === "LIVE_GROUP" && (
+          <div className="mt-6">
+            <PrimarySelect
+              selected={time}
+              setSelected={setTime}
+              label="Class Duration"
+              data={[
+                { name: "30 mins", value: 30 },
+                { name: "60 mins", value: 60 },
+              ]}
+              name="Select"
+            />
           </div>
         )}
+     
 
         {_type === "LIVE_GROUP" && (
           <div className="w-full flex flex-col">
-            <div className="w-full mt-4 lg:w-2/3 grid grid-cols-2 max-w-[435px] h-[36px] rounded-md p-1 bg-[#F4F4F5]">
-              <div
+            <div className=" mt-6   w-fit">
+              {/* <div
                 className={`${
                   classType === 1
                     ? "flex items-center h-full bg-white justify-center text-sm inter font-medium text-foreground  cursor-pointer"
@@ -176,7 +137,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
                 }`}
               >
                 Single class
-              </div>
+              </div> */}
               <div
                 className={`${
                   classType === 0
@@ -199,8 +160,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
               ))}
             </div>
             <div className="w-fit mt-6">
-
-            <CapsuleBtn name=' Add a session' onClick={addNewTime}  />
+              <CapsuleBtn name=" Add a session" onClick={addNewTime} />
             </div>
           </div>
         )}
@@ -228,9 +188,11 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
           <span>
             <BigButton
               name="Continue"
+              loading={loading}
+              disabled={loading}
               onClick={() => {
                 if (_type === "ONE_MONTHLY") {
-                  setCurrent(3);
+                  handleCreate();
                 } else {
                   setCurrent(2);
                 }
