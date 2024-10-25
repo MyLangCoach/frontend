@@ -40,14 +40,19 @@ const Testing = () => {
   const [open, setOpen] = useState(true);
   return (
     <div>
+      <h2>
+        THIS IS TESTING 
+      </h2>
+      <div className="w-full flex  gap-8 flex-col p-8">
+
+      <input type="date" className='w-[200px]' />
+      <input type="time" className='w-[200px]' />
+      </div>
       <div>
         {/* <h1>Paystack Payment Integration</h1>
         <PaystackPayment /> */}
       </div>
-      <ReUseModal width='w-[700px]' open={openModal} setOpen={setOpenModal }>
-      
-      <Calendar item={item} setOpen={setOpen} />
-      </ReUseModal>
+     
     </div>
   );
 }
