@@ -53,7 +53,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         <img
                           src={mobLogo}
                           alt="logo"
-                          className="w-auto h-auto"
+                          className="w-[120px] h-auto"
                         />
                         <span
                           className="cursor-pointer"

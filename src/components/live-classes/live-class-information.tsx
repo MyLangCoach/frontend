@@ -8,7 +8,14 @@ import ImageUpload from '../UploadFile/ImageUpload';
 const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImageUrl,setDatetime,title,description,coverImageUrl,dateTime,duration,setDuration,type, seriesCount,setSeriesCount, cost, setCost, liveDateTimes,setLiveDateTimes, setCostType, handleCreate, langTag, setLangTag, loading }: any) => {
   const navigate = useNavigate();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(location.search);
+  const isFirefoxOrSafari = (): boolean => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return (
+      userAgent.includes("firefox") ||
+      (userAgent.includes("safari") && !userAgent.includes("chrome"))
+    );
+  };
     const _type = queryParams.get("type"); 
     // const [name, setName] = useState<string>("");
     const [desc, setDesc] = useState<string>("");
@@ -19,8 +26,10 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
     const [price, setPrice] = useState<number>(0);
     useEffect(() => {
       setDuration(time.value)
-    }, [time])
-    
+    }, [time]) 
+  
+  
+  
   useEffect(() => {
   if (_type === "ONE_MONTHLY") {
 
@@ -110,6 +119,57 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
             />
           </div>
         )}
+        {_type === "ONE_MONTHLY" && (
+          <div className="mt-6 flex-col">
+            {/* <PrimarySelect
+              selected={time}
+              setSelected={setTime}
+              label="Class Duration"
+              data={[
+                { name: "30 mins", value: 30 },
+                { name: "60 mins", value: 60 },
+              ]}
+              name="Select"
+            /> */}
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-4 gap-4 ">
+              <div>
+                <PrimarySelect
+                  selected={seriesCount}
+                  setSelected={setSeriesCount}
+                  label="Classes per month"
+                  data={[
+                    { name: "single class", value: 1 },
+                    { name: "4 classes", value: 4 },
+                    { name: "8 classes", value: 8 },
+                    { name: "12 classes", value: 12 },
+                  ]}
+                  name="Select"
+                />
+              </div>
+              <div>
+                <PrimarySelect
+                  selected={time}
+                  setSelected={setTime}
+                  label="Duration"
+                  data={[
+                    { name: "30 mins", value: 30 },
+                    { name: "1 hour", value: 60 },
+                  ]}
+                  name="Select"
+                />
+              </div>
+              <div>
+                <Input
+                  label={"Cost"}
+                  height="h-9"
+                  value={price}
+                  setValue={setPrice}
+                  type="number"
+                />
+              </div>
+            </div>
+          </div>
+        )}
         {_type === "LIVE_GROUP" && (
           <div className="mt-6">
             <PrimarySelect
@@ -124,7 +184,6 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
             />
           </div>
         )}
-     
 
         {_type === "LIVE_GROUP" && (
           <div className="w-full flex flex-col">
@@ -190,6 +249,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
               name="Continue"
               loading={loading}
               disabled={loading}
+              altText='Loading'
               onClick={() => {
                 if (_type === "ONE_MONTHLY") {
                   handleCreate();

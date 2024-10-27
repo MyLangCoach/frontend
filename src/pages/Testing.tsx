@@ -50,7 +50,9 @@ function DateTimeInput({ onChange } :any) {
       <label>Time:</label>
       <input
         type="time"
+
         value={time}
+      
         className="border border-black p-2"
         onChange={handleTimeChange}
       />
