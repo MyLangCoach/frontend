@@ -9,13 +9,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
   const navigate = useNavigate();
     const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isFirefoxOrSafari = (): boolean => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    return (
-      userAgent.includes("firefox") ||
-      (userAgent.includes("safari") && !userAgent.includes("chrome"))
-    );
-  };
+
     const _type = queryParams.get("type"); 
     // const [name, setName] = useState<string>("");
     const [desc, setDesc] = useState<string>("");

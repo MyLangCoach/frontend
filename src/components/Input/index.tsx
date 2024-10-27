@@ -195,33 +195,85 @@ export const DateTimeInput = ({
       inputRef?.current?.showPicker();
     }
   };
+    const isFirefoxOrSafari = (): boolean => {
+      const userAgent = navigator.userAgent.toLowerCase();
+      return (
+        userAgent.includes("firefox") ||
+        (userAgent.includes("safari") && !userAgent.includes("chrome"))
+      );
+  };
+  const browserType = isFirefoxOrSafari();
   return (
-    <div
-      className={`relative outline-none rounded-[5px] border border-border flex  items-center px-4  w-full      ${className} ${
-        height ? height : "h-[36px]"
-      }`}
-    >
-      <input
-        type="datetime-local"
-        name="date"
-        className=" opacity-0  "
-        value={dateTime}
-        onChange={(e: any) => setDateTime(e.target?.value)}
-        ref={inputRef}
-      />
-      <div className="flex items-center  justify-between w-full px-3 absolute inset-0">
-        <p
-          className={` text-sm  ${
-            dateTime ? "text-foreground" : "text-[#71717A]"
+    <>
+      {browserType ? (
+        <DateTimeCustom onChange={setDateTime} />
+      ) : (
+        <div
+          className={`relative outline-none rounded-[5px] border border-border flex  items-center px-4  w-full   ${className} ${
+            height ? height : "h-[36px]"
           }`}
         >
-          {dateTime ? dateTime : "Select Date & Time"}
-        </p>
-        <span className="cursor-pointer" onClick={onCalenderIconClick}>
-          <CalenderIcon />
-        </span>
-      </div>
-    </div>
+          <input
+            type="datetime-local"
+            name="date"
+            className=" opacity-0  "
+            value={dateTime}
+            onChange={(e: any) => setDateTime(e.target?.value)}
+            ref={inputRef}
+          />
+          <div className="flex items-center  justify-between w-full px-3 absolute inset-0">
+            <p
+              className={` text-sm  ${
+                dateTime ? "text-foreground" : "text-[#71717A]"
+              }`}
+            >
+              {dateTime ? dateTime : "Select Date & Time"}
+            </p>
+            <span className="cursor-pointer" onClick={onCalenderIconClick}>
+              <CalenderIcon />
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
+
+function DateTimeCustom({ onChange }: any) {
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  const handleDateChange = (e: any) => {
+    setDate(e.target.value);
+    onChange(`${e.target.value}T${time}`);
+  };
+
+  const handleTimeChange = (e: any) => {
+    setTime(e.target.value);
+    onChange(`${date}T${e.target.value}`);
+  };
+
+  return (
+    <div className="gap-6 md:flex-row flex-col  flex md:items-center">
+      <div className="flex items-center gap-3">
+        <label className="red-hat text-base">Date:</label>
+        <input
+          type="date"
+          className="border rounded-[5px]  border-border p-2 h-9"
+          value={date}
+          onChange={handleDateChange}
+        />
+      </div>
+      <div className="flex items-center gap-3">
+        <label>Time:</label>
+        <input
+          type="time"
+          value={time}
+          className="border rounded-[5px] p-2 border-border h-9"
+          onChange={handleTimeChange}
+        />
+      </div>
+    </div>
+  );
+}

@@ -39,23 +39,27 @@ function DateTimeInput({ onChange } :any) {
   };
 
   return (
-    <div className="gap-4 flex items-center">
-      <label>Date:</label>
+    <div className="gap-6 md:flex-row flex-col  flex md:items-center">
+      <div className="flex items-center gap-3">
+
+      <label className="red-hat text-base">Date:</label>
       <input
         type="date"
-        className="border border-black p-2"
+        className="border rounded-[5px]  border-border p-2 h-9"
         value={date}
         onChange={handleDateChange}
-      />
+        />
+      </div>
+      <div className="flex items-center gap-3">
+
       <label>Time:</label>
       <input
         type="time"
-
         value={time}
-      
-        className="border border-black p-2"
+        className="border rounded-[5px] p-2 border-border h-9"
         onChange={handleTimeChange}
-      />
+        />
+        </div>
     </div>
   );
 }
