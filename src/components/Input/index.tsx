@@ -232,7 +232,12 @@ export const DateTimeInput = ({
             <span className="cursor-pointer" onClick={onCalenderIconClick}>
               <CalenderIcon />
             </span>
-          </div>
+            </div>
+            <p
+            
+            >
+
+            </p>
         </div>
       )}
     </>

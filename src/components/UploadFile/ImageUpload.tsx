@@ -2,7 +2,8 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
 import { Button } from "../Button";
 import toast from "react-hot-toast";
-const apiEndpoint = "https://mylangcoach-api.onrender.com/api/v1/file-upload"; 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+const apiEndpoint = `${baseUrl}/file-upload`; 
 interface ImageUploadProps {
  
   imageUrl: string;
