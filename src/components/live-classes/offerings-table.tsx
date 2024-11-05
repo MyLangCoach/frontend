@@ -231,17 +231,17 @@ const SingleRow = ({item, index} : any) => {
           {/* <p className="text-foreground font-normal text-sm truncate inter">
             {item?.numOfAttendees}
           </p> */}
-          {
+          {/* {
             item?.type === "LIVE_GROUP" && (
               <Button name="Reschedule" onClick={() => setOpenReschedule(true)} />
 
             )
-          }
-          <Button
+          } */}
+          {/* <Button
             className="min-w-max"
             name="Feedbacks"
             onClick={() => setOpenReschedule(true)}
-          />
+          /> */}
         </td>
         <ViewOfferingModal
           open={open}
@@ -282,7 +282,7 @@ const SingleRow = ({item, index} : any) => {
               />
             </div>
             <div className="w-full mt-6">
-              <Button
+              {/* <Button
                 name={offering?.loading ? "Loading..." : "Book Now"}
                 height="h-[49px]"
                 className={`flex-grow min-w-full ${
@@ -290,7 +290,7 @@ const SingleRow = ({item, index} : any) => {
                 }`}
                 onClick={handleReschedule}
                 disabled={!active}
-              />
+              /> */}
             </div>
           </div>
         </ReUseModal>
