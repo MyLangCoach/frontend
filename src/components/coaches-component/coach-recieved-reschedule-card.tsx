@@ -41,7 +41,7 @@ const CoachReceivedRescheduleCard = ({ item, index }: { item: any; index: number
     
   const handleReject = async () => {
     setLoading(true);
-      if (note) {
+     
         const sentdata = {
           id: item?.id,
           data: {
@@ -60,9 +60,7 @@ const CoachReceivedRescheduleCard = ({ item, index }: { item: any; index: number
         else {
           setLoading(false);
         }
-      } else {
-        toast.error("All Field   must be provided");
-      }
+      
 }
 
 

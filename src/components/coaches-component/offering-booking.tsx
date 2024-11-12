@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment-timezone";
 import { Input } from "../Input";
 import {
-    bookCoachOffering,
+  bookCoachOffering,
   createFirstBookingWithCoach,
   getAvailability,
   restoreDefault,
@@ -25,28 +25,30 @@ interface OfferingCalendarProps {
   setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) => {
+const OfferingCalendar: React.FC<OfferingCalendarProps> = ({
+  item,
+  setOpen,
+}) => {
   const navigate = useNavigate();
-    const authenticated = store.getState().auth?.token;
+  const authenticated = store.getState().auth?.token;
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
-    const urlId = useParams();
+  const urlId = useParams();
   const {
     description,
     coverImageUrl,
-   
-    
+
     id,
-    
-    title
+
+    title,
   } = item;
 
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState("I want to learn");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-    const [message, setMessage] = useState("");
-    const [isAvailable, setIsAvailable] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isAvailable, setIsAvailable] = useState(false);
   const [pickedTime, setPickedTime] = useState<string>("");
   const [pickedDay, setPickedDay] = useState<string>("");
   const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
@@ -88,12 +90,12 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
   };
 
   useEffect(() => {
-    if (note && selectedTime && isAvailable) {
+    if (selectedTime && isAvailable) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [note, selectedTime, isAvailable]);
+  }, [selectedTime, isAvailable]);
 
   const handleTimeClick = (day: moment.Moment, time: moment.Moment) => {
     const selectedDateTime = day
@@ -110,8 +112,6 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
     setPickedTime(time.tz("Africa/Lagos").format());
     setPickedDay(day.tz("Africa/Lagos").format());
     setPickedDate(selectedDateTime);
-  
-  
   };
   const handleChecKAvailability = async () => {
     setLoading(true);
@@ -130,67 +130,62 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
       setIsAvailable(false);
     }
   };
-    const handlePayment = async (seriesId: any) => {
-     
-      const data = {
-        seriesId: seriesId,
-        paymentMethod: "TRANSFER",
-      };
-
-      const { payload } = await dispatch(payForOffering(data));
-      if (payload?.status === "success") {
-        window.open(payload?.data?.authorization_url, "_blank");
-        setTimeout(() => {
-          navigate("/student/live-classes");
-        }, 3000);
-      }
+  const handlePayment = async (seriesId: any) => {
+    const data = {
+      seriesId: seriesId,
+      paymentMethod: "TRANSFER",
     };
-   useEffect(() => {
-     if (selectedTime) {
-       handleChecKAvailability();
-     }
-   }, [selectedTime]);
+
+    const { payload } = await dispatch(payForOffering(data));
+    if (payload?.status === "success") {
+      window.open(payload?.data?.authorization_url, "_blank");
+      setTimeout(() => {
+        navigate("/student/live-classes");
+      }, 3000);
+    }
+  };
+  useEffect(() => {
+    if (selectedTime) {
+      handleChecKAvailability();
+    }
+  }, [selectedTime]);
   const handleBook = async () => {
     if (authenticated) {
-
       if (active) {
         const sentdata = {
           id: id,
           data: {
-          note: note,
-          bookTimes: [selectedTime],
-        },
-      };
-   
-        const { payload } = await dispatch(bookCoachOffering(sentdata)); 
-          if (payload?.status === "success") {
-            toast.success(
-              "You have successfully booked this coach offering with the coach"
-            );
+            note: note ?? "I want to learn ",
+            bookTimes: [selectedTime],
+          },
+        };
 
-            handlePayment(payload?.data?.[0]?.seriesId);
-             dispatch(restoreDefault());
-             dispatch(resetRedirect());
+        const { payload } = await dispatch(bookCoachOffering(sentdata));
+        if (payload?.status === "success") {
+          toast.success(
+            "You have successfully booked this coach offering with the coach"
+          );
 
-             setOpen(false);
-          }
+          handlePayment(payload?.data?.[0]?.seriesId);
+          dispatch(restoreDefault());
+          dispatch(resetRedirect());
+
+          setOpen(false);
+        }
+      } else {
+        toast.error("Note and time must be provided");
+      }
     } else {
-      toast.error("Note and time must be provided");
-    }
-    }
-    else {
       dispatch(saveRedirectUrl(`/view-coach/${urlId?.id}`));
-      navigate("/login")
+      navigate("/login");
     }
   };
-
- 
 
   const handleClose = () => {
     setTimeout(() => {
       setOpen(false);
     }, 50);
-  }
+  };
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
       <div className="w-full flex flex-col">
@@ -210,10 +205,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
           </div>
           <div className="flex flex-col">
             <span className="flex items-center gap-[10px]">
-              <p className="font-bold red-hat capitalize">
-                {" "}
-                              {title}
-              </p>
+              <p className="font-bold red-hat capitalize"> {title}</p>
               <img src={ar} alt="ar" />
               <span>
                 <VerifyIcon />
@@ -221,7 +213,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
             </span>
             <p className="text-sm text-subTopic dm-sans">
               {" "}
-              {description ?? ""} 
+              {description ?? ""}
             </p>
           </div>
         </div>
@@ -322,5 +314,3 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({ item, setOpen }) =>
 };
 
 export default OfferingCalendar;
-
-

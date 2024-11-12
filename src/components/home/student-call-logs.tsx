@@ -224,7 +224,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
   const offering = useAppSelector((state) => state.offerings);
   const [openReschedule, setOpenReschedule] = useState(false);
   const [date, setDate] = useState<string>("");
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState("I want to learn");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
   const [activeReschule, setActiveReschedule] = useState<boolean>(false);
     const [message, setMessage] = useState("");
@@ -264,7 +264,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
   };
   const handleBookNextSession = () => {
 
-    if (note && isAvailable) {
+    if ( isAvailable) {
       const sentdata = {
         id: item?.seriesId,
         data: {
@@ -306,15 +306,15 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
     if (isFilled) {
       handleChecKAvailability();
     }
-    if (isFilled && note ) {
+    if (isFilled ) {
       setActive(true);
     } else {
       setActive(false);
     }
-    if (note && date) {
+    if ( date) {
       setActiveReschedule(true);
     }
-  }, [note, liveDateTimes, date]);
+  }, [ liveDateTimes, date]);
   const handleCloseMonthly = () => {
     setTimeout(() => {
       setOpenMonthly(false);
@@ -326,7 +326,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
       const sentdata = {
         id: item?.id,
         data: {
-          note: note,
+          note: note ?? "I want to learn ",
           proposedDateTime: date,
         },
       };
