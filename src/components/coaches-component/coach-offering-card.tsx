@@ -66,19 +66,15 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
     setLiveDateTimes(updatedDateTimes);
   };
   const handleBookNextSession = () => {
-    if (note) {
-      const sentdata = {
-        id: item?.seriesId,
-        data: {
-          note: note,
-          bookTimes: liveDateTimes,
-        },
-      };
+    const sentdata = {
+      id: item?.seriesId,
+      data: {
+        note: note ?? "I want to learn ",
+        bookTimes: liveDateTimes,
+      },
+    };
 
-      dispatch(bookNextSession(sentdata));
-    } else {
-      toast.error("Note  must be provided");
-    }
+    dispatch(bookNextSession(sentdata));
   };
 
   const [active, setActive] = useState(false);
@@ -89,15 +85,15 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
   useEffect(() => {
     const isFilled = liveDateTimes?.some(verifyItems);
 
-    if (isFilled && note) {
+    if (isFilled) {
       setActive(true);
     } else {
       setActive(false);
     }
-    if (note && date) {
+    if (date) {
       setActiveReschedule(true);
     }
-  }, [note, liveDateTimes, date]);
+  }, [liveDateTimes, date]);
   const handleCloseMonthly = () => {
     setTimeout(() => {
       setOpenMonthly(false);
@@ -110,7 +106,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
       const sentdata = {
         id: item?.id,
         data: {
-          note: note,
+          note: note ?? "I want to learn ",
           proposedDateTime: date,
         },
       };
@@ -225,7 +221,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
               )}
 
             {/* <Button name="Join Session" /> */}
-         
+
             {item?.offeringType !== "LIVE_GROUP" && (
               <ActionBtn
                 name="Reschedule call"

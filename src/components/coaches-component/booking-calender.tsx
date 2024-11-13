@@ -14,7 +14,10 @@ import {
   restoreDefault,
 } from "../../features/offeringslice";
 import toast from "react-hot-toast";
-import { payForSession, restoreDefault as restorer } from "../../features/paymentslice";
+import {
+  payForSession,
+  restoreDefault as restorer,
+} from "../../features/paymentslice";
 
 interface CalendarProps {
   // note: string;
@@ -39,7 +42,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
     firstName,
     lastName,
   } = item;
- 
+
   const selectedLanguage = languages?.[0];
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -51,7 +54,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   const [bookingId, setBookingId] = useState<string>("");
   const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
   const [currentWeek, setCurrentWeek] = useState(moment().tz("Africa/Lagos")); // Set the timezone to WAT
-    const [isAvailable, setIsAvailable] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
   const [duration, setDuration] = useState(30); // 30 minutes or 60 minutes
   const startOfCurrentWeek = currentWeek.clone().startOf("isoWeek");
   const endOfCurrentWeek = currentWeek.clone().endOf("isoWeek");
@@ -90,18 +93,20 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   };
 
   useEffect(() => {
-    if (note && selectedTime && isAvailable) {
+    if (selectedTime && isAvailable) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [note, selectedTime,isAvailable]);
+  }, [selectedTime, isAvailable]);
 
   useEffect(() => {
-    const id = costPerSession?.find((item: any) => item?.sessionType === duration);
-    
-    setSessionId(id?.id)
-  }, [duration])
+    const id = costPerSession?.find(
+      (item: any) => item?.sessionType === duration
+    );
+
+    setSessionId(id?.id);
+  }, [duration]);
   const handleChecKAvailability = async () => {
     setLoading(true);
     const data = {
@@ -111,25 +116,19 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
     const { payload } = await dispatch(getAvailability(data));
     if (payload?.status === "success") {
       toast.success(" Coach is Available");
-       setIsAvailable(true);
+      setIsAvailable(true);
       setLoading(false);
     } else {
       // toast.error("Selected time is  Not Available, kindly pick another time");
       setLoading(false);
-  
     }
   };
 
-  
   useEffect(() => {
     if (selectedTime) {
-      
       handleChecKAvailability();
-     
     }
-  }, [selectedTime])
-  
-
+  }, [selectedTime]);
 
   const handleTimeClick = (day: moment.Moment, time: moment.Moment) => {
     const selectedDateTime = day
@@ -147,23 +146,22 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
     setPickedDay(day.tz("Africa/Lagos").format());
     setPickedDate(selectedDateTime);
     const payload = { note, bookTime };
-   
   };
 
-  const handleBook = async() => {
+  const handleBook = async () => {
     if (active) {
       const sentdata = {
         coachId: sessionId,
         data: {
-          note: note,
+          note: note ?? "I want to learn ",
           bookTime: selectedTime,
         },
       };
-    
-      const { payload } = await dispatch(createFirstBookingWithCoach(sentdata)); 
-      if (payload) { 
+
+      const { payload } = await dispatch(createFirstBookingWithCoach(sentdata));
+      if (payload) {
         toast.success("Booking Successful");
-        
+
         dispatch(restoreDefault());
         handlePayment(payload?.data?.id);
         setOpen(false);
@@ -180,33 +178,32 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   //     setOpen(false);
   //   }
   // }, [offering?.createBookingSessionSuccess]);
- const payment = useAppSelector((state) => state.payment);
+  const payment = useAppSelector((state) => state.payment);
 
   const handlePayment = async (bookingId: any) => {
-   console.log("first",bookingId)
-   const data = {
-     bookingId: bookingId,
-     paymentMethod: "TRANSFER",
-   };
-   console.log({ data });
-    const { payload } = await dispatch(payForSession(data)); 
+    console.log("first", bookingId);
+    const data = {
+      bookingId: bookingId,
+      paymentMethod: "TRANSFER",
+    };
+    console.log({ data });
+    const { payload } = await dispatch(payForSession(data));
     if (payload?.status === "success") {
-window.open(payload?.data?.authorization_url, "_blank");
+      window.open(payload?.data?.authorization_url, "_blank");
     }
- };
+  };
 
-//  useEffect(() => {
-//    if (
-//      payment?.sessionPaymentSuccess &&
-//      payment?.sessionPaymentResp?.authorization_url
-//    ) {
-//      window.open(payment?.sessionPaymentResp?.authorization_url, "_blank");
-    
-//        dispatch(restorer());
-  
-//    }
-//  }, [payment?.sessionPaymentSuccess]);
+  //  useEffect(() => {
+  //    if (
+  //      payment?.sessionPaymentSuccess &&
+  //      payment?.sessionPaymentResp?.authorization_url
+  //    ) {
+  //      window.open(payment?.sessionPaymentResp?.authorization_url, "_blank");
 
+  //        dispatch(restorer());
+
+  //    }
+  //  }, [payment?.sessionPaymentSuccess]);
 
   return (
     <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
@@ -232,7 +229,7 @@ window.open(payload?.data?.authorization_url, "_blank");
                 {" "}
                 {firstName} {lastName}
               </p>
-            
+
               <span>
                 <VerifyIcon />
               </span>

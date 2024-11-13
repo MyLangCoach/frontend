@@ -42,27 +42,25 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
 
   const [openLive, setOpenLive] = useState(false);
   const [openMonthly, setOpenMonthly] = useState(false);
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState("I want to learn");
   const [message, setMessage] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([""]);
 
   const handleBookLiveClass = () => {
     if (authenticated) {
-      if (note) {
+     
         const sentdata = {
           id: item?.id,
           data: {
-            note: note,
+            note: note ?? "I want to learn ",
             bookTimes: [],
             // email:userEmail
           },
         };
 
         dispatch(bookCoachOffering(sentdata));
-      } else {
-        toast.error("Note  must be provided");
-      }
+      
     } else {
       dispatch(saveRedirectUrl(`/view-coach/${urlId?.id}`));
       navigate("/login");
@@ -170,12 +168,12 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
   useEffect(() => {
     const isFilled = liveDateTimes?.some(verifyItems);
 
-    if (isFilled && note) {
+    if (isFilled) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [note, liveDateTimes]);
+  }, [ liveDateTimes]);
 
   return (
     <div
