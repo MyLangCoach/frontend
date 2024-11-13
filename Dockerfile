@@ -8,8 +8,8 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn run build
+RUN yarn build
 
 EXPOSE 10000
 
-CMD ["yarn", "run", "serve"]
+CMD ["yarn", "serve"]
