@@ -5,7 +5,7 @@ import { GoogleLogo } from "../../assets";
 import { Input, Password } from "../../components/Input";
 import { useAppDispatch,useAppSelector } from "../../app/hooks";
 import PrimarySelect from "../../components/Selects/PrimarySelect";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUser, restoreDefault } from "../../features/auth/authSlice";
 import toast from "react-hot-toast";
 const Register = () => {
@@ -107,13 +107,13 @@ const Register = () => {
   return (
     <div className="w-full flex flex-col xl:flex-row lg:h-screen  flow-hide ">
       <div className="w-full hidden xl:flex xl:w-1/2 bg-[#fcfcff]  justify-center items-center h-screen ">
-        <span>
+        <Link to={"https://my-lang-website-daniekeys-projects.vercel.app/"}>
           <img
             src={signPic}
             alt="sign pic"
             className="w-auto max-w-[554px]  h-auto"
           />
-        </span>
+        </Link>
       </div>
       <div className="w-full xl:w-1/2 flex items-center justify-center   ">
         {success ? (
@@ -135,9 +135,12 @@ const Register = () => {
         ) : (
           <div className="h-screen overflow-y-scroll w-full  flex justify-center">
             <div className="w-full px-4 md:max-w-[345px] flex flex-col  h-full ">
-              <div className="mt-10">
+              <Link
+                to={"https://my-lang-website-daniekeys-projects.vercel.app/"}
+                className="mt-10"
+              >
                 <img src={logo} alt="logo" className="w-[150px] h-auto" />
-              </div>
+              </Link>
               <div className="flex flex-col mt-12">
                 <h1 className="text-2xl font-extrabold text-black red-hat">
                   Create a new account

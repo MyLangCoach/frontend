@@ -5,7 +5,8 @@ import { CancelX, NextIcon, PrevIcon, VerifyIcon } from "../../assets";
 import ar from "../../assets/png/ar.png";
 import pic from "../../assets/png/pic.png";
 import { Button, OutlineBtn } from "../Button";
-import { useNavigate } from "react-router-dom";
+import { store } from "../../app/store";
+import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment-timezone";
 import { Input } from "../Input";
 import {
@@ -18,6 +19,7 @@ import {
   payForSession,
   restoreDefault as restorer,
 } from "../../features/paymentslice";
+import { saveRedirectUrl } from "../../features/auth/authSlice";
 
 interface CalendarProps {
   // note: string;
@@ -29,6 +31,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
+   const authenticated = store.getState().auth?.token;
   const handleError = (e: any) => {
     e.target.onerror = null; // Prevent looping
     e.target.src = pic;
@@ -44,6 +47,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   } = item;
 
   const selectedLanguage = languages?.[0];
+   const urlId = useParams();
   const [note, setNote] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
@@ -149,26 +153,34 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   };
 
   const handleBook = async () => {
-    if (active) {
-      const sentdata = {
-        coachId: sessionId,
-        data: {
-          note: note ?? "I want to learn ",
-          bookTime: selectedTime,
-        },
-      };
+    if (authenticated) {
+      if (active) {
+        const sentdata = {
+          coachId: sessionId,
+          data: {
+            note: note ?? "I want to learn ",
+            bookTime: selectedTime,
+          },
+        };
 
-      const { payload } = await dispatch(createFirstBookingWithCoach(sentdata));
-      if (payload) {
-        toast.success("Booking Successful");
+        const { payload } = await dispatch(
+          createFirstBookingWithCoach(sentdata)
+        );
+        if (payload) {
+          toast.success("Booking Successful");
 
-        dispatch(restoreDefault());
-        handlePayment(payload?.data?.id);
-        setOpen(false);
+          dispatch(restoreDefault());
+          handlePayment(payload?.data?.id);
+          setOpen(false);
+        }
+      } else {
+        toast.error("Note and time must be provided");
       }
     } else {
-      toast.error("Note and time must be provided");
+      dispatch(saveRedirectUrl(`/view-coach/${urlId?.id}`));
+      navigate("/login");
     }
+
   };
 
   // useEffect(() => {
