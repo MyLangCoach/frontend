@@ -12,4 +12,4 @@ RUN yarn build
 
 EXPOSE 10000
 
-CMD ["yarn", "serve"]
+CMD ["yarn", "dev"]
