@@ -93,7 +93,7 @@ const ViewSingleCoachPage = () => {
                 </span>
               </div>
               <p className="max-w-[644px] text-sm red-hat">
-                {coachDetail?.description}
+                {coachDetail?.bio}
               </p>
               <div className="w-full mt-4 flex flex-col gap-3">
                 <div className="flex items-center gap-[6px]">
@@ -174,7 +174,7 @@ const ViewSingleCoachPage = () => {
                   <h1 className="text-xl font-bold red-hat">About the coach</h1>
 
                   <p className="text-base red-hat leading-[27px]">
-                    {coachDetail?.bio}
+                    {coachDetail?.description}
                   </p>
                   <h1 className="text-xl font-bold red-hat mt-12">
                     Similar Coaches
