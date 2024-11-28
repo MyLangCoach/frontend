@@ -325,7 +325,7 @@ const CoachProfile = () => {
         e.target.onerror = null; // Prevent looping
         e.target.src = dp;
       };
-console.log(userData)
+
 
   if (user?.fetchLoading) {
     return (
