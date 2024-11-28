@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CancelIcon, MicIcon, PhoneIcon } from "../../assets";
 import woman from "../../assets/png/smile-woman.png";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const GuideTour = () => {
   const [open, setOpen] = useState(true);
@@ -25,9 +26,12 @@ const GuideTour = () => {
               </p>
 
               <div className="flex gap-4 items-center mt-5">
-                <div
+                <Link
+                  to={"https://youtu.be/4FYPvbPH8cU"}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-[0.5px] h-[30px] flex items-center justify-center px-3 rounded-[4px] border-opacity-50 gap-3 border-[#0E79FF] min-w-max "
-                  onClick={() => navigate("/create-new-class?type=ONE_TIME")}
+                  // onClick={() => navigate("/create-new-class?type=ONE_TIME")}
                 >
                   <span>
                     <PhoneIcon />
@@ -35,10 +39,12 @@ const GuideTour = () => {
                   <p className="text-sm font-medium cursor-pointer dm-sans ">
                     1:1 Calls
                   </p>
-                </div>
-                <div
+                </Link>
+                <Link  to={"https://youtu.be/4FYPvbPH8cU"}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-[0.5px] h-[30px] flex items-center justify-center px-3 rounded-[4px] border-opacity-50 gap-3 border-[#0E79FF] min-w-max "
-                  onClick={() => navigate("/create-new-class?type=ONE_MONTHLY")}
+                 
                 >
                   <span>
                     <PhoneIcon />
@@ -46,10 +52,13 @@ const GuideTour = () => {
                   <p className="text-sm font-medium cursor-pointer dm-sans ">
                     1:1 Monthly
                   </p>
-                </div>
-                <div
+                </Link>
+                <Link
+                   to={"https://youtu.be/4FYPvbPH8cU"}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-[0.5px] h-[30px] flex items-center justify-center px-3 rounded-[4px] border-opacity-50 gap-3 border-[#0E79FF] min-w-max "
-                  onClick={() => navigate("/create-new-class?type=LIVE_GROUP")}
+                 
                 >
                   <span>
                     <MicIcon />
@@ -57,7 +66,7 @@ const GuideTour = () => {
                   <p className="text-sm font-medium cursor-pointer dm-sans ">
                     Live events
                   </p>
-                </div>
+                </Link>
               </div>
             </div>
             <div className="w-full lg:w-1/2 flex justify-end relative">
