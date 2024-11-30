@@ -25,7 +25,7 @@ const Profile = () => {
           >
             My profile
           </div>
-          {!isStudent && (
+          {/* {!isStudent && (
             <div
               className={
                 openProfile === false
@@ -36,7 +36,7 @@ const Profile = () => {
             >
               My availability
             </div>
-          )}
+          )} */}
         </div>
 
         {/* end of tabs session */}

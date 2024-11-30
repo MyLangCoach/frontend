@@ -20,7 +20,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { yearsArray } from "../../util/mockdata";
 import { ProfileViewIcon } from "../../assets";
-import ImageUpload from "../UploadFile/ImageUpload";
+
 import VideoUpload from "../UploadFile/VideoUpload";
 import { TiDelete } from "react-icons/ti";
 const uploadEndpoint =
