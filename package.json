@@ -1,5 +1,5 @@
 {
-  "name": "MyLangCoach Application",
+  "name": "MyLangCoachApplication",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
