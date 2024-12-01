@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ContainerLayout from "../../layouts/ContainerLayout";
 import banner from "../../assets/png/face-woman.png";
 import pic from "../../assets/png/user-pic-1.png";
@@ -15,19 +15,24 @@ import {
 import { getSingleCoachOffering } from "../../features/offeringslice";
 import { useParams } from "react-router-dom";
 import LoadingComponent from "../../components/Loaders/skeleton-loading";
-import { ClassDetails } from "../../util/types";
+import { ClassDetails, CoachDetails } from "../../util/types";
 import OfferingCard from "../../components/coaches-component/offering-card";
 import SingleVideoCard from "../../components/coaches-component/single-video-coach";
+import CoachSessionCalendar from "../../components/coaches-component/coach-session-calender";
 
 const ViewSingleCoachPage = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
   const offering = useAppSelector((state) => state.offerings);
   const [isOffering, setIsOffering] = useState(false);
+  const [present, setPresent] = useState<number>(0);
   const id = useParams();
   const userId = id.id;
+   const aboutRef = useRef<HTMLDivElement>(null);
+   const scheduleRef = useRef<HTMLDivElement>(null);
+   const qualificationRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    dispatch(getAllCoaches());
+    // dispatch(getAllCoaches());
     dispatch(getSingleCoachOffering({ id: id?.id }));
     dispatch(resetRedirect());
     dispatch(getSingleUserDetail(userId));
@@ -41,10 +46,14 @@ const ViewSingleCoachPage = () => {
 
   const allOfferings: ClassDetails[] = offering?.singleCoachOffering;
 
-  const coachDetail = auth?.singleUserProfile;
+  const coachDetail  : CoachDetails = auth?.singleUserProfile;
 
   const recentOfferings: ClassDetails[] = auth?.singleUserProfile?.offerings?.slice(0,1); 
 
+    const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+      ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  
   if (auth?.fetchLoading || offering?.fetchLoading) {
     return (
       <div className="w-full">
@@ -62,20 +71,19 @@ const ViewSingleCoachPage = () => {
         style={{
           background: `url(${coachDetail?.profileImage ?? banner})`,
           backgroundSize: "cover",
-          backgroundPosition:"center"
+          backgroundPosition: "center",
         }}
-      >
-      </div>
-        <ContainerLayout>
-          <div className="w-full flex items-end h-[380px] pb-4 absolute z-pro top-0  ">
-            <img
-              src={coachDetail?.profileImage}
-              onError={handleError}
-              alt="pics"
-              className="border border-white rounded-full w-[126px] h-[126px] object-cover"
-            />
-          </div>
-        </ContainerLayout>
+      ></div>
+      <ContainerLayout>
+        <div className="w-full flex items-end h-[380px] pb-4 absolute z-pro top-0  ">
+          <img
+            src={coachDetail?.profileImage}
+            onError={handleError}
+            alt="pics"
+            className="border border-white rounded-full w-[126px] h-[126px] object-cover"
+          />
+        </div>
+      </ContainerLayout>
 
       {/* end of the banner side */}
       <ContainerLayout>
@@ -87,13 +95,13 @@ const ViewSingleCoachPage = () => {
                 <h1 className="text-xl lg:text-[28px] font-bold red-hat uppercase">
                   {coachDetail?.firstName} {coachDetail?.lastName}
                 </h1>
-           
+
                 <span>
                   <VerifyIcon />
                 </span>
               </div>
               <p className="max-w-[644px] text-sm red-hat">
-                {coachDetail?.description}
+                {coachDetail?.bio}
               </p>
               <div className="w-full mt-4 flex flex-col gap-3">
                 <div className="flex items-center gap-[6px]">
@@ -137,26 +145,57 @@ const ViewSingleCoachPage = () => {
               <div className="w-full flex flex-row lg:flex-col items-center lg:items-start gap-3 lg:w-3/12">
                 <h1
                   className={`text-xl  red-hat cursor-pointer ${
-                    isOffering
+                    present !== 0
                       ? "text-muted text-base"
                       : "text-black font-bold text-xl"
                   }`}
-                  onClick={() => setIsOffering(false)}
+                  onClick={() => {
+                    scrollToSection(aboutRef);
+                    setPresent(0);
+                  }}
                 >
                   About
                 </h1>
                 <h1
-                  className={`text-base  cursor-pointer red-hat  ${
-                    isOffering
-                      ? "text-black font-bold text-xl"
-                      : "text-muted text-base"
+                  className={`text-xl  red-hat cursor-pointer ${
+                    present !== 1
+                      ? "text-muted text-base"
+                      : "text-black font-bold text-xl"
                   }`}
-                  onClick={() => setIsOffering(true)}
+                  onClick={() => {
+                    scrollToSection(scheduleRef);
+                    setPresent(1);
+                  }}
+                >
+                  Schedule
+                </h1>
+                <h1
+                  className={`text-xl  red-hat cursor-pointer ${
+                    present !== 2
+                      ? "text-muted text-base"
+                      : "text-black font-bold text-xl"
+                  }`}
+                  onClick={() => {
+                    scrollToSection(qualificationRef);
+                    setPresent(2);
+                  }}
+                >
+                  Qualification
+                </h1>
+                <h1
+                  className={`text-xl  red-hat cursor-pointer ${
+                    present !== 3
+                      ? "text-muted text-base"
+                      : "text-black font-bold text-xl"
+                  }`}
+                  onClick={() => {
+                    setPresent(3);
+                  }}
                 >
                   Offerings
                 </h1>
               </div>
-              {isOffering ? (
+              {present === 3 ? (
                 <div className="flex flex-col w-full ">
                   <h1 className="text-xl font-bold red-hat mb-6">
                     Coach Offerings
@@ -170,13 +209,53 @@ const ViewSingleCoachPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="w-full lg:w-9/12 flex flex-col">
-                  <h1 className="text-xl font-bold red-hat">About the coach</h1>
+                <div className="w-full lg:w-9/12 flex flex-col flow-hide lg:h-screen">
+                  <h1 className="text-xl font-bold red-hat" ref={aboutRef}>
+                    About the coach
+                  </h1>
 
                   <p className="text-base red-hat leading-[27px]">
-                    {coachDetail?.bio}
+                    {coachDetail?.description}
                   </p>
-                  <h1 className="text-xl font-bold red-hat mt-12">
+
+                  <h1 className="text-xl font-bold red-hat mt-12">Schedule</h1>
+                  <div className="w-full" ref={scheduleRef}>
+                    <CoachSessionCalendar item={coachDetail} />
+                  </div>
+
+                  {coachDetail?.qualifications?.length > 0 && (
+                    <h1 className="text-xl font-bold red-hat mt-12">
+                      Qualification
+                    </h1>
+                  )}
+                  <div
+                    className="w-full flex flex-col mt-4 gap-3"
+                    ref={qualificationRef}
+                  >
+                    {coachDetail?.qualifications?.map(
+                      (item: any, index: number) => {
+                        return (
+                          <div className="w-full flex flex-col" key={index}>
+                            <div className="flex items-center gap-[6px]">
+                              <span>
+                                <CapIcon />
+                              </span>
+                              <p className="text-black  text-lg capitalize font-bold">
+                                {item?.name}
+                              </p>
+                            </div>
+                            <p className="text-sm red-hat lg:text-lg ml-5 ">
+                              {item?.issuing_org}
+                            </p>
+                            <p className="text-sm red-hat lg:text-lg ml-5 ">
+                              {item?.year}
+                            </p>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                  {/* <h1 className="text-xl font-bold red-hat mt-12">
                     Similar Coaches
                   </h1>
 
@@ -184,7 +263,7 @@ const ViewSingleCoachPage = () => {
                     {auth?.allCoaches?.map((item: any, index: any) => {
                       return <SingleCoachCard key={index} item={item} />;
                     })}
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
@@ -194,8 +273,10 @@ const ViewSingleCoachPage = () => {
           {/* offering  */}
           <div className="w-full lg:w-1/3 flex flex-col">
             <div className="flex mt-6 w-full">
-
-            <SingleVideoCard item={coachDetail} onClick={() => setIsOffering(true)} />
+              <SingleVideoCard
+                item={coachDetail}
+                onClick={() => setIsOffering(true)}
+              />
             </div>
             {!isOffering && (
               <div className="flex flex-col mt-4">

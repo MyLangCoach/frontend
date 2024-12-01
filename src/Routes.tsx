@@ -58,13 +58,53 @@ const AppRoutes = () => {
         
         } />
             
-        <Route path="/payouts" element={<Payouts />} />
-        <Route path="/expenditure" element={<Payouts />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/students" element={<CoachStudent />} />
-        <Route path="/testing" element={<Testing />} />
-        <Route path="/coaches" element={<AllCoaches />} />
-        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payouts" element={
+           <ProtectedRoute>
+
+          <Payouts />
+           </ProtectedRoute>
+        
+        } />
+        <Route path="/expenditure" element={
+           <ProtectedRoute>
+
+          <Payouts />
+           </ProtectedRoute>
+        
+        } />
+        <Route path="/settings" element={
+           <ProtectedRoute>
+
+          
+          <SettingsPage />
+           </ProtectedRoute>
+        
+        } />
+        
+        <Route path="/students" element={
+           <ProtectedRoute>
+
+          <CoachStudent />
+           </ProtectedRoute>
+        
+        } />
+       
+          
+        <Route path="/coaches" element={
+           <ProtectedRoute>
+
+          <AllCoaches />
+           </ProtectedRoute>
+        } />
+       
+        
+        <Route path="/payment" element={
+           <ProtectedRoute>
+
+          <PaymentPage />
+           </ProtectedRoute>
+        
+        } />
         <Route
           path="/email-verification-success"
           element={<VerifyEmailSuccess />}
@@ -98,9 +138,9 @@ const AppRoutes = () => {
         <Route
           path="/profile"
           element={
-            // <ProtectedRoute>
+            <ProtectedRoute>
             <Profile />
-            // </ProtectedRoute>
+             </ProtectedRoute>
           }
         />
 

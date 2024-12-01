@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { loginUser } from "../../features/auth/authSlice";
 import toast from "react-hot-toast";
+import { websiteUrl } from "../../util/endpoints";
+
 const Login = () => {
   const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -53,7 +55,7 @@ const Login = () => {
       <div className="w-full xl:w-1/2 flex items-center justify-center flow-hide h-screen">
         <div className="w-full px-4 md:max-w-[345px] flex flex-col flow-hide h-screen ">
           <Link
-            to={"https://my-lang-website-daniekeys-projects.vercel.app/"}
+            to={websiteUrl}
             className="mt-20"
           >
             <img src={logo} alt="logo" className="w-[150px] h-auto" />
