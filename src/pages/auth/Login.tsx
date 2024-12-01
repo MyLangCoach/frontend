@@ -5,10 +5,12 @@ import { GoogleLogo } from "../../assets";
 import { Input, Password } from "../../components/Input";
 import Status from "../../components/dropdown/status-drop";
 import PrimarySelect from "../../components/Selects/PrimarySelect";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { loginUser } from "../../features/auth/authSlice";
 import toast from "react-hot-toast";
+import { websiteUrl } from "../../util/endpoints";
+
 const Login = () => {
   const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -52,9 +54,12 @@ const Login = () => {
       </div>
       <div className="w-full xl:w-1/2 flex items-center justify-center flow-hide h-screen">
         <div className="w-full px-4 md:max-w-[345px] flex flex-col flow-hide h-screen ">
-          <div className="mt-20">
+          <Link
+            to={websiteUrl}
+            className="mt-20"
+          >
             <img src={logo} alt="logo" className="w-[150px] h-auto" />
-          </div>
+          </Link>
           <div className="flex flex-col mt-12">
             <h1 className="text-2xl font-extrabold text-black red-hat">
               Login
@@ -84,15 +89,18 @@ const Login = () => {
                 setValue={setPassword}
                 label="Password"
               />
-              <p className="text-xs font-medium text-muted cursor-pointer " onClick={() => navigate("/forgot-password")}>
+              <p
+                className="text-xs font-medium text-muted cursor-pointer "
+                onClick={() => navigate("/forgot-password")}
+              >
                 Forgot password?
               </p>
               <div className="w-full  flex items-center justify-end mt-4">
-                <button className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] " onClick={handleLogin}>
-                  {
-                    auth?.loading ? "Loading..." : "Sign In"
-                  }
-            
+                <button
+                  className="bg-black h-[49px] w-full justify-center xl:w-auto cursor-pointer dm-sans min-w-[96px] text-white px-6 flex items-center rounded-[4px] "
+                  onClick={handleLogin}
+                >
+                  {auth?.loading ? "Loading..." : "Sign In"}
                 </button>
               </div>
               <div className="w-full flex items-center justify-center mb-20">

@@ -2,6 +2,8 @@
 
 /** this would wrap all the api endpoints and base urls */
 export const baseUrl = import.meta.env.VITE_BASE_URL;
+export const websiteUrl = import.meta.env.VITE_WEBSITE_URL;
+export const appUrl = import.meta.env.VITE_APP_URL;
 
 export const url = {
   login: "/auth/signin",

@@ -23,15 +23,15 @@ import { saveRedirectUrl } from "../../features/auth/authSlice";
 
 interface CalendarProps {
   // note: string;
-  item: CoachDetails;
-  setOpen: React.Dispatch<SetStateAction<boolean>>;
+  item: CoachDetails | any;
+
 }
 
-const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
+const CoachSessionCalendar: React.FC<CalendarProps> = ({ item }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
-   const authenticated = store.getState().auth?.token;
+  const authenticated = store.getState().auth?.token;
   const handleError = (e: any) => {
     e.target.onerror = null; // Prevent looping
     e.target.src = pic;
@@ -47,8 +47,8 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   } = item;
 
   const selectedLanguage = languages?.[0];
-   const urlId = useParams();
-  const [note, setNote] = useState("");
+  const urlId = useParams();
+  const [note, setNote] = useState("I love to learn");
   const [selectedTime, setSelectedTime] = useState("");
   const [active, setActive] = useState(false);
   const [pickedTime, setPickedTime] = useState<string>("");
@@ -171,7 +171,7 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
 
           dispatch(restoreDefault());
           handlePayment(payload?.data?.id);
-          setOpen(false);
+        
         }
       } else {
         toast.error("Note and time must be provided");
@@ -180,7 +180,6 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
       dispatch(saveRedirectUrl(`/view-coach/${urlId?.id}`));
       navigate("/login");
     }
-
   };
 
   // useEffect(() => {
@@ -218,41 +217,12 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
   //  }, [payment?.sessionPaymentSuccess]);
 
   return (
-    <div className="flex flex-col items-center p-4 h-[85vh] flow-hide">
+    <div className="flex flex-col items-center mt-2  flow-hide">
       <div className="w-full flex flex-col">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl red-hat font-bold">Book a session</h2>
-          <span className="cursor-point" onClick={() => setOpen(false)}>
-            <CancelX />
-          </span>
-        </div>
-        <div className="flex items-start gap-3 pb-3 border-b-border1 border-b">
-          <div>
-            <img
-              src={profileImage}
-              alt=""
-              className="w-9 h-9 rounded-full object-cover"
-              onError={handleError}
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="flex items-center gap-[10px]">
-              <p className="font-bold red-hat capitalize">
-                {" "}
-                {firstName} {lastName}
-              </p>
-
-              <span>
-                <VerifyIcon />
-              </span>
-            </span>
-            <p className="text-sm text-subTopic dm-sans">
-              {" "}
-              {selectedLanguage?.language ?? ""} coach
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-6 mt-6 mb-6">
+       
+      
+              
+        <div className="flex gap-6 mt-2 mb-2">
           <p className="text-sm lg:text-base font-bold red-hat ">Choose time</p>
           <label className="flex items-center">
             <input
@@ -277,16 +247,16 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
             60 mins
           </label>
         </div>
-        <div className="w-full mb-4">
+        {/* <div className="w-full mb-4">
           <Input
             label={"Add A Session Note"}
             placeholder="Enter Note..."
             value={note}
             setValue={setNote}
           />
-        </div>
+        </div> */}
       </div>
-      <div className="flex flex-col mb-4 w-full border-border border rounded-[6px] p-3">
+      <div className="flex flex-col mb-4 w-full  mt-3 ">
         <div className="flex items-center justify-between ">
           <span onClick={() => handleWeekChange("prev")}>
             <PrevIcon />
@@ -299,8 +269,8 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
             <NextIcon />
           </span>
         </div>
-        <div className=" mt-6 max-h-[428px] flow-hide">
-          <div className="flex justify-center ">
+        <div className=" mt-6  flow-hide flow-hide-x">
+          <div className="flex lg:justify-center  min-w-max  ">
             {daysOfWeek.map((day) => (
               <div key={day.toISOString()} className="text-center mx-2">
                 <h3 className="font-semibold mb-2 text-sm">
@@ -330,22 +300,24 @@ const Calendar: React.FC<CalendarProps> = ({ item, setOpen }) => {
         </div>
       </div>
       <div className="flex justify-between w-full gap-3">
-        <OutlineBtn
+        {/* <OutlineBtn
           name="Cancel"
-          onClick={() => setOpen(false)}
           height="h-[49px]"
           className="flex-grow"
-        />
+        /> */}
+            
+                  
         <Button
           name={offering?.loading ? "Loading..." : "Book Now"}
           height="h-[49px]"
           className={`flex-grow ${!active && "opacity-40 cursor-not-allowed"}`}
           onClick={handleBook}
           disabled={!active}
-        />
+          />
+          
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default CoachSessionCalendar;
