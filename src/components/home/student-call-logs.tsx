@@ -153,8 +153,8 @@ const StudentCallLogs = () => {
           ) : (
             <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any classes at the moment, You can proceed to
-                book a coaching session or offerings to continue
+                You do not have any classes at the moment. You can proceed to
+                book a coaching session or explore other offerings to continue.
               </p>
               <Button
                 name="Book a Coach Session"
@@ -176,8 +176,9 @@ const StudentCallLogs = () => {
           ) : (
             <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any upcoming classes at the moment, You can
-                proceed to book a coaching session or offerings to continue
+                You do not have any upcoming classes at the moment. You can
+                proceed to book a coaching session or explore other offerings to
+                continue.
               </p>
               <Button
                 name="Book a Coach Session"
@@ -199,8 +200,9 @@ const StudentCallLogs = () => {
           ) : (
             <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
               <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any past classes at the moment, You can proceed
-                to book a coaching session or offerings to continue
+                You do not have any past classes at the moment. You can proceed
+                to book a coaching session or explore other offerings to
+                continue.
               </p>
               <Button
                 name="Book a Coach Session"

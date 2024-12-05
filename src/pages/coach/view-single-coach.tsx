@@ -275,7 +275,7 @@ const ViewSingleCoachPage = () => {
             <div className="flex mt-6 w-full">
               <SingleVideoCard
                 item={coachDetail}
-                onClick={() => setIsOffering(true)}
+                onClick={() => setPresent(3)}
               />
             </div>
             {!isOffering && (
