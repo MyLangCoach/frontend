@@ -9,10 +9,10 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getUserProfile,restoreDefault,updateUserProfile } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { UserProfileData } from "../../util/types";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
-import { storage } from "../../firebase";
+
 import axios from "axios";
 const uploadEndpoint = "https://mylangcoach-api.onrender.com/api/v1/file-upload";
 const UserProfile = () => {
@@ -109,38 +109,7 @@ const getFiles = (files: any) => {
 };
 
 
-const uploadFile = () => {
-  // e.preventDefault();
-  setLoading(true);
-  const storageRef = ref(storage, `/files/${selectedFile.name}`);
-  const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const prog = Math.round(
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      );
-      setProgress(prog);
-    },
-    () => {
-      setSuccess(false);
-      setLoading(false);
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-        setFileUrl(url);
-        
-        setSuccess(true);
-        setSelectedFile("");
-        setLoading(false);
-        
-        toast.success("Image Upload Successful");
-         dispatch(updateUserProfile({profileImage:url})); 
-        // setPreview("");
-      });
-    }
-  );
-}; 
+
 
   
   useEffect(() => {

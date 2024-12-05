@@ -13,9 +13,9 @@ import {
 } from "../../features/auth/authSlice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { Language, Qualification, UserProfileData } from "../../util/types";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import toast from "react-hot-toast";
-import { storage } from "../../firebase";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { yearsArray } from "../../util/mockdata";
@@ -240,44 +240,7 @@ const CoachProfile = () => {
     setPreview(objectUrl);
   };
 
-  const uploadFile = () => {
-    // e.preventDefault();
-    setLoading(true);
-    const storageRef = ref(storage, `/files/${selectedFile.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(prog);
-      },
-      () => {
-        setSuccess(false);
-        setLoading(false);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setFileUrl(url);
-
-          setSuccess(true);
-          setSelectedFile("");
-          setLoading(false);
-
-          toast.success("Image Upload Successful");
-          dispatch(updateUserProfile({ profileImage: url }));
-          // setPreview("");
-        });
-      }
-    );
-  };
-
-  useEffect(() => {
-    if (selectedFile) {
-      uploadFile();
-    }
-  }, [selectedFile]); 
+  
   
    const [image, setImage] = useState<File | null>(null);
 
