@@ -202,20 +202,38 @@ const getFiles = (files: any) => {
             backgroundSize: "cover",
           }}
         >
-          <div className="flex relative cursor-pointer">
-            <input
-              type="file"
-              name=""
-              className="inset-0 opacity-0 absolute"
-              accept="image/*"
-              id=""
-              onChange={handleImageChange}
-              // onChange={(e) => getFiles(e.target.files)}
-            />
-            <span>
-              <img src={camera} alt="camera" />
+          {loading ? (
+            <span className="">
+              <svg
+                className="animate-spin h-10 w-10 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
             </span>
-          </div>
+          ) : (
+            <div className="flex relative cursor-pointer">
+              <input
+                type="file"
+                name=""
+                className="inset-0 opacity-0 absolute"
+                id=""
+                // onChange={(e) => getFiles(e.target.files)}
+                onChange={handleImageChange}
+              />
+              <span>
+                <img src={camera} alt="camera" />
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full mt-12 flex flex-col px-2 lg:px-6 lg:py-6 py-4">
@@ -225,7 +243,7 @@ const getFiles = (files: any) => {
             <Input
               value={firstname}
               setValue={setFirstname}
-              label="First name"
+              label="First name *"
               height="h-[36px]"
             />
           </div>
@@ -233,7 +251,7 @@ const getFiles = (files: any) => {
             <Input
               value={lastname}
               setValue={setLastname}
-              label="Last name"
+              label="Last name *"
               height="h-[36px]"
             />
           </div>
@@ -256,7 +274,7 @@ const getFiles = (files: any) => {
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Short bio
+            Short bio *
           </label>
           <textarea
             id=""
@@ -271,7 +289,7 @@ const getFiles = (files: any) => {
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Short Description
+            Short Description *
           </label>
           <textarea
             id=""
@@ -288,7 +306,7 @@ const getFiles = (files: any) => {
           <PrimarySelect
             selected={country}
             setSelected={setCountry}
-            label="Choose Country"
+            label="Choose Country *"
             data={Location}
             name={country}
           />
@@ -297,7 +315,7 @@ const getFiles = (files: any) => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Social media
+            Social media *
           </h1>
           <CapsuleBtn name="Add social media" onClick={addSocialMedia} />
         </div>
@@ -307,7 +325,7 @@ const getFiles = (files: any) => {
         <div className="w-full mt-4 flex flex-col gap-3">
           {socialMedia.map((social: string, index: number) => (
             <UrlInput
-              placeholder="www.facebook.com"
+              placeholder="e.g www.facebook.com"
               value={social}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleSocialMediaChange(index, e.target.value)
@@ -321,7 +339,7 @@ const getFiles = (files: any) => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Language Interests
+            Language Interests *
           </h1>
           <CapsuleBtn name="Add language" onClick={() => setShowInput(true)} />
         </div>
@@ -377,3 +395,5 @@ const getFiles = (files: any) => {
 };
 
 export default UserProfile;
+
+

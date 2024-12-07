@@ -19,6 +19,11 @@ import { ClassDetails, CoachDetails } from "../../util/types";
 import OfferingCard from "../../components/coaches-component/offering-card";
 import SingleVideoCard from "../../components/coaches-component/single-video-coach";
 import CoachSessionCalendar from "../../components/coaches-component/coach-session-calender";
+import { Link } from "react-router-dom";
+interface SocialMedia {
+  platform: string;
+  link: string;
+}
 
 const ViewSingleCoachPage = () => {
   const dispatch = useAppDispatch();
@@ -44,12 +49,37 @@ const ViewSingleCoachPage = () => {
     e.target.src = pic;
   };
 
+  function extractPlatformName(links: string[]): SocialMedia[] {
+    const socialMediaPlatforms: SocialMedia[] = [];
+
+    links.forEach((link) => {
+      if (link.includes("linkedin")) {
+        socialMediaPlatforms.push({ platform: "LinkedIn", link });
+      } else if (link.includes("facebook")) {
+        socialMediaPlatforms.push({ platform: "Facebook", link });
+      } else if (link.includes("twitter")) {
+        socialMediaPlatforms.push({ platform: "Twitter", link });
+      } else if (link.includes("instagram")) {
+        socialMediaPlatforms.push({ platform: "Instagram", link });
+      } else if (link.includes("youtube")) {
+        socialMediaPlatforms.push({ platform: "YouTube", link });
+      } else {
+        socialMediaPlatforms.push({ platform: "Unknown", link });
+      }
+    });
+
+    return socialMediaPlatforms;
+  }
+
   const allOfferings: ClassDetails[] = offering?.singleCoachOffering;
 
   const coachDetail  : CoachDetails = auth?.singleUserProfile;
 
   const recentOfferings: ClassDetails[] = auth?.singleUserProfile?.offerings?.slice(0,1); 
 
+  // console.log(coachDetail)
+  const socialMedia = extractPlatformName(coachDetail?.socials);
+  console.log(socialMedia);
     const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
       ref.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -255,6 +285,22 @@ const ViewSingleCoachPage = () => {
                       }
                     )}
                   </div>
+                  <h1 className="text-xl font-bold red-hat mt-6 ml-5">
+                    Social Handles
+                    </h1>
+                    <div className="w-full flex flex-col ml-5">
+
+                    {
+                      socialMedia?.map((item) => (
+                        <div>
+                          <Link to={item?.link} target="_blank" rel="no referrer" className="text-primary capitalize" >
+                          {item?.platform}
+                          </Link>
+                        </div>
+                      ))
+                    }
+                    </div>
+
                   {/* <h1 className="text-xl font-bold red-hat mt-12">
                     Similar Coaches
                   </h1>

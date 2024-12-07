@@ -63,7 +63,7 @@ const CoachProfile = () => {
     { language: "", proficiency: "" },
   ]);
 
-  console.log(userData)
+
   const [cost, setCost] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [prof, setProf] = useState<{ name: string }>({ name: "" });
@@ -323,19 +323,39 @@ const CoachProfile = () => {
             backgroundSize: "cover",
           }}
         >
-          <div className="flex relative cursor-pointer">
-            <input
-              type="file"
-              name=""
-              className="inset-0 opacity-0 absolute"
-              id=""
-              // onChange={(e) => getFiles(e.target.files)}
-              onChange={handleImageChange}
-            />
-            <span>
-              <img src={camera} alt="camera" />
-            </span>
-          </div>
+          {loading ? (
+            <span className="">
+
+            <svg
+              className="animate-spin h-10 w-10 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+            </svg>
+                </span>
+          ) : (
+            <div className="flex relative cursor-pointer">
+              <input
+                type="file"
+                name=""
+                className="inset-0 opacity-0 absolute"
+                id=""
+                // onChange={(e) => getFiles(e.target.files)}
+                onChange={handleImageChange}
+              />
+              <span>
+                <img src={camera} alt="camera" />
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full mt-12 flex flex-col px-2 lg:px-6 lg:py-6 py-4">
@@ -361,7 +381,7 @@ const CoachProfile = () => {
             <Input
               value={firstname}
               setValue={setFirstname}
-              label="First name"
+              label="First name *"
               height="h-[36px]"
             />
           </div>
@@ -369,7 +389,7 @@ const CoachProfile = () => {
             <Input
               value={lastname}
               setValue={setLastname}
-              label="Last name"
+              label="Last name *"
               height="h-[36px]"
             />
           </div>
@@ -392,7 +412,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Short bio
+            Short bio *
           </label>
           <textarea
             id=""
@@ -407,7 +427,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Description
+            Description *
           </label>
           <textarea
             id=""
@@ -424,7 +444,7 @@ const CoachProfile = () => {
           <PrimarySelect
             selected={country}
             setSelected={setCountry}
-            label="Choose Country"
+            label="Choose Country *"
             data={Location}
             name={country}
           />
@@ -435,12 +455,11 @@ const CoachProfile = () => {
           <PrimarySelect
             selected={gender}
             setSelected={setGender}
-            label="Select Gender"
+            label="Select Gender *"
             data={[
-              {name:"Male", value:"MALE"},
-              {name:"Female", value:"FEMALE"},
-              {name:"Others", value:"OTHERS"},
-             
+              { name: "Male", value: "MALE" },
+              { name: "Female", value: "FEMALE" },
+              { name: "Others", value: "OTHERS" },
             ]}
             name={country}
           />
@@ -449,7 +468,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Social media
+            Social media *
           </h1>
           <CapsuleBtn name="Add social media" onClick={addSocialMedia} />
         </div>
@@ -473,7 +492,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Language
+            Language *
           </h1>
           <CapsuleBtn name="Add language" onClick={addLanguage} />
         </div>
@@ -501,7 +520,7 @@ const CoachProfile = () => {
                 setSelected={(value: any) =>
                   handleLanguageChange(index, "proficiency", value.name)
                 }
-                label="Proficiency"
+                label="Proficiency *"
                 data={[
                   { name: "A1 - A2" },
                   { name: "B1 - B2" },
@@ -516,7 +535,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Language Interests
+            Language Interests *
           </h1>
           <CapsuleBtn name="Add language" onClick={() => setShowInput(true)} />
         </div>
@@ -560,7 +579,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Professional Qualification
+            Professional Qualification *
           </h1>
           <CapsuleBtn name="Add Qualification" onClick={addQualification} />
         </div>
@@ -577,7 +596,7 @@ const CoachProfile = () => {
                 setValue={(value: string) =>
                   handleQualificationChange(index, "name", value)
                 }
-                label="Name of Qualification"
+                label="Name of Qualification *"
                 height="h-[36px]"
                 placeholder=""
               />
@@ -588,7 +607,7 @@ const CoachProfile = () => {
                 setValue={(value: string) =>
                   handleQualificationChange(index, "issuing_org", value)
                 }
-                label="Issuing Organization"
+                label="Issuing Organization *"
                 height="h-[36px]"
                 placeholder=""
               />
@@ -599,7 +618,7 @@ const CoachProfile = () => {
                 setSelected={(value: any) =>
                   handleQualificationChange(index, "year", Number(value.name))
                 }
-                label="Year"
+                label="Year *"
                 data={yearsArray}
                 name="Select"
               />
@@ -611,7 +630,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex justify-between items-center mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Hourly rate <span className="font-[300] ">(Maximum two)</span>
+            Hourly rate <span className="font-[300] ">(Maximum two) *</span>
           </h1>
         </div>
         {/* end */}
@@ -621,7 +640,7 @@ const CoachProfile = () => {
             <PrimarySelect
               selected={sessionType}
               setSelected={setSessionType}
-              label={"Duration"}
+              label={"Duration *"}
               name={userData?.costPerSession?.[0]?.sessionType || 0}
               data={[
                 {
@@ -639,7 +658,7 @@ const CoachProfile = () => {
             <Input
               value={sessionPrice}
               setValue={setSessionPrice}
-              label="Price"
+              label="Price *"
               height="h-[36px]"
               type="number"
             />
@@ -651,7 +670,7 @@ const CoachProfile = () => {
             <PrimarySelect
               selected={sessionTypeSecond}
               setSelected={setSessionTypeSecond}
-              label={"Duration"}
+              label={"Duration *"}
               name={userData?.costPerSession?.[1]?.sessionType || 0}
               data={[
                 // {
@@ -669,7 +688,7 @@ const CoachProfile = () => {
             <Input
               value={sessionPriceSecond}
               setValue={setSessionPriceSecond}
-              label="Price"
+              label="Price *"
               height="h-[36px]"
               type="number"
             />
@@ -696,7 +715,7 @@ const CoachProfile = () => {
         {/* start */}
         <div className="flex flex-col start mt-8">
           <h1 className="font-bold text-black red-hat lg:text-xl text-base ">
-            Intro video
+            Intro video *
           </h1>
           <p className="text-muted text ">
             Hint: Your intro video should be 30 seconds, use a good background

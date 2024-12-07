@@ -6,8 +6,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   bookNextSession,
   getAllOfferingBookingStudent,
-  getAllReschedules, getAvailability,
-  rescheduleOffering
+  getAllReschedules,
+  getAvailability,
+  rescheduleOffering,
 } from "../../features/offeringslice";
 import LoadingComponent from "../Loaders/skeleton-loading";
 import { formatDateTime } from "../../util";
@@ -18,11 +19,10 @@ import {
   BlueVideoIcon,
   CancelX,
   DollarIcon,
-  PaddedArrow, WaterGlass
+  PaddedArrow,
+  WaterGlass,
 } from "../../assets";
-import {
-  payForOffering, restoreDefault
-} from "../../features/paymentslice";
+import { payForOffering, restoreDefault } from "../../features/paymentslice";
 import toast from "react-hot-toast";
 
 import { DateTimeInput, Input } from "../Input";
@@ -53,7 +53,6 @@ const StudentCallLogs = () => {
 
   const allOfferings = offering?.allBookedOfferingsStudent;
   useEffect(() => {
-    
     if (allOfferings) {
       const currentTime = new Date();
       const past: any = [];
@@ -82,9 +81,7 @@ const StudentCallLogs = () => {
       setPastOfferingBooking(past);
       setUpcomingOfferingBooking(upcoming);
     }
-  }, [ allOfferings]);
-
-
+  }, [allOfferings]);
 
   if (offering.fetchLoading) {
     return (
@@ -229,9 +226,9 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
   const [note, setNote] = useState("I want to learn");
   const [liveDateTimes, setLiveDateTimes] = useState<string[]>([" "]);
   const [activeReschule, setActiveReschedule] = useState<boolean>(false);
-    const [message, setMessage] = useState("");
-    const [isAvailable, setIsAvailable] = useState(false);
-    const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState("");
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const handlePayment = () => {
     const data = {
       seriesId: item?.seriesId,
@@ -265,8 +262,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
     setLiveDateTimes(updatedDateTimes);
   };
   const handleBookNextSession = () => {
-
-    if ( isAvailable) {
+    if (isAvailable) {
       const sentdata = {
         id: item?.seriesId,
         data: {
@@ -297,7 +293,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
       setIsAvailable(false);
     }
   };
-  
+
   const [active, setActive] = useState(false);
   const verifyItems = (time: string) => {
     return time.split("")?.length > 2;
@@ -308,15 +304,15 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
     if (isFilled) {
       handleChecKAvailability();
     }
-    if (isFilled ) {
+    if (isFilled) {
       setActive(true);
     } else {
       setActive(false);
     }
-    if ( date) {
+    if (date) {
       setActiveReschedule(true);
     }
-  }, [ liveDateTimes, date]);
+  }, [liveDateTimes, date]);
   const handleCloseMonthly = () => {
     setTimeout(() => {
       setOpenMonthly(false);
@@ -377,7 +373,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
           <div className="w-full mt-3 flex flex-wrap gap-6 items-center">
             <div className="flex items-center gap-[10px] min-w-max ">
               <span>
-                <DollarIcon />
+                <p className="text-primary ">₦</p>
               </span>
               <p className="text-muted font-medium dm-sams">
                 {item?.isFree ? "FREE" : item?.cost?.amount}
@@ -452,7 +448,7 @@ export const SingleRow = ({ item, index }: { item: any; index: number }) => {
               )}
 
             {/* <Button name="Join Session" /> */}
-         
+
             {item?.nextSession && (
               <span className="flex items-center gap-[10px]">
                 <ActionBtn

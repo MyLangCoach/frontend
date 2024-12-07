@@ -145,7 +145,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
           <div className="w-full mt-3 flex-wrap flex  gap-6 items-center">
             <div className="flex items-center gap-[10px] min-w-max ">
               <span>
-                <DollarIcon />
+                <p className="text-primary ">₦</p>
               </span>
               <p className="text-muted font-medium dm-sams">
                 {item?.isFree ? "FREE" : item?.cost?.amount}

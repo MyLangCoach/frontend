@@ -183,7 +183,7 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
         if (item?.type === "ONE_TIME") {
           setOpen(true);
         }
-        
+
         if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
           setOpenMonthly(true);
         }
@@ -227,7 +227,8 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
         <div className="w-full flex items-center gap-4 mt-6 border-t  border-t-border pt-3">
           <div className="flex gap-3  items-center">
             <span>
-              <DollarIcon />
+             
+              <p className="text-primary ">₦</p> 
             </span>
             <p className="text-muted font-medium dm-sams">
               {item?.isFree ? "FREE" : item?.cost?.amount}
