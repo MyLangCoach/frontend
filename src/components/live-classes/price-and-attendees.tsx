@@ -46,7 +46,7 @@ const PriceAttendees = ({
       </h1>
       <div className="w-full mt-4 flex flex-col">
         <label className="text-sm text-foreground font-medium dm-sans mb-2">
-          Cost
+          Cost *
         </label>
         <div className="flex items-center gap-10">
           <span className="flex gap-2 items-center">
@@ -61,7 +61,7 @@ const PriceAttendees = ({
         {!free && (
           <div className="w-full mt-4">
             <Input
-              label={"Class price (NGN)"}
+              label={"Class price (NGN) *"}
               value={price}
               setValue={setPrice}
               height="h-9"
@@ -72,7 +72,7 @@ const PriceAttendees = ({
         {type === "LIVE_GROUP" && (
           <div className="w-full mt-4 flex flex-col">
             <label className="text-sm text-foreground font-medium dm-sans mb-2">
-              Number of Attendees
+              Number of Attendees *
             </label>
             <div className="flex items-center gap-10">
               <span className="flex gap-2 items-center">
@@ -96,7 +96,7 @@ const PriceAttendees = ({
         {type === "LIVE_GROUP" && (
           <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-8">
             <Input
-              label={"Attendees"}
+              label={"Attendees *"}
               value={numOfAttendees}
               setValue={setNumOfAttendees}
               height="h-9"
@@ -111,11 +111,10 @@ const PriceAttendees = ({
           </span>
           <span>
             <BigButton
-              name={ "Continue"}
+              name={"Continue"}
               loading={loading}
-            altText='Loading'
+              altText="Loading"
               onClick={handleCreate}
-              
             />
           </span>
         </div>

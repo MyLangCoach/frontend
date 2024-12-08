@@ -45,7 +45,7 @@ const PaymentPage = () => {
               <div className="flex flex-col">
                 <span className="flex items-center gap-[10px]">
                   <p className="font-bold red-hat capitalize"> Gabriel H.</p>
-                  <img src={ar} alt="ar" />
+               
                   <span>
                     <VerifyIcon />
                   </span>

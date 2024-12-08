@@ -52,7 +52,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
       <div className="w-full flex flex-col mt-4">
         <div className="w-full">
           <Input
-            label={" Class name"}
+            label={" Class name *"}
             height="h-9"
             value={title}
             setValue={setTitle}
@@ -61,7 +61,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Description
+            Description *
           </label>
           <textarea
             id=""
@@ -75,7 +75,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
         {/* end */}
         <div className="w-full mt-6">
           <Input
-            label={"Language Tag"}
+            label={"Language Tag *"}
             height="h-9"
             value={langTag}
             setValue={setLangTag}
@@ -84,7 +84,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
         {/* start */}
         <div className="w-full mt-4 flex flex-col">
           <label className="text-xs text-foreground font-medium dm-sans mb-2">
-            Cover Image
+            Cover Image *
           </label>
           {/* <textarea
             id=""
@@ -104,7 +104,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
             <PrimarySelect
               selected={time}
               setSelected={setTime}
-              label="Class Duration"
+              label="Class Duration *"
               data={[
                 { name: "30 mins", value: 30 },
                 { name: "60 mins", value: 60 },
@@ -130,7 +130,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
                 <PrimarySelect
                   selected={seriesCount}
                   setSelected={setSeriesCount}
-                  label="Classes per month"
+                  label="Classes per month *"
                   data={[
                     { name: "single class", value: 1 },
                     { name: "4 classes", value: 4 },
@@ -144,7 +144,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
                 <PrimarySelect
                   selected={time}
                   setSelected={setTime}
-                  label="Duration"
+                  label="Duration *"
                   data={[
                     { name: "30 mins", value: 30 },
                     { name: "1 hour", value: 60 },
@@ -154,7 +154,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
               </div>
               <div>
                 <Input
-                  label={"Cost"}
+                  label={"Cost *"}
                   height="h-9"
                   value={price}
                   setValue={setPrice}
@@ -169,7 +169,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
             <PrimarySelect
               selected={time}
               setSelected={setTime}
-              label="Class Duration"
+              label="Class Duration *"
               data={[
                 { name: "30 mins", value: 30 },
                 { name: "60 mins", value: 60 },
@@ -243,7 +243,7 @@ const LiveClassInformation = ({ setCurrent,setTitle,setDescription,setCoverImage
               name="Continue"
               loading={loading}
               disabled={loading}
-              altText='Loading'
+              altText="Loading"
               onClick={() => {
                 if (_type === "ONE_MONTHLY") {
                   handleCreate();
