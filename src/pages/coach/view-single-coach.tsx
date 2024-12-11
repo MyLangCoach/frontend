@@ -52,19 +52,19 @@ const ViewSingleCoachPage = () => {
   function extractPlatformName(links: string[]): SocialMedia[] {
     const socialMediaPlatforms: SocialMedia[] = [];
 
-    links.forEach((link) => {
-      if (link.includes("linkedin")) {
-        socialMediaPlatforms.push({ platform: "LinkedIn", link });
-      } else if (link.includes("facebook")) {
-        socialMediaPlatforms.push({ platform: "Facebook", link });
-      } else if (link.includes("twitter")) {
+    links?.forEach((link) => {
+      if (link?.includes("linkedin")) {
+        socialMediaPlatforms?.push({ platform: "LinkedIn", link });
+      } else if (link?.includes("facebook")) {
+        socialMediaPlatforms?.push({ platform: "Facebook", link });
+      } else if (link?.includes("twitter")) {
         socialMediaPlatforms.push({ platform: "Twitter", link });
-      } else if (link.includes("instagram")) {
-        socialMediaPlatforms.push({ platform: "Instagram", link });
-      } else if (link.includes("youtube")) {
-        socialMediaPlatforms.push({ platform: "YouTube", link });
+      } else if (link?.includes("instagram")) {
+        socialMediaPlatforms?.push({ platform: "Instagram", link });
+      } else if (link?.includes("youtube")) {
+        socialMediaPlatforms?.push({ platform: "YouTube", link });
       } else {
-        socialMediaPlatforms.push({ platform: "Unknown", link });
+        socialMediaPlatforms?.push({ platform: "Unknown", link });
       }
     });
 
