@@ -200,7 +200,7 @@ const OfferingCalendar: React.FC<OfferingCalendarProps> = ({
             <img
               src={coverImageUrl ?? pic}
               alt=""
-              className="w-9 h-9 rounded-full object-cover"
+              className="w-9 h-9 rounded-full object-cover min-w-9 min-h-9"
             />
           </div>
           <div className="flex flex-col">

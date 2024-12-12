@@ -15,7 +15,7 @@ import CreateClass from "./pages/live-classes/create-new-class";
 import Payouts from "./pages/payouts";
 import SettingsPage from "./pages/settings";
 import CoachStudent from "./pages/student/coach-student-page";
-import Testing from "./pages/Testing";
+
 import AllCoaches from "./pages/student/all-coaches-page";
 import PaymentPage from "./pages/payment";
 import StudentLiveClasses from "./pages/live-classes/student-classes";
