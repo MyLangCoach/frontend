@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../Button";
 import { payForOffering } from "../../features/paymentslice";
+import ViewOfferingModal from "../modal/view-offering-modal";
 const OfferingCard = ({ item }: { item: ClassDetails }) => {
   const authenticated = store.getState().auth?.token;
   const userPic = pic;
@@ -39,6 +40,7 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [open, setOpen] = useState<boolean>(false);
+  const [openDetails, setOpenDetails] = useState<boolean>(false);
 
   const [openLive, setOpenLive] = useState(false);
   const [openMonthly, setOpenMonthly] = useState(false);
@@ -179,26 +181,41 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
     <div
       className="w-full flex flex-col offering-shadow rounded-md cursor-pointer min-w-full "
       key={item?.id}
-      onClick={() => {
-        if (item?.type === "ONE_TIME") {
-          setOpen(true);
-        }
+      // onClick={() => {
+      //   if (item?.type === "ONE_TIME") {
+      //     setOpen(true);
+      //   }
 
-        if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
-          setOpenMonthly(true);
-        }
-        if (item?.type === "LIVE_GROUP") {
-          setOpenLive(true);
-        }
-      }}
+      //   if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
+      //     setOpenMonthly(true);
+      //   }
+      //   if (item?.type === "LIVE_GROUP") {
+      //     setOpenLive(true);
+      //   }
+      // }}
     >
       <img
         src={item?.coverImageUrl}
         onError={handleError}
         alt=""
         className=" rounded-md w-full h-[240px] object-cover "
+        onClick={() => setOpenDetails(true)}
       />
-      <div className="flex flex-col p-[18px] bg-white ">
+      <div
+        className="flex flex-col p-[18px] bg-white cursor-pointer "
+        onClick={() => {
+          if (item?.type === "ONE_TIME") {
+            setOpen(true);
+          }
+
+          if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
+            setOpenMonthly(true);
+          }
+          if (item?.type === "LIVE_GROUP") {
+            setOpenLive(true);
+          }
+        }}
+      >
         <h1 className="font-bold text-lg red-hat capitalize">{item?.title}</h1>
         <p className="text-base red-hat mt-6">{item?.description}</p>
         {/* <p className="text-base red-hat mt-6">
@@ -227,8 +244,7 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
         <div className="w-full flex items-center gap-4 mt-6 border-t  border-t-border pt-3">
           <div className="flex gap-3  items-center">
             <span>
-             
-              <p className="text-primary ">₦</p> 
+              <p className="text-primary ">₦</p>
             </span>
             <p className="text-muted font-medium dm-sams">
               {item?.isFree ? "FREE" : item?.cost?.amount}
@@ -251,6 +267,12 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
           </div>
         </div>
       </div>
+      <ViewOfferingModal
+        open={openDetails}
+        setOpen={setOpenDetails}
+        item={item}
+        index={item?.id}
+      />
       <ReUseModal
         open={open}
         setOpen={setOpen}

@@ -136,13 +136,16 @@ const ViewOfferingModal = ({ open, setOpen, item, index }: viewProps) => {
                 <p className=" text-sm lg:text-lg inter font-semibold ">
                   Redirect Url
                 </p>
-                <a
+                <p>
+                  -
+                </p>
+                {/* <a
                   className="lg:text-lg  text-muted text-sm   mt-2 capitalize  cursor-pointer"
                   href={details?.redirectLink}
                   target="_blank"
                 >
                   {details?.redirectLink ?? "-"}
-                </a>
+                </a> */}
               </div>
               {/* end */}
               {/* start  */}
