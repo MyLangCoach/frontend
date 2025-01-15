@@ -25,15 +25,22 @@ const UpcomingEvents = () => {
   }
   return (
     <div className="w-full flex flex-col">
-      <div className="flex items-center justify-between">
-        <h1 className="lg:text-2xl text-lg font-bold text-black ">
-          Upcoming Events
+      <div
+        className="flex items-center justify-between cursor-pointer"
+        onClick={() => navigate("/create-new-class?type=LIVE_GROUP")}
+      >
+        <h1 className="lg:text-2xl text-lg font-bold text-black hover:text-primary  ">
+          Add new offering
         </h1>
-        <span onClick={() => navigate("/create-new-class?type=LIVE_GROUP")}>
+        <span>
           <AddIcon />
         </span>
       </div>
       <div className="bg-white p-3 rounded-md w-full mt-3 flex flex-col ">
+        <h1 className="lg:text-xl text-base font-bold red-hat text-[#333] mb-3">
+          Upcoming Events
+        </h1>
+
         <div className="flex items-center justify-between w-full ">
           <span className="arrow-shadows w-9 h-9  flex items-center justify-center cursor-pointer">
             <LeftArrow />

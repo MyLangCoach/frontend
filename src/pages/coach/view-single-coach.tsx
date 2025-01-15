@@ -41,7 +41,7 @@ const ViewSingleCoachPage = () => {
     dispatch(getSingleCoachOffering({ id: id?.id }));
     dispatch(resetRedirect());
     dispatch(getSingleUserDetail(userId));
-    // dispatch(getAllStudent());
+  
   }, []);
 
   const handleError = (e: any) => {

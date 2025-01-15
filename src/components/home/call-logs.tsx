@@ -10,9 +10,13 @@ import CoachReschedules from "../Reschedules/coach-reschedule";
 
 const CallLogs = () => {
  
+
   const dispatch = useAppDispatch();
   const offering = useAppSelector((state) => state.offerings);
   
+  const [currentSession, setCurrentSession] = useState(1);
+  const [currentOffering, setCurrentOffering] = useState(1);
+  const [present, setPresent] = useState(0);
   useEffect(() => {
     dispatch(getAllSessionBookingCoach());
     dispatch(getAllBookedOfferingCoach());
@@ -22,9 +26,6 @@ const CallLogs = () => {
   const offeringsList = offering?.allBookedOfferingCoach;
 
 
-  const [currentSession, setCurrentSession] = useState(1);
-  const [currentOffering, setCurrentOffering] = useState(1);
-  const [present, setPresent] = useState(0);
 
   const currentTime = new Date(); // current user's date and time
 

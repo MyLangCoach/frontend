@@ -58,7 +58,7 @@ const VideoUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full h-[250px] border border-dashed border-border flex items-center justify-center rounded-md ">
+      <div className="relative w-full  aspect-video border border-dashed border-border flex items-center justify-center rounded-md ">
         {imageUrl ? (
           <video
             src={imageUrl}

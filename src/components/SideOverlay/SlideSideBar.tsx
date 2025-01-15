@@ -114,32 +114,8 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           </p>
                         </div>
                       )}
-                      <div
-                        className={
-                          current === 100
-                            ? styles.active
-                            : `${styles.inActive} opacity-0 cursor-not-allowed`
-                        }
-                        onClick={() => navigate("/")}
-                      >
-                        <CatIcon />
-                        <p className="text-black text-sm font-medium inter">
-                          Categories
-                        </p>
-                      </div>
-                      <div
-                        className={
-                          current === 201
-                            ? styles.active
-                            : `${styles.inActive} opacity-0 cursor-not-allowed`
-                        }
-                        onClick={() => navigate("/")}
-                      >
-                        <MessageIcon />
-                        <p className="text-black text-sm font-medium inter">
-                          Messages
-                        </p>
-                      </div>
+                    
+                    
 
                       <h1 className="text-lg font-semibold inter text-[#09090B] mb-2 pl-4 mt-6 ">
                         My Account

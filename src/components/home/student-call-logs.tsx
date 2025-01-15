@@ -7,6 +7,7 @@ import {
   bookNextSession,
   getAllOfferingBookingStudent,
   getAllReschedules,
+  getAllSessionBookingStudent,
   getAvailability,
   rescheduleOffering,
 } from "../../features/offeringslice";
@@ -28,12 +29,24 @@ import toast from "react-hot-toast";
 import { DateTimeInput, Input } from "../Input";
 import ReUseModal from "../modal/Modal";
 import CoachReschedules from "../Reschedules/coach-reschedule";
+import CoachSessionCard from "../coaches-component/coach-session-card";
+import StudentSessionCard from "../students/student-session-card";
 const StudentCallLogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+const [currentSession, setCurrentSession] = useState(1);
+const [currentOffering, setCurrentOffering] = useState(1);
+  const [present, setPresent] = useState(0);
+   const [pastAppointmentsBooking, setPastAppointmentsBooking] = useState([]);
+   const [upcomingAppointmentsBooking, setUpcomingAppointmentsBooking] =
+     useState([]);
+   const [pastOfferingBooking, setPastOfferingBooking] = useState([]);
+   const [upcomingOfferingBooking, setUpcomingOfferingBooking] = useState([]);
   const offering = useAppSelector((state) => state.offerings);
   useEffect(() => {
     dispatch(getAllOfferingBookingStudent());
+      dispatch(getAllSessionBookingStudent());
     dispatch(getAllReschedules());
   }, []);
   useEffect(() => {
@@ -43,16 +56,43 @@ const StudentCallLogs = () => {
     }
     if (offering.rescheduleSuccess) {
       dispatch(restoreDefault());
-      toast.success("Offering rescheduled");
+      toast.success("Reschedule request sent successfully");
     }
   }, [offering?.nextSessionBookingSuccess, offering?.rescheduleSuccess]);
 
-  const [pastOfferingBooking, setPastOfferingBooking] = useState([]);
-  const [upcomingOfferingBooking, setUpcomingOfferingBooking] = useState([]);
-  const [current, setCurrent] = useState(0);
+ 
 
   const allOfferings = offering?.allBookedOfferingsStudent;
+    const bookings = offering?.allBookingsSessionStudent;
   useEffect(() => {
+    if (bookings) {
+      const currentTime = new Date();
+      const past: any = [];
+      const upcoming: any = [];
+
+      bookings.forEach((item: any) => {
+        const startDateTime = new Date(item.startDateTime);
+        const endDateTime = new Date(item.endDateTime);
+
+        if (endDateTime < currentTime) {
+          past.push(item); // Add to past appointments
+        } else if (startDateTime >= currentTime) {
+          upcoming.push(item); // Add to upcoming appointments
+        }
+      });
+
+      // Sort upcoming appointments by startDateTime in ascending order (closest first)
+      upcoming.sort((a: any, b: any) => {
+        return (
+          new Date(a.startDateTime).getTime() -
+          new Date(b.startDateTime).getTime()
+        );
+      });
+
+      // Update state
+      setPastAppointmentsBooking(past);
+      setUpcomingAppointmentsBooking(upcoming);
+    }
     if (allOfferings) {
       const currentTime = new Date();
       const past: any = [];
@@ -81,7 +121,8 @@ const StudentCallLogs = () => {
       setPastOfferingBooking(past);
       setUpcomingOfferingBooking(upcoming);
     }
-  }, [allOfferings]);
+  }, [allOfferings, bookings]);
+  console.log(bookings)
 
   if (offering.fetchLoading) {
     return (
@@ -92,125 +133,256 @@ const StudentCallLogs = () => {
   }
   return (
     <div className="w-full flex flex-col mt-6">
-      {/* tabs session */}
-      <div className="w-full flex gap-4 items-center justify-between lg:justify-start px-4 lg:px-0 flex-wrap">
-        <div
-          className={
-            current === 0
-              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(0)}
+      <div className="w-full flex items-center mb-6 gap-4">
+        <p
+          className={`cursor-pointer red-hat text-base ${
+            present === 0
+              ? "font-bold text-[#09090B] red-hat border-b-primary border-b  pb-1"
+              : "pb-1 text-[#09090B] "
+          } `}
+          onClick={() => setPresent(0)}
         >
-          All
-        </div>
-        <div
-          className={
-            current === 1
-              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted px-4 flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(1)}
+          Offerings
+        </p>
+        <p
+          className={`cursor-pointer red-hat text-base ${
+            present === 1
+              ? "font-bold text-[#09090B] red-hat border-b-primary border-b  pb-1"
+              : "pb-1 text-muted "
+          } `}
+          onClick={() => setPresent(1)}
         >
-          Upcoming calls
-        </div>
-        <div
-          className={
-            current === 2
-              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted px-4 flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(2)}
-        >
-          Past calls
-        </div>
-        <div
-          className={
-            current === 3
-              ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
-              : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
-          }
-          onClick={() => setCurrent(3)}
-        >
-          Reschedule
-        </div>
+          Sessions
+        </p>
       </div>
-      {/* <p className="capitalize">
-        {item?.student.firstName ?? ""} {item?.student?.lastName ?? ""}
-      </p> */}
-      {/* end of tabs session */}
-      {current === 0 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
-          {allOfferings.length > 0 ? (
-            <div className="w-full flex flex-col px-4 py-4 gap-5">
-              {allOfferings?.map((item: any, index: number) => (
-                <SingleRow item={item} index={index} key={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any classes at the moment. You can proceed to
-                book a coaching session or explore other offerings to continue.
-              </p>
-              <Button
-                name="Book a Coach Session"
-                className="mt-5 mx-auto"
-                onClick={() => navigate("/coaches")}
-              />
-            </div>
-          )}
+      {/* tabs session */}
+      {present === 0 && (
+        <div className="w-full flex gap-4 items-center flex-wrap justify-between  lg:justify-start px-4 lg:px-0">
+          <div
+            className={
+              currentOffering === 1
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(1)}
+          >
+            Upcoming calls
+          </div>
+          <div
+            className={
+              currentOffering === 3
+                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(3)}
+          >
+            Reschedule
+          </div>
+          <div
+            className={
+              currentOffering === 2
+                ? "bg-white flex px-4 items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(2)}
+          >
+            Past calls
+          </div>
+          <div
+            className={
+              currentOffering === 0
+                ? "bg-white flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium px-4 lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentOffering(0)}
+          >
+            All
+          </div>
         </div>
       )}
-      {current === 1 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          {upcomingOfferingBooking.length > 0 ? (
-            <div className="w-full flex flex-col px-4 py-4 gap-5">
-              {upcomingOfferingBooking?.map((item: any, index: number) => (
-                <SingleRow item={item} index={index} key={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any upcoming classes at the moment. You can
-                proceed to book a coaching session or explore other offerings to
-                continue.
-              </p>
-              <Button
-                name="Book a Coach Session"
-                className="mt-5 mx-auto"
-                onClick={() => navigate("/coaches")}
-              />
-            </div>
-          )}
+      {present === 1 && (
+        <div className="w-full flex gap-4 items-center flex-wrap justify-between lg:justify-start px-4 lg:px-0">
+          <div
+            className={
+              currentSession === 1
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(1)}
+          >
+            Upcoming calls
+          </div>
+          <div
+            className={
+              currentSession === 2
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(2)}
+          >
+            Past calls
+          </div>
+          <div
+            className={
+              currentSession === 3
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(3)}
+          >
+            Reschedule
+          </div>
+          <div
+            className={
+              currentSession === 0
+                ? "bg-white px-4 flex items-center justify-center h-[28px] text-[#09090B] text-sm font-medium lg:min-w-[152px]  cursor-pointer inter  "
+                : "text-muted flex items-center justify-center h-[28px] cursor-pointer font-medium inter lg:min-w-[152px]  "
+            }
+            onClick={() => setCurrentSession(0)}
+          >
+            All
+          </div>
         </div>
       )}
-      {current === 2 && (
-        <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
-          {pastOfferingBooking.length > 0 ? (
-            <div className="w-full flex flex-col px-4 py-4 gap-5">
-              {pastOfferingBooking?.map((item: any, index: number) => (
-                <SingleRow item={item} index={index} key={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
-              <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
-                You do not have any past classes at the moment. You can proceed
-                to book a coaching session or explore other offerings to
-                continue.
-              </p>
-              <Button
-                name="Book a Coach Session"
-                className="mt-5 mx-auto"
-                onClick={() => navigate("/coaches")}
-              />
+
+      {/* end of tabs offerings */}
+      {present === 0 && (
+        <div>
+          {currentOffering === 0 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {allOfferings.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-5">
+                  {allOfferings?.map((item: any, index: number) => (
+                    <SingleRow item={item} index={index} key={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any classes at the moment. You can proceed
+                    to book a coaching session or explore other offerings to
+                    continue.
+                  </p>
+                  <Button
+                    name="Book a Coach Session"
+                    className="mt-5 mx-auto"
+                    onClick={() => navigate("/coaches")}
+                  />
+                </div>
+              )}
             </div>
           )}
+          {currentOffering === 1 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              {upcomingOfferingBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-5">
+                  {upcomingOfferingBooking?.map((item: any, index: number) => (
+                    <SingleRow item={item} index={index} key={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any upcoming classes at the moment. You can
+                    proceed to book a coaching session or explore other
+                    offerings to continue.
+                  </p>
+                  <Button
+                    name="Book a Coach Session"
+                    className="mt-5 mx-auto"
+                    onClick={() => navigate("/coaches")}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {currentOffering === 2 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+              {pastOfferingBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-5">
+                  {pastOfferingBooking?.map((item: any, index: number) => (
+                    <SingleRow item={item} index={index} key={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any past classes at the moment. You can
+                    proceed to book a coaching session or explore other
+                    offerings to continue.
+                  </p>
+                  <Button
+                    name="Book a Coach Session"
+                    className="mt-5 mx-auto"
+                    onClick={() => navigate("/coaches")}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {currentOffering === 3 && <CoachReschedules />}
         </div>
       )}
-      {current === 3 && <CoachReschedules />}
+      {present === 1 && (
+        <div className="w-full">
+          {currentSession === 0 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {bookings.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                  {bookings?.map((item: any, index: number) => (
+                    <StudentSessionCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center flex-col min-h-[234px]">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center  ">
+                    You do not have any session calls yet. You can proceed to book a coaching session or explore other offerings to continue.
+                  </p>
+                
+                </div>
+              )}
+            </div>
+          )}
+          {currentSession === 1 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {upcomingAppointmentsBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4 gap-4">
+                  {upcomingAppointmentsBooking?.map(
+                    (item: any, index: number) => (
+                      <StudentSessionCard item={item} index={index} />
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any upcoming calls.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          {currentSession === 2 && (
+            <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col  rounded-md">
+              {pastAppointmentsBooking.length > 0 ? (
+                <div className="w-full flex flex-col px-4 py-4">
+                  {pastAppointmentsBooking?.map((item: any, index: number) => (
+                    <StudentSessionCard item={item} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full mt-4 bg-white min-h-[234px] flex flex-col items-center justify-center rounded-md">
+                  <p className="red-hat font-bold text-black lg:max-w-[424px] lg:text-xl text-base text-center ">
+                    You do not have any past calls.
+                  </p>
+                  <Button name="create new  class" className="mt-5 mx-auto" />
+                </div>
+              )}
+            </div>
+          )}
+          {currentSession === 3 && <CoachReschedules />}
+        </div>
+      )}
     </div>
   );
 };
