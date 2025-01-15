@@ -21,7 +21,7 @@ const OfferingsTable = () => {
   }, [])
   
   const allOfferings = offerings?.allCreatedOfferingsCoach?.offerings;
-  console.log(allOfferings);
+
 
   const [open, setOpen] = useState(false);
 
@@ -78,7 +78,7 @@ const OfferingsTable = () => {
             <Plus />
           </span>
           <span className="text-foreground text-sm inter font-medium">
-            Add new service
+            Add new offering
           </span>
         </div>
         {/* end of new service */}

@@ -199,10 +199,6 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
         onError={handleError}
         alt=""
         className=" rounded-md w-full h-[240px] object-cover "
-        onClick={() => setOpenDetails(true)}
-      />
-      <div
-        className="flex flex-col p-[18px] bg-white cursor-pointer "
         onClick={() => {
           if (item?.type === "ONE_TIME") {
             setOpen(true);
@@ -215,8 +211,14 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
             setOpenLive(true);
           }
         }}
-      >
-        <h1 className="font-bold text-lg red-hat capitalize">{item?.title}</h1>
+      />
+      <div className="flex flex-col p-[18px] bg-white cursor-pointer ">
+        <h1
+          className="font-bold text-lg red-hat capitalize cursor-pointer hover:text-primary"
+          onClick={() => setOpenDetails(true)}
+        >
+          {item?.title}
+        </h1>
         <p className="text-base red-hat mt-6">{item?.description}</p>
         {/* <p className="text-base red-hat mt-6">
           {item?.type === "LIVE_GROUP" && "LIVE GROUP"}
@@ -224,7 +226,21 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
           {item?.type === "ONE_TIME" && "ONE TIME"}
         </p> */}
 
-        <div className="w-full flex items-center mt-6 justify-between">
+        <div
+          className="w-full flex items-center mt-6 justify-between cursor-pointer"
+          onClick={() => {
+            if (item?.type === "ONE_TIME") {
+              setOpen(true);
+            }
+
+            if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
+              setOpenMonthly(true);
+            }
+            if (item?.type === "LIVE_GROUP") {
+              setOpenLive(true);
+            }
+          }}
+        >
           <span className="flex items-center gap-2">
             <YellowCap />
             <p className="text-muted dm-sans ">
@@ -241,7 +257,21 @@ const OfferingCard = ({ item }: { item: ClassDetails }) => {
           </span>
         </div>
 
-        <div className="w-full flex items-center gap-4 mt-6 border-t  border-t-border pt-3">
+        <div
+          className="w-full flex items-center gap-4 mt-6 border-t  border-t-border pt-3 cursor-pointer"
+          onClick={() => {
+            if (item?.type === "ONE_TIME") {
+              setOpen(true);
+            }
+
+            if (item?.type === "ONE_MONTHLY" && item?.seriesCount >= 1) {
+              setOpenMonthly(true);
+            }
+            if (item?.type === "LIVE_GROUP") {
+              setOpenLive(true);
+            }
+          }}
+        >
           <div className="flex gap-3  items-center">
             <span>
               <p className="text-primary ">₦</p>

@@ -30,7 +30,10 @@ const SingleCoachCard: React.FC<SingleCardProps> = ({ item }: any) => {
       />
       <div className="w-full px-4 py-3 flex flex-col">
         <div className="flex gap-3 items-center">
-          <h1 className="text-base lg:text-xl font-bold red-hat capitalize truncate">
+          <h1
+            className="text-base lg:text-xl font-bold red-hat capitalize truncate hover:text-primary cursor-pointer"
+            onClick={() => navigate(`/view-coach/${id}`)}
+          >
             {firstName} {lastName}
           </h1>
 

@@ -114,7 +114,7 @@ const CoachOfferingCard = ({ item, index }: { item: any; index: number }) => {
       const { payload } = await dispatch(rescheduleOffering(sentdata));
       if (payload?.status === "success") {
         setLoading(false);
-        toast.success("Offering rescheduled");
+        toast.success("Reschedule request sent successfully");
         setOpenReschedule(false);
         dispatch(getAllBookedOfferingCoach());
       } else {

@@ -20,6 +20,11 @@ import counterReducer from "../features/counter/counterSlice";
 import authReducer from "../features/auth/authSlice";
 import offeringsSlice from "../features/offeringslice";
 import paymentSlice from "../features/paymentslice";
+import {
+  getStorageValue,
+  setStorageValue,
+  removeStorageValue,
+} from "../util/localStorage";
 
 const rootReducer = combineReducers({
   counter: counterReducer, //to be removed once we have more than one reducer
@@ -28,10 +33,27 @@ const rootReducer = combineReducers({
   payment:paymentSlice,
 });
 
-const persistConfig = {
+interface StorageConfig {
+  getItem: (key: string) => Promise<string | null>;
+  setItem: (key: string, value: string) => Promise<void>;
+  removeItem: (key: string) => Promise<void>;
+}
+
+interface PersistConfig {
+  key: string;
+  storage: StorageConfig;
+  whitelist: string[];
+}
+
+const persistConfig: PersistConfig = {
   key: "root",
-  storage: session,
-  whitelist: ["auth",], //add any reducer you want to be persisted here
+  storage: {
+    getItem: (key: string): Promise<string | null> => Promise.resolve(getStorageValue(key)),
+    setItem: (key: string, value: string): Promise<void> =>
+      Promise.resolve(setStorageValue({ key, value, expirationInDays: 1 })),
+    removeItem: (key: string): Promise<void> => Promise.resolve(removeStorageValue(key)),
+  },
+  whitelist: ["auth"], //add any reducer you want to be persisted here
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

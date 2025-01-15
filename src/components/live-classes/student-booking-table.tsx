@@ -26,7 +26,7 @@ const StudentBookingTable = () => {
   const bookings = offering?.allBookingsSessionStudent;
 
   
-console.log(bookings)
+
 
   if (offering?.fetchLoading) {
     return (

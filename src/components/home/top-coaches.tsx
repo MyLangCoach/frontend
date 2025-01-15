@@ -42,35 +42,37 @@ const TopCoaches = () => {
       )}
       {topstudents?.slice(0.3)?.map((item: any, index: number) => (
         <div className="mt-6 w-full rounded-md px-3 py-2 border border-[#E4E4E7] flex items-center justify-between gap-2  ">
-          <div className="flex items-center gap-3 w-9/12 flex-grow">
+          <div className="flex items-center gap-3 w-9/12 flex-grow overflow-x-hidden">
             <img
               src={item?.profileImage ?? avatar}
               alt="avart"
               className="w-[40px] h-[40px] rounded-full "
             />
             <div className="flex flex-col">
-              <h1 className="font-medium text-base lg:text-lg inter truncate ">
-                {item?.firstName} {item?.lastName}
+              <h1 className=" font-medium text-base lg:text-base inter truncate ">
+               
+                {item?.firstName.length + item?.lastName.length > 16
+                  ? `${item?.firstName} ${item?.lastName}`.slice(0, 16) + "..."
+                  : `${item?.firstName} ${item?.lastName}`}
               </h1>
-            
             </div>
           </div>
           {index === 0 && (
-            <div className="flex px-2 w-3/12">
+            <div className="flex px-2 w-2/12  justify-end">
               <span>
                 <StarOne />
               </span>
             </div>
           )}
           {index === 1 && (
-            <div className="flex px-2">
+            <div className="flex px-2 w-2/12  justify-end">
               <span>
                 <StarTwo />
               </span>
             </div>
           )}
           {index === 2 && (
-            <div className="flex px-2">
+            <div className="flex px-2 w-2/12  justify-end">
               <span>
                 <StarThree />
               </span>

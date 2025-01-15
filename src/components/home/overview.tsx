@@ -3,16 +3,17 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import classIcon from "../../assets/icons/class.svg";
 import expenseIcon from "../../assets/icons/expense.svg";
 import coachIcon from "../../assets/icons/tutors.svg";
-import { getDashboardStarts } from "../../features/auth/authSlice";
+import { getDashboardStarts, getUserProfile } from "../../features/auth/authSlice";
 const Overview = () => {
   const user = useAppSelector((state) => state.auth);
   const userRole = user?.userData?.role;
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getDashboardStarts());
+      dispatch(getUserProfile());
   }, [])
   
-  console.log(user?.dashboardStats)
+
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-3 mt-8 lg:gap-4 gap-4 px-4 lg:px-0 ">
       {/* start of a pack */}
