@@ -12,9 +12,10 @@ import { UserProfileData } from "../../util/types";
 
 import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
-
+import { baseUrl } from "../../util/endpoints";
 import axios from "axios";
-const uploadEndpoint = "https://mylangcoach-api.onrender.com/api/v1/file-upload";
+const uploadEndpoint =
+  `${baseUrl}/file-upload`;
 const UserProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.auth);

@@ -15,7 +15,7 @@ import LoadingComponent from "../Loaders/skeleton-loading";
 import { Language, Qualification, UserProfileData } from "../../util/types";
 
 import toast from "react-hot-toast";
-
+import { baseUrl } from "../../util/endpoints";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { yearsArray } from "../../util/mockdata";
@@ -24,7 +24,7 @@ import { ProfileViewIcon } from "../../assets";
 import VideoUpload from "../UploadFile/VideoUpload";
 import { TiDelete } from "react-icons/ti";
 const uploadEndpoint =
-  "https://mylangcoach-api.onrender.com/api/v1/file-upload";
+  `${baseUrl}/file-upload`;
 const CoachProfile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth);
