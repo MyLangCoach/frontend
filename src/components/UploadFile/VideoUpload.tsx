@@ -2,7 +2,9 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
 import { Button } from "../Button";
 import toast from "react-hot-toast";
-const apiEndpoint = "https://mylangcoach-api.onrender.com/api/v1/file-upload";
+import { baseUrl } from "../../util/endpoints";
+const apiEndpoint =
+  `${baseUrl}/file-upload`;
 interface ImageUploadProps {
   imageUrl: string;
   setImageUrl: (url: string) => void;
@@ -58,11 +60,11 @@ const VideoUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full  aspect-video border border-dashed border-border flex items-center justify-center rounded-md ">
+      <div className="relative w-full  max-h-fit border border-dashed border-border flex items-center justify-center rounded-md ">
         {imageUrl ? (
           <video
             src={imageUrl}
-            className="w-full h-full object-cover"
+            className="w-full h-full max-h-[800px] object-cover  "
             
             controls
             
