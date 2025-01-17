@@ -22,7 +22,7 @@ useEffect(() => {
     )
   }
   return (
-    <div className="w-full bg-white py-6 px-3 flex flex-col">
+    <div className=" bg-white py-6 px-3 flex flex-col w-[800px] lg:w-full">
       <h1 className="text-black font-bold  red-hat text-base lg:text-[19px]">
         All Students ({auth?.allMyStudent?.length})
       </h1>
