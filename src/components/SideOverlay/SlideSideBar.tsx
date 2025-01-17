@@ -5,10 +5,10 @@ import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HomeIcon, MicIcon, CatIcon, MessageIcon, StudentIcon, ProfileIcon, RecieptIcon, SettingsIcon } from "../../assets";
 
-import sampPic from "../../assets/png/samp-pic.png";
+import sampPic from "../../assets/png/default-user-image.jpg";
 import mobLogo from "../../assets/icons/lang-logo.svg";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { clearState } from "../../features/offeringslice";
+import { clearState } from "../../features/auth/authSlice";
 const styles = {
   active: "flex h-[36px] items-center gap-2 px-4 py-2 bg-[#f4f4f5] rounded-[4px] mb-2  ",
   inActive: "flex h-[36px] items-center gap-2 px-4 py-2 mb-2 cursor-pointer",
@@ -114,8 +114,6 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           </p>
                         </div>
                       )}
-                    
-                    
 
                       <h1 className="text-lg font-semibold inter text-[#09090B] mb-2 pl-4 mt-6 ">
                         My Account
@@ -124,7 +122,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                         className={
                           current === 6 ? styles.active : styles.inActive
                         }
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/profile")}
                       >
                         <ProfileIcon />
                         <p className="text-black text-sm font-medium inter">
@@ -136,7 +134,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                           className={
                             current === 7 ? styles.active : styles.inActive
                           }
-                          onClick={() => navigate("/payouts")}
+                          onClick={() => navigate("/expenditure")}
                         >
                           <RecieptIcon />
                           <p className="text-black text-sm font-medium inter">
@@ -184,7 +182,7 @@ export default function SlideSidebar({current,open,setOpen} : any) {
                     <div className="flex item-center gap-2">
                       <span>
                         <img
-                          src={sampPic}
+                          src={user?.userData?.profileImage ?? sampPic}
                           alt="sample"
                           className="w-8 h-8 rounded-[4px]"
                         />

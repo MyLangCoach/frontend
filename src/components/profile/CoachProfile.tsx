@@ -458,7 +458,7 @@ const CoachProfile = () => {
             data={[
               { name: "Male", value: "MALE" },
               { name: "Female", value: "FEMALE" },
-              { name: "Others", value: "OTHERS" },
+            
             ]}
             name={country}
           />

@@ -39,7 +39,7 @@ const CoachStudent = () => {
         </div>
         <div className="w-full flex flex-col lg:flex-row gap-5">
           {/* start of left side */}
-          <div className="w-full 2xl:w-10/12 ">
+          <div className="w-full 2xl:w-10/12 overflow-x-scroll flow-hide-x ">
             <StudentList />
             {/* <CallLogs />
             <GuideTour /> */}
